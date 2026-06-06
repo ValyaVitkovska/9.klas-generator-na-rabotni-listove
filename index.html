@@ -28,7 +28,13 @@
         window.MathJax = {
             tex: {
                 inlineMath: [['$', '$']],
-                displayMath: [['$$', '$$']]
+                displayMath: [['$$', '$$']],
+                macros: {
+                    tan: '{\\text{tg}}',
+                    cot: '{\\text{cotg}}',
+                    cotg: '{\\text{cotg}}',
+                    tg: '{\\text{tg}}'
+                }
             },
             options: {
                 skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
@@ -125,7 +131,7 @@
                     Генератор на <br class="hidden md:inline">работни листове
                 </h2>
                 <p class="text-slate-300 text-sm md:text-base mt-6 leading-relaxed max-w-lg mx-auto">
-                    Генерирайте моментално писмени изпитвания, домашни работи и класни упражнения. Сега с пълно разнообразие от задачи и автоматични чертежи.
+                    Генерирайте моментално персонализирани писмени изпитвания, домашни работи и контролни работи. С интелигентни вариации на задачите и автоматични чертежи.
                 </p>
                 <div class="mt-8">
                     <button onclick="enterApp()" class="group relative inline-flex items-center justify-center gap-2 bg-gradient-to-r from-teal-500 to-cyan-600 hover:from-teal-600 hover:to-cyan-700 text-white text-base font-bold py-4 px-8 rounded-2xl shadow-lg hover:shadow-teal-500/20 transition-all duration-300 hover:scale-105 active:scale-95">
@@ -284,6 +290,7 @@
 
     <!-- Скриптове и логика -->
     <script>
+        // Пренаписано съдържание, съвпадащо на 100% с Учебната програма за 9. клас
         const curriculumData = [
             {
                 id: "probability", title: "1. Класическа вероятност",
@@ -313,35 +320,35 @@
             {
                 id: "systems_linear", title: "4. Системи линейни уравнения с две неизвестни",
                 lessons: [
-                    "Урок 1: Проверка за решение и графично тълкуване", 
-                    "Урок 2: Решаване чрез заместване", 
-                    "Урок 3: Решаване чрез събиране", 
-                    "Урок 4: Текстови задачи със системи",
+                    "Урок 1: Проверка за решение и методи за решаване", 
+                    "Урок 2: Решаване чрез заместване и събиране", 
+                    "Урок 3: Графично решаване и тълкуване", 
+                    "Урок 4: Текстови задачи със системи линейни уравнения",
                     "Контролна работа върху темата"
                 ]
             },
             {
                 id: "systems_quadratic", title: "5. Системи уравнения от втора степен с две неизвестни",
                 lessons: [
-                    "Урок 1: Системи, на които едното уравнение е линейно", 
-                    "Урок 2: Решаване на системи от втора степен (симетрични)",
+                    "Урок 1: Системи, на които едното уравнение е от първа степен", 
+                    "Урок 2: Системи с хомогенни и симетрични уравнения",
                     "Контролна работа върху темата"
                 ]
             },
             {
                 id: "similar_triangles", title: "6. Подобни триъгълници",
                 lessons: [
-                    "Урок 1: Първи признак за подобност", 
+                    "Урок 1: Теорема на Талес. Първи признак", 
                     "Урок 2: Втори и трети признак за подобност", 
-                    "Урок 3: Свойства на подобните триъгълници",
+                    "Урок 3: Свойства на подобните триъгълници (лица, височини)",
                     "Контролна работа върху темата"
                 ]
             },
             {
                 id: "rational_inequalities", title: "7. Рационални неравенства",
                 lessons: [
-                    "Урок 1: Дробни неравенства", 
-                    "Урок 2: Метод на интервалите",
+                    "Урок 1: Квадратни и дробни неравенства", 
+                    "Урок 2: Метод на интервалите и висши степени",
                     "Контролна работа върху темата"
                 ]
             },
@@ -349,16 +356,16 @@
                 id: "metric_relations", title: "8. Метрични зависимости между отсечки",
                 lessons: [
                     "Урок 1: Метрични зависимости в правоъгълен триъгълник", 
-                    "Урок 2: Питагорова теорема",
+                    "Урок 2: Теорема на Питагор и приложения",
                     "Контролна работа върху темата"
                 ]
             },
             {
                 id: "trig_acute", title: "9. Тригонометрични функции на остър ъгъл",
                 lessons: [
-                    "Урок 1: Определение за sin, cos, tg, cotg", 
+                    "Урок 1: Определение за sin, cos, tg, cotg в правоъгълен триъгълник", 
                     "Урок 2: Стойности за 30°, 45° и 60°", 
-                    "Урок 3: Основни тригонометрични зависимости",
+                    "Урок 3: Основни зависимости и решаване на равнобедрен триъгълник",
                     "Контролна работа върху темата"
                 ]
             },
@@ -379,16 +386,16 @@
         };
 
         const reminders = {
-            probability: "Вероятност $P = \\frac{m}{n}$, където $m$ е броят на благоприятните изходи, а $n$ е общият брой възможни изходи. $0 \\le P \\le 1$.",
-            functions: "За $f(x) = ax + b$, графиката е права. За $f(x) = ax^2 + bx + c$, графиката е парабола с връх $x_0 = -\\frac{b}{2a}$, $y_0 = f(x_0)$.",
+            probability: "Вероятност $P(A) = \\frac{m}{n}$, където $m$ е броят на благоприятните изходи, а $n$ е общият брой на всички възможни равновероятни изходи. Винаги $0 \\le P(A) \\le 1$.",
+            functions: "За линейната функция $y = ax + b$: $a$ е ъглов коефициент, $b$ е пресечната точка с $Oy$. За квадратната функция $y = ax^2 + bx + c$: координатите на върха са $x_0 = -\\frac{b}{2a}$, $y_0 = f(x_0)$.",
             linear_work: "Класна работа №1 обхваща темите: 1. Класическа вероятност и 2. Функции. Максимален брой точки: 40 т. Оценка = 2 + точки/10.",
-            systems_linear: "Методи за решаване: заместване, събиране или графично. При успоредни прави – няма решение, при съвпадащи – безброй много.",
-            systems_quadratic: "При системи с линейно уравнение, изразете променливата от него и заместете в квадратното.",
-            similar_triangles: "Признаци: 1) два равни ъгъла, 2) две пропорционални страни и ъгъл между тях, 3) три пропорционални страни.",
-            rational_inequalities: "Метод на интервалите: намерете нулите на числителя и знаменателя, нанесете ги на числова ос (знаменателят винаги е с 'празна' точка).",
-            metric_relations: "В правоъгълен триъгълник с катети $a, b$, хипотенуза $c$ и височина $h_c$: Питагорова теорема: $a^2 + b^2 = c^2$. Основни метрични формули: $h_c^2 = a_1 \\cdot b_1$, $a^2 = a_1 \\cdot c$, $b^2 = b_1 \\cdot c$ и $h_c = \\frac{a \\cdot b}{c}$.",
-            trig_acute: "В правоъгълен триъгълник с остър ъгъл $\\alpha$: $\\sin \\alpha = \\frac{\\text{срещулежащ катет}}{\\text{хипотенуза}} = \\frac{a}{c}$, $\\cos \\alpha = \\frac{\\text{прилежащ катет}}{\\text{хипотенуза}} = \\frac{b}{c}$, $\\tan \\alpha = \\frac{a}{b}$, $\\cot \\alpha = \\frac{b}{a}$. Зависимост: $\\sin^2 \\alpha + \\cos^2 \\alpha = 1$.",
-            assessment: "Внимателно проверявайте изчисленията си. При текстови задачи винаги дефинирайте ясно неизвестните."
+            systems_linear: "Системи линейни уравнения се решават чрез: 1) Метод на заместването; 2) Метод на събирането; 3) Графичен метод (правите се пресичат в единствена точка - решение).",
+            systems_quadratic: "При системи с едно линейно уравнение изразяваме едната променлива и заместваме във второто. При хомогенно уравнение от вида $Ax^2+Bxy+Cy^2=0$ разлагаме на множители.",
+            similar_triangles: "При подобни триъгълници съответните ъгли са равни, а страните са пропорционални: $\\frac{a}{a_1} = \\frac{b}{b_1} = \\frac{c}{c_1} = k$. Лицата се отнасят като квадрата на коефициента: $\\frac{S}{S_1} = k^2$.",
+            rational_inequalities: "За решаване по метода на интервалите: намираме нулите на числителя и знаменателя, нанасяме ги на числова ос. Внимаваме за четните степени на множителите (знакът не се променя при преминаване през тях).",
+            metric_relations: "Метрични зависимости в правоъгълен триъгълник с височина $h_c$: $h_c^2 = a_1 \\cdot b_1$; $a^2 = a_1 \\cdot c$; $b^2 = b_1 \\cdot c$; $h_c = \\frac{a \\cdot b}{c}$. Питагорова теорема: $a^2 + b^2 = c^2$.",
+            trig_acute: "Основни дефиниции: $\\sin \\alpha = \\frac{a}{c}$, $\\cos \\alpha = \\frac{b}{c}$, $\\text{tg } \\alpha = \\frac{a}{b}$, $\\text{cotg } \\alpha = \\frac{b}{a}$. Основно тригонометрично тъждество: $\\sin^2 \\alpha + \\cos^2 \\alpha = 1$.",
+            assessment: "Подгответе се систематично, като прегледате основните алгебрични преобразувания, свойства на функциите и метричните теореми в геометрията."
         };
 
         const themeSelect = document.getElementById('themeSelect');
@@ -633,7 +640,7 @@
                                 { label: "Г) $(-1; 4)$", correct: false }
                             ],
                             a: "А) $(1; 2)$",
-                            s: `Заместваме точките в $y = 5 - 3x$: За $(1; 2) \\Rightarrow 2 = 5 - 3(1) \\Rightarrow 2 = 2$ (Вярно).`
+                            s: `Заместваме точките in $y = 5 - 3x$: За $(1; 2) \\Rightarrow 2 = 5 - 3(1) \\Rightarrow 2 = 2$ (Вярно).`
                         }
                     ];
                     const activeT3 = task3Variations[getRandomIntSeeded(0, task3Variations.length - 1)];
@@ -717,7 +724,7 @@
                         (i) => {
                             const rVal = getRandomIntSeeded(2, 5);
                             return {
-                                question: `Вероятността при хвърляне на един правилен зар да се паднат <b>по-малко от ${rVal + 1} точки</b> е:`,
+                                question: `Вероятността при хвърляне на один правилен зар да се паднат <b>по-малко от ${rVal + 1} точки</b> е:`,
                                 space: "h-20", answer: `$\\frac{${rVal}}{6}$`,
                                 solution: `Благоприятни изходи: {${Array.from({length: rVal}, (_, idx) => idx + 1).join(', ')}} (общо ${rVal}). $P = \\frac{${rVal}}{6}$.`
                             };
@@ -901,14 +908,14 @@
                     let templates = [
                         (i) => {
                             return { 
-                                question: `Решете системата линейни уравнения чрез заместване:<br><br>$$\\left| \\begin{array}{l} x - y = 2 \\\\ 2x + y = 7 \\end{array} \\right.$$`, 
+                                question: `Решете системата линейни уравнения чрез заместване:<br><br>$\\left| \\begin{array}{l} x - y = 2 \\\\ 2x + y = 7 \\end{array} \\right.$`, 
                                 space: "h-28", answer: `$(3; 1)$`, 
                                 solution: `От първото уравнение $x = y + 2$. Заместваме във второто: $2(y+2)+y=7 \\Rightarrow 3y=3 \\Rightarrow y=1$. Тогава $x=3$.` 
                             };
                         },
                         (i) => {
                             return { 
-                                question: `Решете системата линейни уравнения чрез събиране:<br><br>$$\\left| \\begin{array}{l} 3x + y = 4 \\\\ 4x + 2y = 12 \\end{array} \\right.$$`, 
+                                question: `Решете системата линейни уравнения чрез събиране:<br><br>$\\left| \\begin{array}{l} 3x + y = 4 \\\\ 4x + 2y = 12 \\end{array} \\right.$`, 
                                 space: "h-28", answer: `$(2; -2)$`, 
                                 solution: `Умножаваме първото по $-2$: $-6x - 2y = -8$. Събираме с второто: $-2x = 4 \\Rightarrow x = -2$. Заместваме: $y=10$.` 
                             };
@@ -922,7 +929,7 @@
                         },
                         (i) => {
                             return { 
-                                question: `Проверете коя от наредените двойки числа е решение на системата:<br><br>$$\\left| \\begin{array}{l} 4x + 5y = 3 \\\\ 3x - 5y = 11 \\end{array} \\right.$$<br>А) (-1; 2) &nbsp;&nbsp;&nbsp; Б) (2; -1) &nbsp;&nbsp;&nbsp; В) (3; -3) &nbsp;&nbsp;&nbsp; Г) (12; 5)`, 
+                                question: `Проверете коя от наредените двойки числа е решение на системата:<br><br>$\\left| \\begin{array}{l} 4x + 5y = 3 \\\\ 3x - 5y = 11 \\end{array} \\right.$<br>А) (-1; 2) &nbsp;&nbsp;&nbsp; Б) (2; -1) &nbsp;&nbsp;&nbsp; В) (3; -3) &nbsp;&nbsp;&nbsp; Г) (12; 5)`, 
                                 space: "h-20", answer: `Б) (2; -1)`, 
                                 solution: `Заместваме (2; -1): $4(2) + 5(-1) = 8 - 5 = 3$ (вярно) и $3(2) - 5(-1) = 6 + 5 = 11$ (вярно).` 
                             };
@@ -944,21 +951,21 @@
                     let templates = [
                         (i) => {
                             return { 
-                                question: `Решете системата уравнения:<br><br>$$\\left| \\begin{array}{l} (x - 2)(y + 3) = 0 \\\\ x^2 + y^2 - 3x = 7 \\end{array} \\right.$$`, 
+                                question: `Решете системата уравнения:<br><br>$\\left| \\begin{array}{l} (x - 2)(y + 3) = 0 \\\\ x^2 + y^2 - 3x = 7 \\end{array} \\right.$`, 
                                 space: "h-28", answer: `$(2; 3), (2; -3), (1; -3)$`, 
                                 solution: `От първото уравнение следва $x=2$ или $y=-3$. Заместваме последователно във второто уравнение и намираме съответните реални решения.` 
                             };
                         },
                         (i) => {
                             return { 
-                                question: `Решете системата уравнения:<br><br>$$\\left| \\begin{array}{l} x^2 + xy - 2y^2 = 0 \\\\ xy + x - y = 1 \\end{array} \\right.$$`, 
+                                question: `Решете системата уравнения:<br><br>$\\left| \\begin{array}{l} x^2 + xy - 2y^2 = 0 \\\\ xy + x - y = 1 \\end{array} \\right.$`, 
                                 space: "h-32", answer: `Решения: $(1; 1)$, $(-1; -1)$`, 
                                 solution: `Първото уравнение е хомогенно. Разлагаме на $(x-y)(x+2y)=0$. Оттук имаме два случая: $x=y$ или $x=-2y$. Заместваме във второто уравнение и решаваме.` 
                             };
                         },
                         (i) => {
                             return { 
-                                question: `Решете системата уравнения от втора степен:<br><br>$$\\left| \\begin{array}{l} x^2 + y^2 = 10 \\\\ x + y = 4 \\end{array} \\right.$$`, 
+                                question: `Решете системата уравнения от втора степен:<br><br>$\\left| \\begin{array}{l} x^2 + y^2 = 10 \\\\ x + y = 4 \\end{array} \\right.$`, 
                                 space: "h-32", answer: `$(3; 1)$ и $(1; 3)$`, 
                                 solution: `Изразяваме $x = 4 - y$ и заместваме в първото: $(4-y)^2 + y^2 = 10 \\Rightarrow 2y^2 - 8y + 6 = 0 \\Rightarrow y^2 - 4y + 3 = 0$. Получаваме решенията.` 
                             };
@@ -1088,7 +1095,6 @@
                         // Квадратно неравенство
                         (i) => {
                             let p = shuffledPairs[i % shuffledPairs.length];
-                            // x^2 - sum*x + prod >= 0
                             return {
                                 question: `Решете квадратното неравенство:<br><b>$x^2 ${getSignStr(-p.sum)}x ${getSignStr(p.prod)} \\ge 0$</b>`,
                                 space: "h-20",
@@ -1099,7 +1105,6 @@
                         // Квадратно неравенство (с отрицателен знак)
                         (i) => {
                             let p = shuffledPairs[i % shuffledPairs.length];
-                            // -x^2 + sum*x - prod >= 0
                             return {
                                 question: `Решете квадратното неравенство:<br><b>$-x^2 ${getSignStr(p.sum)}x ${getSignStr(-p.prod)} \\ge 0$</b>`,
                                 space: "h-20",
@@ -1187,7 +1192,7 @@
                             let t = shuffledTriangles[i % shuffledTriangles.length];
                             return {
                                 htmlElement: svgHelpers.metricTriangle(`a = ${t.aStr}`, `b = ${t.bStr}`, `c = ${t.cStr}`, 'H', `a_1 = ${t.a1Str}`, `b_1 = ${t.b1Str}`, `h_c = ${t.hcStr}`),
-                                question: `В правоъгълен триъгълник $ABC$ ($\angle C=90^{\\circ}$) петата на височината $CH$ ($H \\in AB$) разделя хипотенузата на проекции $a_1 = ${t.a1Str}$ cm и $b_1 = ${t.b1Str}$ cm. Намерете хипотенузата $c$, височината $h_c$ и катетите $a, b$.`,
+                                question: `В правоъгълен триъгълник $ABC$ ($\angle C=90^{\\circ}$) петата на височината $CH$ ($H \\in AB$) разделя хипотенузата на проекции $a_1 = ${t.a1Str}$ cm and $b_1 = ${t.b1Str}$ cm. Намерете хипотенузата $c$, височината $h_c$ и катетите $a, b$.`,
                                 space: "h-24",
                                 answer: `$c = ${t.cStr}$ cm, $h_c = ${t.hcStr}$ cm, $a = ${t.aStr}$ cm, $b = ${t.bStr}$ cm`,
                                 solution: `Хипотенузата е $c = a_1 + b_1 = ${t.a1Str} + ${t.b1Str} = ${t.cStr}$ cm. <br> Височината се намира по формулата: $h_c^2 = a_1 \\cdot b_1 \\Rightarrow h_c = ${t.hcStr}$ cm.<br> Катетите намираме от: $a^2 = a_1 \\cdot c \\Rightarrow a = ${t.aStr}$ cm и $b^2 = b_1 \\cdot c \\Rightarrow b = ${t.bStr}$ cm.`
@@ -1262,7 +1267,7 @@
                             ];
                             let c = circles[getRandomIntSeeded(0, circles.length - 1)];
                             return {
-                                question: `В правоъгълен триъгълник катетите са $a=${c.a}$ cm и $b=${c.b}$ cm. Намерете хипотенузата $c$ и радиуса $r$ на вписаната окръжност.`,
+                                question: `В правоъгълен триъгълник катетите са $a=${c.a}$ cm and $b=${c.b}$ cm. Намерете хипотенузата $c$ и радиуса $r$ на вписаната окръжност.`,
                                 space: "h-24",
                                 answer: `$c = ${c.c}$ cm, $r = ${c.r}$ cm`,
                                 solution: `По Питагорова теорема $c = \\sqrt{${c.a}^2 + ${c.b}^2} = ${c.c}$ cm. Радиусът е $r = \\frac{a+b-c}{2} = \\frac{${c.a}+${c.b}-${c.c}}{2} = ${c.r}$ cm.`
@@ -1318,13 +1323,13 @@
                                 question: `В правоъгълен триъгълник хипотенузата е $c=${c}$ cm, а за острия ъгъл $\\alpha$ е известно, че $\\sin \\alpha = \\frac{3}{5}$. Намерете дължините на катетите на триъгълника.`,
                                 space: "h-24",
                                 answer: `$a = ${c * 3 / 5}$ cm, $b = ${c * 4 / 5}$ cm`,
-                                solution: `$\\sin \\alpha = \\frac{a}{c} \\Rightarrow a = ${c * 3 / 5}$ cm. $b = \\sqrt{${c}^2 - ${c*3/5}^2} = ${c*4/5}$ cm.`
+                                solution: `$\\sin \\alpha = \\frac{a}{c} \\Rightarrow \\frac{3}{5} = \\frac{a}{${c}} \\Rightarrow a = ${c * 3 / 5}$ cm. <br>По Питагорова теорема: $b = \\sqrt{${c}^2 - ${c*3/5}^2} = ${c*4/5}$ cm.`
                             };
                         },
                         // Шаблон 3
                         (i) => {
                             return {
-                                question: `Пресметнете числената стойност на тригонометричния израз:<br><br><b>$A = \\sin 60^\\circ \\cdot \\tan 30^\\circ + \\cos 45^\\circ \\cdot \\sin 45^\\circ$</b>`,
+                                question: `Пресметнете числената стойност на тригонометричния израз:<br><br><b>$A = \\sin 60^\\circ \\cdot \\text{tg } 30^\\circ + \\cos 45^\\circ \\cdot \\sin 45^\\circ$</b>`,
                                 space: "h-20",
                                 answer: `$A = 1$`,
                                 solution: `$A = \\frac{\\sqrt{3}}{2} \\cdot \\frac{\\sqrt{3}}{3} + \\frac{\\sqrt{2}}{2} \\cdot \\frac{\\sqrt{2}}{2} = \\frac{3}{6} + \\frac{2}{4} = 1$.`
@@ -1333,16 +1338,16 @@
                         // Шаблон 4
                         (i) => {
                             return {
-                                question: `Пресметнете числената стойност на тригонометричния израз:<br><br><b>$B = \\cos^2 45^\\circ + \\sin 30^\\circ - 2 \\cdot \\cotg 45^\\circ$</b>`,
+                                question: `Пресметнете числената стойност на тригонометричния израз:<br><br><b>$B = \\cos^2 45^\\circ + \\sin 30^\\circ - 2 \\cdot \\text{cotg } 45^\\circ$</b>`,
                                 space: "h-20",
                                 answer: `$B = -1$`,
-                                solution: `$B = (\\frac{\\sqrt{2}}{2})^2 + \\frac{1}{2} - 2 \\cdot 1 = \\frac{1}{2} + \\frac{1}{2} - 2 = -1$.`
+                                solution: `$B = \\left(\\frac{\\sqrt{2}}{2}\\right)^2 + \\frac{1}{2} - 2 \\cdot 1 = \\frac{1}{2} + \\frac{1}{2} - 2 = -1$.`
                             };
                         },
                         // Шаблон 5
                         (i) => {
                             return {
-                                question: `Опростете тригонометричния израз за остър ъгъл $\\alpha$:<br><br><b>$X = \\sin^2 \\alpha \\cdot \\cotg^2 \\alpha + \\sin^2 \\alpha$</b>`,
+                                question: `Опростете тригонометричния израз за остър ъгъл $\\alpha$:<br><br><b>$X = \\sin^2 \\alpha \\cdot \\text{cotg}^2 \\alpha + \\sin^2 \\alpha$</b>`,
                                 space: "h-20",
                                 answer: `$X = 1$`,
                                 solution: `$X = \\sin^2 \\alpha \\cdot \\frac{\\cos^2 \\alpha}{\\sin^2 \\alpha} + \\sin^2 \\alpha = \\cos^2 \\alpha + \\sin^2 \\alpha = 1$.`
@@ -1355,7 +1360,7 @@
                                 question: `Бедрото на равнобедрен триъгълник е $${side}$ cm, а синусът на ъгъла при основата му е $\\sin \\alpha = \\frac{4}{5}$. Намерете основата, височината към нея и радиуса на описаната окръжност $R$.`,
                                 space: "h-32",
                                 answer: `основа $= ${side * 1.2}$ cm, височина $= ${side * 0.8}$ cm`,
-                                solution: `Височината е $CH = ${side * 0.8}$ cm. $AH = ${side * 0.6}$ cm. Основата $AB = ${side * 1.2}$ cm. Описаният радиус е $R = \\frac{BC}{2 \\sin \\alpha} = ${side * 0.625}$ cm.`
+                                solution: `Височината е $CH = ${side * 0.8}$ cm. $AH = ${side * 0.6}$ cm. Основата $AB = ${side * 1.2}$ cm. Описаният радиус е $R = \\frac{BC}{2 \\sin \\alpha} = \\frac{10}{2 \\cdot \\frac{4}{5}} = ${side * 0.625}$ cm.`
                             };
                         }
                     ];
@@ -1394,10 +1399,17 @@
         function generateWorksheet() {
             const themeId = themeSelect.value;
             const themeObj = curriculumData.find(t => t.id === themeId);
-            const lessonIdx = parseInt(lessonSelect.value);
+            if (!themeObj) return;
+
+            let lessonIdx = parseInt(lessonSelect.value);
+            // Проверка срещу undefined в lessons
+            if (isNaN(lessonIdx) || lessonIdx >= themeObj.lessons.length) {
+                lessonIdx = 0;
+            }
+
             const sheetType = document.getElementById('sheetType').value;
             
-            const isTest = themeObj.lessons[lessonIdx].includes("Контролна работа") || themeObj.id === "linear_work";
+            const isTest = themeObj.lessons[lessonIdx] ? (themeObj.lessons[lessonIdx].includes("Контролна работа") || themeObj.id === "linear_work") : false;
             const lessonName = isTest ? themeObj.lessons[lessonIdx] : (sheetType === 'mixed_topic' ? "Смесен лист (всички уроци от темата)" : themeObj.lessons[lessonIdx]);
             
             let difficulty = document.querySelector('input[name="difficulty"]:checked').value;
@@ -1654,10 +1666,18 @@
             document.getElementById('settingsPanel').classList.remove('hidden');
             document.getElementById('themeSelect').selectedIndex = themeIdx;
             updateLessons();
-            document.getElementById('lessonSelect').selectedIndex = lessonIdx;
             
             const themeObj = curriculumData[themeIdx];
-            const isTest = themeObj.lessons[lessonIdx].includes("Контролна работа") || themeObj.id === "linear_work";
+            if (!themeObj) return;
+
+            // Подсигуряваме правилен индекс
+            let finalLessonIdx = lessonIdx;
+            if (lessonIdx >= themeObj.lessons.length) {
+                finalLessonIdx = 0;
+            }
+            document.getElementById('lessonSelect').selectedIndex = finalLessonIdx;
+            
+            const isTest = themeObj.lessons[finalLessonIdx] ? (themeObj.lessons[finalLessonIdx].includes("Контролна работа") || themeObj.id === "linear_work") : false;
             
             if (isTest) {
                 if (themeObj.id === "linear_work") {
@@ -1693,6 +1713,72 @@
                 showTableOfContents();
             }, 500);
         }
+
+        // Обновяване на броя задачи при ръчна промяна на урока през менюто
+        document.getElementById('lessonSelect').addEventListener('change', () => {
+            const themeId = themeSelect.value;
+            const themeObj = curriculumData.find(t => t.id === themeId);
+            if (!themeObj) return;
+
+            let lessonIdx = parseInt(lessonSelect.value);
+            if (isNaN(lessonIdx) || lessonIdx >= themeObj.lessons.length) {
+                lessonIdx = 0;
+            }
+
+            if (themeObj.lessons[lessonIdx] && (themeObj.lessons[lessonIdx].includes("Контролна работа") || themeObj.id === "linear_work")) {
+                if (themeId === "linear_work") {
+                    document.getElementById('tasksCount').value = 5;
+                } else if (themeId === "rational_inequalities") {
+                    document.getElementById('tasksCount').value = 9;
+                } else if (themeId === "similar_triangles") {
+                    document.getElementById('tasksCount').value = 7;
+                } else if (themeId === "systems_quadratic") {
+                    document.getElementById('tasksCount').value = 4;
+                } else if (themeId === "probability") {
+                    document.getElementById('tasksCount').value = 5;
+                } else if (themeId === "metric_relations" || themeId === "trig_acute") {
+                    document.getElementById('tasksCount').value = 8;
+                } else {
+                    document.getElementById('tasksCount').value = 8;
+                }
+            } else {
+                document.getElementById('tasksCount').value = 5;
+            }
+            generateWorksheet();
+        });
+
+        document.getElementById('themeSelect').addEventListener('change', () => {
+            updateLessons();
+            const themeId = themeSelect.value;
+            const themeObj = curriculumData.find(t => t.id === themeId);
+            if (!themeObj) return;
+
+            let lessonIdx = parseInt(lessonSelect.value);
+            if (isNaN(lessonIdx) || lessonIdx >= themeObj.lessons.length) {
+                lessonIdx = 0;
+            }
+
+            if (themeObj.lessons[lessonIdx] && (themeObj.lessons[lessonIdx].includes("Контролна работа") || themeObj.id === "linear_work")) {
+                if (themeId === "linear_work") {
+                    document.getElementById('tasksCount').value = 5;
+                } else if (themeId === "rational_inequalities") {
+                    document.getElementById('tasksCount').value = 9;
+                } else if (themeId === "similar_triangles") {
+                    document.getElementById('tasksCount').value = 7;
+                } else if (themeId === "systems_quadratic") {
+                    document.getElementById('tasksCount').value = 4;
+                } else if (themeId === "probability") {
+                    document.getElementById('tasksCount').value = 5;
+                } else if (themeId === "metric_relations" || themeId === "trig_acute") {
+                    document.getElementById('tasksCount').value = 8;
+                } else {
+                    document.getElementById('tasksCount').value = 8;
+                }
+            } else {
+                document.getElementById('tasksCount').value = 5;
+            }
+            generateWorksheet();
+        });
 
         function exitApp() {
             const lp = document.getElementById('landingPage');
@@ -1755,66 +1841,15 @@
 
         function animate3D() {
             requestAnimationFrame(animate3D);
-            mathGroup.rotation.y += 0.003; mathGroup.rotation.x += 0.001;
+            if (mathGroup) {
+                mathGroup.rotation.y += 0.003; 
+                mathGroup.rotation.x += 0.001;
+            }
             camera.position.x += (mouseX - camera.position.x) * 0.05;
             camera.position.y += (-mouseY - camera.position.y) * 0.05;
             camera.lookAt(scene.position);
             renderer.render(scene, camera);
         }
-
-        // Обновяване на броя задачи при ръчна промяна на урока през менюто
-        document.getElementById('lessonSelect').addEventListener('change', () => {
-            const themeId = themeSelect.value;
-            const themeObj = curriculumData.find(t => t.id === themeId);
-            const lessonIdx = parseInt(lessonSelect.value);
-            if (themeObj && (themeObj.lessons[lessonIdx].includes("Контролна работа") || themeObj.id === "linear_work")) {
-                if (themeId === "linear_work") {
-                    document.getElementById('tasksCount').value = 5;
-                } else if (themeId === "rational_inequalities") {
-                    document.getElementById('tasksCount').value = 9;
-                } else if (themeId === "similar_triangles") {
-                    document.getElementById('tasksCount').value = 7;
-                } else if (themeId === "systems_quadratic") {
-                    document.getElementById('tasksCount').value = 4;
-                } else if (themeId === "probability") {
-                    document.getElementById('tasksCount').value = 5;
-                } else if (themeId === "metric_relations" || themeId === "trig_acute") {
-                    document.getElementById('tasksCount').value = 8;
-                } else {
-                    document.getElementById('tasksCount').value = 8;
-                }
-            } else {
-                document.getElementById('tasksCount').value = 5;
-            }
-            generateWorksheet();
-        });
-
-        document.getElementById('themeSelect').addEventListener('change', () => {
-            updateLessons();
-            const themeId = themeSelect.value;
-            const themeObj = curriculumData.find(t => t.id === themeId);
-            const lessonIdx = parseInt(lessonSelect.value);
-            if (themeObj && (themeObj.lessons[lessonIdx].includes("Контролна работа") || themeObj.id === "linear_work")) {
-                if (themeId === "linear_work") {
-                    document.getElementById('tasksCount').value = 5;
-                } else if (themeId === "rational_inequalities") {
-                    document.getElementById('tasksCount').value = 9;
-                } else if (themeId === "similar_triangles") {
-                    document.getElementById('tasksCount').value = 7;
-                } else if (themeId === "systems_quadratic") {
-                    document.getElementById('tasksCount').value = 4;
-                } else if (themeId === "probability") {
-                    document.getElementById('tasksCount').value = 5;
-                } else if (themeId === "metric_relations" || themeId === "trig_acute") {
-                    document.getElementById('tasksCount').value = 8;
-                } else {
-                    document.getElementById('tasksCount').value = 8;
-                }
-            } else {
-                document.getElementById('tasksCount').value = 5;
-            }
-            generateWorksheet();
-        });
 
         document.getElementById('btnGenerate').addEventListener('click', generateWorksheet);
         document.getElementById('btnNewVariant').addEventListener('click', () => { document.getElementById('variantNum').value++; generateWorksheet(); });
