@@ -83,6 +83,9 @@
                 border-bottom: 1px dotted #94a3b8 !important;
                 background-color: transparent !important;
             }
+            .svg-print-fix {
+                break-inside: avoid;
+            }
         }
 
         .writing-space {
@@ -122,11 +125,11 @@
                     Генератор на <br class="hidden md:inline">работни листове
                 </h2>
                 <p class="text-slate-300 text-sm md:text-base mt-6 leading-relaxed max-w-lg mx-auto">
-                    Генерирайте моментално персонализирани писмени изпитвания, домашни работи и класни упражнения със строго съобразени задачи за всеки урок.
+                    Генерирайте моментално писмени изпитвания, домашни работи и класни упражнения. Сега с пълно разнообразие от задачи и автоматични чертежи.
                 </p>
                 <div class="mt-8">
                     <button onclick="enterApp()" class="group relative inline-flex items-center justify-center gap-2 bg-gradient-to-r from-teal-500 to-cyan-600 hover:from-teal-600 hover:to-cyan-700 text-white text-base font-bold py-4 px-8 rounded-2xl shadow-lg hover:shadow-teal-500/20 transition-all duration-300 hover:scale-105 active:scale-95">
-                        <span>Влез в генератора</span>
+                        <span>Влез в съдържанието</span>
                         <svg class="w-5 h-5 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
                         </svg>
@@ -167,16 +170,15 @@
                         <p class="text-xs text-slate-300">Интелигентно помагало по Математика за 9. клас</p>
                     </div>
                 </div>
-                <div class="flex gap-2">
-                    <span class="bg-teal-700 text-white text-xs px-3 py-1.5 rounded-full font-semibold">СТРОГО ПО УРОК</span>
-                    <span class="bg-orange-500 text-white text-xs px-3 py-1.5 rounded-full font-semibold">ХОРИЗОНТАЛНИ ДРОБИ</span>
+                <div class="flex gap-2 hidden sm:flex">
+                    <span class="bg-teal-700 text-white text-xs px-3 py-1.5 rounded-full font-semibold">АВТОМАТИЧНИ ЧЕРТЕЖИ</span>
                 </div>
             </div>
         </header>
 
         <main class="max-w-7xl w-full mx-auto p-4 md:p-6 flex-grow flex flex-col lg:flex-row gap-6">
             
-            <aside class="w-full lg:w-80 flex-shrink-0 no-print">
+            <aside id="settingsPanel" class="w-full lg:w-80 flex-shrink-0 no-print hidden">
                 <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 sticky top-6">
                     <h2 class="text-lg font-bold text-teal-800 mb-4 flex items-center gap-2 border-b pb-2">
                         <svg class="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -207,7 +209,7 @@
                         </div>
 
                         <div>
-                            <label class="block text-xs font-semibold text-slate-600 mb-1">Ниво на трудност (в рамките на урока):</label>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Ниво на трудност:</label>
                             <div class="grid grid-cols-2 gap-1.5">
                                 <label class="flex items-center gap-1.5 p-1.5 border border-slate-200 rounded bg-slate-50 text-xs cursor-pointer hover:bg-slate-100">
                                     <input type="radio" name="difficulty" value="basic" checked class="text-teal-600 focus:ring-teal-500"> Базово
@@ -227,7 +229,7 @@
                         <div class="grid grid-cols-2 gap-3">
                             <div>
                                 <label class="block text-xs font-semibold text-slate-600 mb-1">Брой задачи:</label>
-                                <input type="number" id="tasksCount" min="2" max="10" value="4" class="w-full bg-slate-50 border border-slate-300 text-slate-700 rounded-lg p-2 text-sm text-center focus:outline-none focus:ring-2 focus:ring-teal-500">
+                                <input type="number" id="tasksCount" min="2" max="10" value="5" class="w-full bg-slate-50 border border-slate-300 text-slate-700 rounded-lg p-2 text-sm text-center focus:outline-none focus:ring-2 focus:ring-teal-500">
                             </div>
                             <div>
                                 <label class="block text-xs font-semibold text-slate-600 mb-1">Вариант №:</label>
@@ -259,8 +261,8 @@
                             <button id="btnPrint" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-3 rounded-lg text-xs flex items-center justify-center gap-1">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg> Печат
                             </button>
-                            <button id="btnClear" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold py-2 px-3 rounded-lg text-xs flex items-center justify-center gap-1">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg> Изчисти
+                            <button id="btnTOC" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold py-2 px-3 rounded-lg text-xs flex items-center justify-center gap-1">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg> Съдържание
                             </button>
                         </div>
                     </div>
@@ -269,18 +271,14 @@
 
             <section class="flex-grow flex justify-center text-slate-800">
                 <div id="worksheetPaper" class="print-container bg-white w-full max-w-4xl min-h-[297mm] p-6 md:p-10 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between transition-all duration-300">
-                    <div class="text-center py-20 text-slate-400">
-                        <svg class="w-16 h-16 mx-auto mb-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                        <p class="text-lg font-medium">Конфигурирайте параметрите вляво и натиснете бутона „Генерирай лист“.</p>
-                    </div>
+                    <!-- Зарежда се съдържанието автоматично -->
                 </div>
             </section>
             
         </main>
 
         <footer class="bg-slate-800 text-slate-400 py-6 px-4 border-t border-slate-700 text-center text-sm no-print">
-            <p>© 2026 Генератор на работни листове – 9. клас. Оригинално дигитално помагало без нужда от инсталация.</p>
-            <p class="text-xs text-slate-500 mt-1">Продуктът е разработен съвместно спрямо учебния план на МОН.</p>
+            <p>© 2026 Генератор на работни листове – 9. клас. Дигитално помагало без инсталация.</p>
         </footer>
     </div>
 
@@ -289,39 +287,87 @@
         const curriculumData = [
             {
                 id: "probability", title: "1. Класическа вероятност",
-                lessons: ["Урок 1: Събития и вероятности", "Урок 2: Класическа вероятност – основни задачи", "Урок 3: Вероятност на сума и произведение на събития"]
+                lessons: [
+                    "Урок 1: Събития и вероятности", 
+                    "Урок 2: Класическа вероятност – основни задачи", 
+                    "Урок 3: Вероятност на сума и произведение на събития",
+                    "Контролна работа върху темата"
+                ]
             },
             {
                 id: "functions", title: "2. Функции",
-                lessons: ["Урок 1: Намиране стойност и дефиниционна област", "Урок 2: Линейна функция y = ax + b. Графика", "Урок 3: Квадратна функция y = ax²", "Урок 4: Квадратна функция y = ax² + bx + c. Връх на парабола"]
+                lessons: [
+                    "Урок 1: Намиране стойност и дефиниционна област", 
+                    "Урок 2: Линейна функция y = ax + b. Графика", 
+                    "Урок 3: Квадратна функция y = ax²", 
+                    "Урок 4: Квадратна функция y = ax² + bx + c. Връх на парабола",
+                    "Контролна работа върху темата"
+                ]
             },
             {
-                id: "systems_linear", title: "3. Системи линейни уравнения с две неизвестни",
-                lessons: ["Урок 1: Проверка за решение и графично тълкуване", "Урок 2: Решаване чрез заместване", "Урок 3: Решаване чрез събиране", "Урок 4: Текстови задачи със системи"]
+                id: "linear_work", title: "3. Класна работа №1",
+                lessons: [
+                    "Примерен изпитен вариант за Класна работа №1"
+                ]
             },
             {
-                id: "systems_quadratic", title: "4. Системи уравнения от втора степен с две неизвестни",
-                lessons: ["Урок 1: Системи, на които едното уравнение е линейно", "Урок 2: Решаване на системи от втора степен (симетрични)"]
+                id: "systems_linear", title: "4. Системи линейни уравнения с две неизвестни",
+                lessons: [
+                    "Урок 1: Проверка за решение и графично тълкуване", 
+                    "Урок 2: Решаване чрез заместване", 
+                    "Урок 3: Решаване чрез събиране", 
+                    "Урок 4: Текстови задачи със системи",
+                    "Контролна работа върху темата"
+                ]
             },
             {
-                id: "similar_triangles", title: "5. Подобни триъгълници",
-                lessons: ["Урок 1: Първи признак за подобност", "Урок 2: Втори и трети признак за подобност", "Урок 3: Свойства на подобните триъгълници"]
+                id: "systems_quadratic", title: "5. Системи уравнения от втора степен с две неизвестни",
+                lessons: [
+                    "Урок 1: Системи, на които едното уравнение е линейно", 
+                    "Урок 2: Решаване на системи от втора степен (симетрични)",
+                    "Контролна работа върху темата"
+                ]
             },
             {
-                id: "rational_inequalities", title: "6. Рационални неравенства",
-                lessons: ["Урок 1: Дробни неравенства", "Урок 2: Метод на интервалите"]
+                id: "similar_triangles", title: "6. Подобни триъгълници",
+                lessons: [
+                    "Урок 1: Първи признак за подобност", 
+                    "Урок 2: Втори и трети признак за подобност", 
+                    "Урок 3: Свойства на подобните триъгълници",
+                    "Контролна работа върху темата"
+                ]
             },
             {
-                id: "metric_relations", title: "7. Метрични зависимости между отсечки",
-                lessons: ["Урок 1: Метрични зависимости в правоъгълен триъгълник", "Урок 2: Питагорова теорема"]
+                id: "rational_inequalities", title: "7. Рационални неравенства",
+                lessons: [
+                    "Урок 1: Дробни неравенства", 
+                    "Урок 2: Метод на интервалите",
+                    "Контролна работа върху темата"
+                ]
             },
             {
-                id: "trig_acute", title: "8. Тригонометрични функции на остър ъгъл",
-                lessons: ["Урок 1: Определение за sin, cos, tg, cotg", "Урок 2: Стойности за 30°, 45° и 60°", "Урок 3: Основни тригонометрични зависимости"]
+                id: "metric_relations", title: "8. Метрични зависимости между отсечки",
+                lessons: [
+                    "Урок 1: Метрични зависимости в правоъгълен триъгълник", 
+                    "Урок 2: Питагорова теорема",
+                    "Контролна работа върху темата"
+                ]
             },
             {
-                id: "assessment", title: "9. Входно и изходно ниво",
-                lessons: ["Входно ниво – тест и задачи", "Изходно ниво – подготовка за изпит"]
+                id: "trig_acute", title: "9. Тригонометрични функции на остър ъгъл",
+                lessons: [
+                    "Урок 1: Определение за sin, cos, tg, cotg", 
+                    "Урок 2: Стойности за 30°, 45° и 60°", 
+                    "Урок 3: Основни тригонометрични зависимости",
+                    "Контролна работа върху темата"
+                ]
+            },
+            {
+                id: "assessment", title: "10. Входно и изходно ниво",
+                lessons: [
+                    "Входно ниво – тест и задачи", 
+                    "Изходно ниво – подготовка за изпит"
+                ]
             }
         ];
 
@@ -335,12 +381,13 @@
         const reminders = {
             probability: "Вероятност $P = \\frac{m}{n}$, където $m$ е броят на благоприятните изходи, а $n$ е общият брой възможни изходи. $0 \\le P \\le 1$.",
             functions: "За $f(x) = ax + b$, графиката е права. За $f(x) = ax^2 + bx + c$, графиката е парабола с връх $x_0 = -\\frac{b}{2a}$, $y_0 = f(x_0)$.",
+            linear_work: "Класна работа №1 обхваща темите: 1. Класическа вероятност и 2. Функции. Максимален брой точки: 40 т. Оценка = 2 + точки/10.",
             systems_linear: "Методи за решаване: заместване, събиране или графично. При успоредни прави – няма решение, при съвпадащи – безброй много.",
             systems_quadratic: "При системи с линейно уравнение, изразете променливата от него и заместете в квадратното.",
             similar_triangles: "Признаци: 1) два равни ъгъла, 2) две пропорционални страни и ъгъл между тях, 3) три пропорционални страни.",
             rational_inequalities: "Метод на интервалите: намерете нулите на числителя и знаменателя, нанесете ги на числова ос (знаменателят винаги е с 'празна' точка).",
-            metric_relations: "Питагорова теорема: $c^2 = a^2 + b^2$. Височина: $h_c^2 = a_1 \\cdot b_1$. Катети: $a^2 = a_1 \\cdot c$, $b^2 = b_1 \\cdot c$.",
-            trig_acute: "В правоъгълен триъгълник: $\\sin = \\frac{\\text{срещулежащ}}{\\text{хипотенуза}}$, $\\cos = \\frac{\\text{прилежащ}}{\\text{хипотенуза}}$. Основно тъждество: $\\sin^2 \\alpha + \\cos^2 \\alpha = 1$.",
+            metric_relations: "В правоъгълен триъгълник с катети $a, b$, хипотенуза $c$ и височина $h_c$: Питагорова теорема: $a^2 + b^2 = c^2$. Основни метрични формули: $h_c^2 = a_1 \\cdot b_1$, $a^2 = a_1 \\cdot c$, $b^2 = b_1 \\cdot c$ и $h_c = \\frac{a \\cdot b}{c}$.",
+            trig_acute: "В правоъгълен триъгълник с остър ъгъл $\\alpha$: $\\sin \\alpha = \\frac{\\text{срещулежащ катет}}{\\text{хипотенуза}} = \\frac{a}{c}$, $\\cos \\alpha = \\frac{\\text{прилежащ катет}}{\\text{хипотенуза}} = \\frac{b}{c}$, $\\tan \\alpha = \\frac{a}{b}$, $\\cot \\alpha = \\frac{b}{a}$. Зависимост: $\\sin^2 \\alpha + \\cos^2 \\alpha = 1$.",
             assessment: "Внимателно проверявайте изчисленията си. При текстови задачи винаги дефинирайте ясно неизвестните."
         };
 
@@ -353,7 +400,6 @@
                 const opt = document.createElement('option');
                 opt.value = theme.id;
                 opt.textContent = theme.title;
-                if (index === 1) opt.selected = true; // Функции по подразбиране
                 themeSelect.appendChild(opt);
             });
             updateLessons();
@@ -369,6 +415,10 @@
                     const opt = document.createElement('option');
                     opt.value = index;
                     opt.textContent = lesson;
+                    if(lesson.includes("Контролна работа") || lesson.includes("Класна работа")) {
+                        opt.style.fontWeight = "bold";
+                        opt.style.color = "#ea580c";
+                    }
                     lessonSelect.appendChild(opt);
                 });
             }
@@ -376,347 +426,1058 @@
 
         themeSelect.addEventListener('change', updateLessons);
 
+        // ==========================================
+        // ПСЕВДОСЛУЧАЕН ГЕНЕРАТОР, БАЗИРАН НА SEED
+        // ==========================================
         let currentSeed = 1;
         function setSeed(seed) { currentSeed = seed; }
-        function seededRandom() { let x = Math.sin(currentSeed++) * 10000; return x - Math.floor(x); }
-        function getRandomIntSeeded(min, max) { return Math.floor(seededRandom() * (max - min + 1)) + min; }
-        function getRandomNonZeroIntSeeded(min, max) { let val = 0; while(val === 0) val = getRandomIntSeeded(min, max); return val; }
+        function seededRandom() { 
+            let x = Math.sin(currentSeed++) * 10000; 
+            return x - Math.floor(x); 
+        }
+        function getRandomIntSeeded(min, max) { 
+            return Math.floor(seededRandom() * (max - min + 1)) + min; 
+        }
+        function getRandomNonZeroIntSeeded(min, max) { 
+            let val = 0; 
+            while(val === 0) val = getRandomIntSeeded(min, max); 
+            return val; 
+        }
+
+        // Алгоритъм на Фишер-Йейтс за псевдослучайно разбъркване по Seed
+        function seededShuffle(arr) {
+            let shuffled = [...arr];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = getRandomIntSeeded(0, i);
+                const temp = shuffled[i];
+                shuffled[i] = shuffled[j];
+                shuffled[j] = temp;
+            }
+            return shuffled;
+        }
+
+        // Интелигентно разпределение за предотвратяване на еднакви последователни задачи
+        function getShuffledTemplates(templates, count) {
+            let result = [];
+            while (result.length < count) {
+                let shuffled = seededShuffle(templates);
+                if (result.length > 0 && result[result.length - 1] === shuffled[0] && shuffled.length > 1) {
+                    let temp = shuffled[0];
+                    shuffled[0] = shuffled[1];
+                    shuffled[1] = temp;
+                }
+                result = result.concat(shuffled);
+            }
+            return result.slice(0, count);
+        }
+
         function getSignStr(val) { return val >= 0 ? `+ ${val}` : `- ${Math.abs(val)}`; }
 
-        // ==========================================
-        // ПРЕРАБОТЕНИ ГЕНЕРАТОРИ СТРОГО СПОРЕД УРОКА
-        // ==========================================
-        const taskGenerator = {
-            probability: {
-                generate: function(lessonIdx, difficulty, count, seed, sheetType) {
-                    setSeed(seed * 15);
-                    const tasks = [];
-                    for (let i = 0; i < count; i++) {
-                        let cDiff = difficulty === 'mixed' ? ['basic', 'medium', 'hard'][i % 3] : difficulty;
-                        let cLesson = sheetType === 'mixed_topic' ? getRandomIntSeeded(0, 2) : lessonIdx;
+        const svgHelpers = {
+            grid: () => `<div class="flex justify-center mt-3 mb-2 svg-print-fix">
+                <svg width="180" height="180" viewBox="-10 -10 20 20" class="border border-slate-200 bg-slate-50 shadow-sm rounded">
+                    <defs><pattern id="gridPattern" width="2" height="2" patternUnits="userSpaceOnUse"><path d="M 2 0 L 0 0 0 2" fill="none" stroke="#e2e8f0" stroke-width="0.3"/></pattern></defs>
+                    <rect x="-10" y="-10" width="20" height="20" fill="url(#gridPattern)" />
+                    <line x1="-10" y1="0" x2="10" y2="0" stroke="#64748b" stroke-width="0.5"/><line x1="0" y1="-10" x2="0" y2="10" stroke="#64748b" stroke-width="0.5"/>
+                    <polygon points="10,0 9,-0.5 9,0.5" fill="#64748b"/><polygon points="0,-10 -0.5,-9 0.5,-9" fill="#64748b"/>
+                    <text x="8" y="1.5" font-size="2" fill="#64748b">x</text><text x="0.5" y="-8" font-size="2" fill="#64748b">y</text>
+                </svg></div>`,
+            
+            rightTriangle: (lblA, lblB, lblC, extra='') => `<div class="flex justify-center mt-4 mb-2 svg-print-fix">
+                <svg width="180" height="120" viewBox="0 0 180 120" class="overflow-visible">
+                    <polygon points="10,110 160,110 10,10" fill="#f8fafc" stroke="#0f766e" stroke-width="2" stroke-linejoin="round"/>
+                    <polyline points="10,95 25,95 25,110" fill="none" stroke="#0f766e" stroke-width="1.5"/>
+                    <text x="85" y="125" font-family="Arial" font-size="14" fill="#334155" text-anchor="middle">${lblB}</text>
+                    <text x="-5" y="60" font-family="Arial" font-size="14" fill="#334155" text-anchor="end">${lblA}</text>
+                    <text x="95" y="50" font-family="Arial" font-size="14" fill="#334155">${lblC}</text>
+                    ${extra}
+                </svg></div>`,
+            
+            similarTriangles: () => `<div class="flex justify-center gap-6 mt-4 mb-2 svg-print-fix">
+                <svg width="100" height="80" viewBox="0 0 100 80" class="overflow-visible">
+                    <polygon points="10,70 90,70 30,10" fill="#f8fafc" stroke="#0f766e" stroke-width="2" stroke-linejoin="round"/>
+                    <text x="5" y="85" font-family="Arial" font-size="12" fill="#475569">A</text><text x="90" y="85" font-family="Arial" font-size="12" fill="#475569">B</text><text x="25" y="5" font-family="Arial" font-size="12" fill="#475569">C</text>
+                </svg>
+                <svg width="60" height="48" viewBox="0 0 100 80" class="overflow-visible mt-auto">
+                    <polygon points="10,70 90,70 30,10" fill="#f8fafc" stroke="#0f766e" stroke-width="2" stroke-linejoin="round"/>
+                    <text x="0" y="85" font-family="Arial" font-size="14" fill="#475569">A₁</text><text x="90" y="85" font-family="Arial" font-size="14" fill="#475569">B₁</text><text x="20" y="-2" font-family="Arial" font-size="14" fill="#475569">C₁</text>
+                </svg></div>`,
 
-                        if (cLesson === 0 || cLesson === 1) { // Урок 1 и 2: Базова вероятност
-                            if (cDiff === 'basic') {
-                                const r = getRandomIntSeeded(4, 8); const g = getRandomIntSeeded(3, 6);
-                                tasks.push({
-                                    question: `В кутия има <b>${r} червени</b> и <b>${g} зелени</b> топки. Изтегля се една топка. Намерете вероятността тя да бъде зелена.`,
-                                    space: "h-20", answer: `$P = \\frac{${g}}{${r+g}}$`,
-                                    solution: `Благоприятни изходи: $m = ${g}$. Всички изходи: $n = ${r} + ${g} = ${r+g}$. Вероятност: $P = \\frac{m}{n} = \\frac{${g}}{${r+g}}$.`
-                                });
-                            } else {
-                                tasks.push({
-                                    question: `Хвърлят се едновременно два зара. Каква е вероятността сумата от точките да бъде <b>точно 7</b>?`,
-                                    space: "h-24", answer: `$P = \\frac{1}{6}$`,
-                                    solution: `Общ брой изходи: $6 \\cdot 6 = 36$. Благоприятни (сума 7): (1,6), (2,5), (3,4), (4,3), (5,2), (6,1) $\\Rightarrow m=6$. $P = \\frac{6}{36} = \\frac{1}{6}$.`
-                                });
-                            }
-                        } else { // Урок 3: Сума/Произведение
-                            tasks.push({
-                                question: `В една партида от <b>20 детайла</b> има <b>4 дефектни</b>. Намерете вероятността при случайно избиране на 2 детайла едновременно, те да са без дефект.`,
-                                space: "h-28", answer: `$P = \\frac{12}{19}$`,
-                                solution: `Детайли без дефект: 16. $n = C_2^{20} = 190$. $m = C_2^{16} = 120$. $P = \\frac{120}{190} = \\frac{12}{19}$.`
-                            });
+            numberLine: (roots) => `<div class="flex justify-center mt-6 mb-4 svg-print-fix">
+                <svg width="250" height="40" viewBox="0 0 250 40" class="overflow-visible">
+                    <line x1="10" y1="20" x2="240" y2="20" stroke="#475569" stroke-width="2"/><polygon points="240,20 235,16 235,24" fill="#475569"/>
+                    <circle cx="80" cy="20" r="4" fill="white" stroke="#0f766e" stroke-width="2"/><text x="80" y="40" font-family="Arial" font-size="14" fill="#334155" text-anchor="middle">${roots[0]}</text>
+                    <circle cx="170" cy="20" r="4" fill="white" stroke="#0f766e" stroke-width="2"/><text x="170" y="40" font-family="Arial" font-size="14" fill="#334155" text-anchor="middle">${roots[1]}</text>
+                </svg></div>`,
+
+            metricTriangle: (lblA, lblB, lblC, lblH, a1, b1, hc) => `<div class="flex justify-center mt-4 mb-2 svg-print-fix">
+                <svg width="220" height="150" viewBox="0 0 220 150" class="overflow-visible">
+                    <polygon points="20,130 200,130 55,40" fill="#f8fafc" stroke="#0f766e" stroke-width="2" stroke-linejoin="round"/>
+                    <line x1="55" y1="40" x2="55" y2="130" stroke="#b91c1c" stroke-width="1.8" stroke-dasharray="3,3"/>
+                    <polyline points="55,120 65,120 65,130" fill="none" stroke="#b91c1c" stroke-width="1"/>
+                    <path d="M 50,47 L 60,54 L 65,47" fill="none" stroke="#0f766e" stroke-width="1"/>
+                    <text x="55" y="30" font-family="Arial" font-size="13" font-weight="bold" fill="#0f766e" text-anchor="middle">C</text>
+                    <text x="12" y="135" font-family="Arial" font-size="13" font-weight="bold" fill="#0f766e">A</text>
+                    <text x="205" y="135" font-family="Arial" font-size="13" font-weight="bold" fill="#0f766e">B</text>
+                    <text x="55" y="143" font-family="Arial" font-size="12" fill="#b91c1c" text-anchor="middle">H</text>
+                    <text x="32" y="85" font-family="Arial" font-size="11" fill="#475569" text-anchor="middle">${lblA}</text>
+                    <text x="130" y="82" font-family="Arial" font-size="11" fill="#475569" text-anchor="middle">${lblB}</text>
+                    <text x="35" y="125" font-family="Arial" font-size="11" fill="#b91c1c" text-anchor="middle">${a1}</text>
+                    <text x="125" y="125" font-family="Arial" font-size="11" fill="#b91c1c" text-anchor="middle">${b1}</text>
+                    <text x="63" y="85" font-family="Arial" font-size="11" fill="#b91c1c">${hc}</text>
+                </svg></div>`,
+
+            linearFunctionGraph: (a, b) => {
+                const x1 = -3, y1 = a * x1 + b;
+                const x2 = 3, y2 = a * x2 + b;
+                const mapX = (x) => 100 + x * 16;
+                const mapY = (y) => 100 - y * 16;
+                
+                return `<div class="flex justify-center mt-3 mb-2 svg-print-fix">
+                    <svg width="200" height="200" viewBox="0 0 200 200" class="border border-slate-200 bg-slate-50 shadow-sm rounded">
+                        <defs>
+                            <pattern id="gridPatternClass" width="16" height="16" patternUnits="userSpaceOnUse">
+                                <path d="M 16 0 L 0 0 0 16" fill="none" stroke="#e2e8f0" stroke-width="0.5"/>
+                            </pattern>
+                        </defs>
+                        <rect width="200" height="200" fill="url(#gridPatternClass)" />
+                        <line x1="10" y1="100" x2="190" y2="100" stroke="#64748b" stroke-width="1.5"/>
+                        <line x1="100" y1="10" x2="100" y2="190" stroke="#64748b" stroke-width="1.5"/>
+                        <polygon points="190,100 184,97 184,103" fill="#64748b"/>
+                        <polygon points="100,10 97,16 103,16" fill="#64748b"/>
+                        <text x="185" y="115" font-family="sans-serif" font-size="12" fill="#475569">x</text>
+                        <text x="112" y="18" font-family="sans-serif" font-size="12" fill="#475569">y</text>
+                        <text x="90" y="113" font-family="sans-serif" font-size="10" fill="#475569">O</text>
+                        <line x1="${mapX(1)}" y1="97" x2="${mapX(1)}" y2="103" stroke="#475569" stroke-width="1.2"/>
+                        <text x="${mapX(1)}" y="115" font-family="sans-serif" font-size="9" fill="#475569" text-anchor="middle">1</text>
+                        <line x1="97" y1="${mapY(1)}" x2="103" y2="${mapY(1)}" stroke="#475569" stroke-width="1.2"/>
+                        <text x="88" y="${mapY(1) + 3}" font-family="sans-serif" font-size="9" fill="#475569" text-anchor="middle">1</text>
+                        <line x1="${mapX(x1)}" y1="${mapY(y1)}" x2="${mapX(x2)}" y2="${mapY(y2)}" stroke="#1e40af" stroke-width="2.5"/>
+                    </svg></div>`;
+            }
+        };
+
+        const taskGenerator = {
+            // ==========================================
+            // КЛАСНА РАБОТА №1 (АВТЕНТИЧНА СЛОЖНОСТ)
+            // ==========================================
+            linear_work: {
+                generate: function(lessonIdx, difficulty, count, seed, sheetType, isTest) {
+                    setSeed(seed * 77);
+                    const tasks = [];
+                    
+                    // --- ЗАДЪЛЖИТЕЛНА ЗАДАЧА 1 ---
+                    const task1Variations = [
+                        { 
+                            q: "да е вале или спатия", 
+                            a: "$\\frac{11}{32}$", 
+                            s: `Всички карти в тестето са $n = 32$. Броят на валетата е 4. Броят на спатиите е 8. Едно вале е спатия (застъпване). Благоприятните изходи са: $m = 4 + 8 - 1 = 11$. Вероятността е $P = \\frac{11}{32}$.` 
+                        },
+                        { 
+                            q: "да е червена или поп", 
+                            a: "$\\frac{9}{16}$", 
+                            s: `Всички карти в тестето са $n = 32$. Червените карти са 16. Поповете са 4. Два от поповете са червени (купа и каро). Благоприятните изходи са: $m = 16 + 4 - 2 = 18$. Вероятността е $P = \\frac{18}{32} = \\frac{9}{16}$.` 
+                        },
+                        { 
+                            q: "да е дама или купа", 
+                            a: "$\\frac{11}{32}$", 
+                            s: `Всички карти в тестето са $n = 32$. Дамите са 4. Купите са 8. Една дама е купа. Благоприятните изходи са: $m = 4 + 8 - 1 = 11$. Вероятността е $P = \\frac{11}{32}$.` 
                         }
-                    }
+                    ];
+                    const activeT1 = task1Variations[getRandomIntSeeded(0, task1Variations.length - 1)];
+                    tasks.push({
+                        question: `От тесте с 32 карти теглим една карта. Каква е вероятността тази карта <b>${activeT1.q}</b>?`,
+                        space: "h-20", answer: activeT1.a, solution: activeT1.s
+                    });
+
+                    // --- ЗАДЪЛЖИТЕЛНА ЗАДАЧА 2 ---
+                    const task2Variations = [
+                        {
+                            digits: "0, 2, 3, 5, 6 и 7",
+                            q: "всички четирицифрени числа с различни цифри. Каква е вероятността първата цифра на случайно избрано число да е 2?",
+                            a: "$\\frac{1}{5}$",
+                            s: `Цифрите са общо 6. Брой на всички четирицифрени числа с различни цифри ($n$): Първата цифра не може да е 0 (5 избора). За следващите три цифри избираме $V_5^3 = 60$. Общо $n = 300$. Благоприятни числа ($m$), започващи с 2: Първата цифра е фиксирана (2). За останалите три цифри избираме $V_5^3 = 60$. Общо $m = 60$. Вероятността е $P = \\frac{60}{300} = \\frac{1}{5}$.`
+                        },
+                        {
+                            digits: "0, 2, 3, 5, 6 и 7",
+                            q: "всички петцифрени числа с различни цифри. Каква е вероятността произволно избрано от тези числа да започва с 67?",
+                            a: "$\\frac{1}{25}$",
+                            s: `Цифрите са 6. Брой на всички петцифрени числа ($n$): Първата цифра не може да бъде 0 (5 избора). За останалите 4 цифри избираме $V_5^4 = 120$. Общо $n = 600$. Благоприятни изходи ($m$), започващи с 67: Първите две цифри са фиксирани. За останалите 3 цифри избираме $V_4^3 = 24$. Общо $m = 24$. Вероятността е $P = \\frac{24}{600} = \\frac{1}{25}$.`
+                        }
+                    ];
+                    const activeT2 = task2Variations[getRandomIntSeeded(0, task2Variations.length - 1)];
+                    tasks.push({
+                        question: `С помощта на цифрите <b>${activeT2.digits}</b> са съставени ${activeT2.q}`,
+                        space: "h-24", answer: activeT2.a, solution: activeT2.s
+                    });
+
+                    // --- ЗАДЪЛЖИТЕЛНА ЗАДАЧА 3 ---
+                    const task3Variations = [
+                        {
+                            func: "y = 7 - 2x",
+                            opts: [
+                                { label: "А) $(0; 7)$", correct: true },
+                                { label: "Б) $(2; -3)$", correct: false },
+                                { label: "В) $(3; -1)$", correct: false },
+                                { label: "Г) $(1; -5)$", correct: false }
+                            ],
+                            a: "А) $(0; 7)$",
+                            s: `Заместваме координатите на точките в уравнението $y = 7 - 2x$: За точка $(0;7) \\Rightarrow 7 = 7 - 2(0) \\Rightarrow 7 = 7$ (Вярно).`
+                        },
+                        {
+                            func: "y = 5 - 3x",
+                            opts: [
+                                { label: "А) $(1; 2)$", correct: true },
+                                { label: "Б) $(0; -3)$", correct: false },
+                                { label: "В) $(2; 1)$", correct: false },
+                                { label: "Г) $(-1; 4)$", correct: false }
+                            ],
+                            a: "А) $(1; 2)$",
+                            s: `Заместваме точките в $y = 5 - 3x$: За $(1; 2) \\Rightarrow 2 = 5 - 3(1) \\Rightarrow 2 = 2$ (Вярно).`
+                        }
+                    ];
+                    const activeT3 = task3Variations[getRandomIntSeeded(0, task3Variations.length - 1)];
+                    let optsHtml = `<div class="grid grid-cols-2 gap-2 mt-2 font-medium">`;
+                    activeT3.opts.forEach(o => { optsHtml += `<span>${o.label}</span>`; });
+                    optsHtml += `</div>`;
+                    
+                    tasks.push({
+                        question: `Коя от точките лежи на графиката на функцията <b>$${activeT3.func}$</b>?`,
+                        htmlElement: optsHtml,
+                        space: "h-20", answer: activeT3.a, solution: activeT3.s
+                    });
+
+                    // --- ЗАДЪЛЖИТЕЛНА ЗАДАЧА 4 ---
+                    const task4Variations = [
+                        {
+                            ptCoords: "(\\sqrt{3}; \\frac{3}{2})",
+                            a: "$a = \\frac{1}{2}$",
+                            s: `Заместваме координатите в $f(x) = ax^2$: $\\frac{3}{2} = a \\cdot (\\sqrt{3})^2 \\Rightarrow \\frac{3}{2} = 3a \\Rightarrow a = \\frac{1}{2}$.`
+                        },
+                        {
+                            ptCoords: "(2; -\\frac{4}{3})",
+                            a: "$a = -\\frac{1}{3}$",
+                            s: `Заместваме координатите: $-\\frac{4}{3} = a \\cdot 2^2 \\Rightarrow -\\frac{4}{3} = 4a \\Rightarrow a = -\\frac{1}{3}$.`
+                        }
+                    ];
+                    const activeT4 = task4Variations[getRandomIntSeeded(0, task4Variations.length - 1)];
+                    tasks.push({
+                        question: `Графиката на квадратната функция <b>$f(x) = ax^2$</b> минава през точка <b>$A${activeT4.ptCoords}$</b>. Определете коефициента $a$.`,
+                        space: "h-20", answer: activeT4.a, solution: activeT4.s
+                    });
+
+                    // --- ЗАДЪЛЖИТЕЛНА ЗАДАЧА 5 ---
+                    const task5Variations = [
+                        {
+                            a: 2, b: 2,
+                            opts: [ "а) $y = -2x - 2$", "б) $y = 2x + 2$", "в) $y = 2x - 2$", "г) $y = -2x + 2$" ],
+                            correctLabel: "б) $y = 2x + 2$",
+                            s: `Правата пресича ординатната ос $Oy$ в точка $(0; 2) \\Rightarrow b = 2$. Пресича абсцисната ос $Ox$ в точка $(-1; 0) \\Rightarrow 0 = a(-1) + 2 \\Rightarrow a = 2$.`
+                        },
+                        {
+                            a: -2, b: 2,
+                            opts: [ "а) $y = 2x - 2$", "б) $y = -2x + 2$", "в) $y = -2x - 2$", "г) $y = 2x + 2$" ],
+                            correctLabel: "б) $y = -2x + 2$",
+                            s: `Правата пресича оста $Oy$ в точка $(0; 2) \\Rightarrow b = 2$. Пресича оста $Ox$ в точка $(1; 0) \\Rightarrow 0 = a(1) + 2 \\Rightarrow a = -2$.`
+                        }
+                    ];
+                    const activeT5 = task5Variations[getRandomIntSeeded(0, task5Variations.length - 1)];
+                    let opts5Html = `<div class="grid grid-cols-2 gap-2 mt-2 font-medium">`;
+                    activeT5.opts.forEach(o => { opts5Html += `<span>${o}</span>`; });
+                    opts5Html += `</div>`;
+
+                    tasks.push({
+                        question: `Графиката на коя линейна функция е изобразена на предоставения по-долу чертеж?`,
+                        htmlElement: svgHelpers.linearFunctionGraph(activeT5.a, activeT5.b) + opts5Html,
+                        space: "h-24", answer: activeT5.correctLabel, solution: activeT5.s
+                    });
+
                     return tasks;
                 }
             },
+            
+            // ==========================================
+            // РАЗДЕЛ 1: КЛАСИЧЕСКА ВЕРОЯТНОСТ
+            // ==========================================
+            probability: {
+                generate: function(lessonIdx, difficulty, count, seed, sheetType, isTest) {
+                    setSeed(seed * 41);
+                    
+                    let templates = [
+                        // Шаблон 1
+                        (i) => {
+                            const rVal = getRandomIntSeeded(2, 5);
+                            return {
+                                question: `Вероятността при хвърляне на един правилен зар да се паднат <b>повече от ${rVal} точки</b> е:`,
+                                space: "h-20", answer: `$\\frac{${6 - rVal}}{6}$`,
+                                solution: `Благоприятни изходи: {${Array.from({length: 6-rVal}, (_, idx) => rVal + 1 + idx).join(', ')}} (общо ${6 - rVal}). $P = \\frac{${6-rVal}}{6}$.`
+                            };
+                        },
+                        // Шаблон 2
+                        (i) => {
+                            const rVal = getRandomIntSeeded(2, 5);
+                            return {
+                                question: `Вероятността при хвърляне на един правилен зар да се паднат <b>по-малко от ${rVal + 1} точки</b> е:`,
+                                space: "h-20", answer: `$\\frac{${rVal}}{6}$`,
+                                solution: `Благоприятни изходи: {${Array.from({length: rVal}, (_, idx) => idx + 1).join(', ')}} (общо ${rVal}). $P = \\frac{${rVal}}{6}$.`
+                            };
+                        },
+                        // Шаблон 3
+                        (i) => {
+                            const girls = getRandomIntSeeded(4, 6);
+                            const total = girls + 2;
+                            return {
+                                question: `Две момчета и ${girls} момичета се нареждат по случаен начин в редица. Каква е вероятността двете момчета да са едно до друго?`,
+                                space: "h-24", answer: `$\\frac{2}{${total}}$`,
+                                solution: `Всички подреждания са $${total}!$. Момчетата се разглеждат като блок. Блокът и момичетата се подреждат по $${total-1}!$ начина. Момчетата в блока се разместват по $2!$ начина. $P = \\frac{2! \\cdot ${total-1}!}{${total}!} = \\frac{2}{${total}}$.`
+                            };
+                        },
+                        // Шаблон 4
+                        (i) => {
+                            const total = getRandomIntSeeded(7, 9);
+                            const authorBooks = getRandomIntSeeded(2, 3);
+                            const blockFact = authorBooks === 2 ? 2 : 6;
+                            const rem = total - authorBooks + 1;
+                            return {
+                                question: `Разполагаме с ${total} книги, ${authorBooks} от които са от един автор. Намерете вероятността при случайно подреждане на книгите трите книги от този автор да са една до друга.`,
+                                space: "h-24", answer: `$\\frac{${blockFact} \\cdot ${rem}!}{${total}!}$`,
+                                solution: `Всички подреждания: $${total}!$. ${authorBooks}-те книги са общ блок. Блокът и останалите книги дават $${rem}!$ подреждания, книгите в блока се подреждат по $${authorBooks}!$ начина. $P = \\frac{${authorBooks}! \\cdot ${rem}!}{${total}!}$.`
+                            };
+                        },
+                        // Шаблон 5
+                        (i) => {
+                            const target = getRandomIntSeeded(8, 10);
+                            const favOutcomes = target === 8 ? 5 : (target === 9 ? 4 : 3);
+                            return {
+                                question: `Хвърляме два правилни зара. Намерете вероятността сборът от точките на двата зара <b>да не е равен на ${target}</b>.`,
+                                space: "h-24", answer: `$\\frac{${36 - favOutcomes}}{36}$`,
+                                solution: `Всички възможни изходи са 36. Изходите, даващи сбор точно ${target}, са ${favOutcomes}. Вероятността за сбор ${target} е $\\frac{${favOutcomes}}{36}$. Вероятността сборът да НЕ е равен е $1 - \\frac{${favOutcomes}}{36} = \\frac{${36-favOutcomes}}{36}$.`
+                            };
+                        },
+                        // Шаблон 6
+                        (i) => {
+                            const w = getRandomIntSeeded(5, 7); const b = getRandomIntSeeded(4, 5);
+                            const total = w + b;
+                            const totalComb = (total * (total - 1)) / 2;
+                            const sameComb = ((w * (w - 1)) / 2) + ((b * (b - 1)) / 2);
+                            return {
+                                question: `В една кутия има <b>${w} бели</b> и <b>${b} черни топки</b>. Изваждат се по случаен начин две топки. Намерете вероятността те да са от <b>един и същ цвят</b>.`,
+                                space: "h-28", answer: `$\\frac{${sameComb}}{${totalComb}}$`,
+                                solution: `Всички възможни начини за избор на 2 топки са $C_{${total}}^{2} = ${totalComb}$. Благоприятни изходи: само бели $C_{${w}}^{2} = ${(w*(w-1))/2}$ или само черни $C_{${b}}^{2} = ${(b*(b-1))/2}$, общо: ${sameComb} изхода. $P = \\frac{${sameComb}}{${totalComb}}$.`
+                            };
+                        },
+                        // Шаблон 7
+                        (i) => {
+                            return {
+                                question: `С цифрите 2, 3, 4, 7 и 9 са записани всички трицифрени числа с различни цифри. Да се намери вероятността случайно избрано число да е <b>нечетно или да е по-малко от 300</b>.`,
+                                space: "h-32", answer: `$\\frac{13}{20}$`,
+                                solution: `Общ брой числа: $V_5^3 = 5 \\cdot 4 \\cdot 3 = 60$. <br>А (числото е нечетно): завършва на 3, 7 или 9. Начини: $3 \\cdot (4 \\cdot 3) = 36$.<br>B (числото е < 300): започва с 2. Начини: $1 \\cdot (4 \\cdot 3) = 12$.<br>А ∩ B (нечетно и < 300): започва с 2, завършва на 3, 7 или 9. Начини: $1 \\cdot 3 \\cdot 3 = 9$.<br>$P(A \\cup B) = \\frac{36 + 12 - 9}{60} = \\frac{39}{60} = \\frac{13}{20}$ .`
+                            };
+                        }
+                    ];
+
+                    if (!isTest && sheetType !== 'mixed_topic') {
+                        if (lessonIdx === 0) {
+                            templates = [templates[0], templates[1]];
+                        } else if (lessonIdx === 1) {
+                            templates = [templates[2], templates[3], templates[4]];
+                        } else {
+                            templates = [templates[5], templates[6]];
+                        }
+                    }
+
+                    const chosen = getShuffledTemplates(templates, count);
+                    return chosen.map((t, idx) => t(idx));
+                }
+            },
+
+            // ==========================================
+            // РАЗДЕЛ 2: ФУНКЦИИ
+            // ==========================================
             functions: {
-                generate: function(lessonIdx, difficulty, count, seed, sheetType) {
+                generate: function(lessonIdx, difficulty, count, seed, sheetType, isTest) {
                     setSeed(seed * 22);
                     const tasks = [];
-                    for (let i = 0; i < count; i++) {
-                        let cDiff = difficulty === 'mixed' ? ['basic', 'medium', 'hard'][i % 3] : difficulty;
-                        let cLesson = sheetType === 'mixed_topic' ? getRandomIntSeeded(0, 3) : lessonIdx;
+                    
+                    let templates = [
+                        // Шаблон 1
+                        (i) => {
+                            const a = getRandomNonZeroIntSeeded(-3, 5); const b = getRandomIntSeeded(-5, 5);
+                            return { 
+                                question: `Намерете стойността на функцията $f(x) = ${a}x ${getSignStr(b)}$ за стойност на аргумента $x = 3$.`, 
+                                space: "h-20", answer: `$f(3) = ${a*3+b}$`, 
+                                solution: `Заместваме $x = 3$: $f(3) = ${a} \\cdot 3 ${getSignStr(b)} = ${a*3+b}$.` 
+                            };
+                        },
+                        // Шаблон 2
+                        (i) => {
+                            const a = getRandomNonZeroIntSeeded(-3, 5); const b = getRandomIntSeeded(-5, 5);
+                            return { 
+                                question: `За коя стойност на аргумента $x$ функцията $f(x) = ${a}x ${getSignStr(b)}$ приема стойност $0$?`, 
+                                space: "h-20", answer: `$x = \\frac{${-b}}{${a}}$`, 
+                                solution: `Решаваме уравнението $f(x) = 0 \\Rightarrow ${a}x ${getSignStr(b)} = 0 \\Rightarrow x = \\frac{${-b}}{${a}}$.` 
+                            };
+                        },
+                        // Шаблон 3
+                        (i) => {
+                            const a = getRandomNonZeroIntSeeded(-4, 4);
+                            return { 
+                                question: `Определете дефиниционната област на функцията: $f(x) = \\frac{x+2}{x - ${Math.abs(a)}}$.`, 
+                                space: "h-20", answer: `$x \\neq ${Math.abs(a)}$`, 
+                                solution: `Знаменателят не трябва да бъде нула: $x - ${Math.abs(a)} \\neq 0 \\Rightarrow x \\neq ${Math.abs(a)}$.` 
+                            };
+                        },
+                        // Шаблон 4
+                        (i) => {
+                            const b = getRandomIntSeeded(-5, 5);
+                            return { 
+                                question: `Определете дефиниционната област на функцията: $f(x) = \\frac{5}{\\sqrt{x + ${Math.abs(b)}}}$.`, 
+                                space: "h-20", answer: `$x > ${-Math.abs(b)}$`, 
+                                solution: `Подкоренната величина в знаменател трябва да е строго положителна: $x + ${Math.abs(b)} > 0 \\Rightarrow x > ${-Math.abs(b)}$.` 
+                            };
+                        },
+                        // Шаблон 5
+                        (i) => {
+                            const a = getRandomNonZeroIntSeeded(-2, 2); const b = getRandomIntSeeded(-3, 3);
+                            return { 
+                                question: `Проверете дали точката $M(1; ${a+b})$ лежи на графиката на линейната функция $y = ${a}x ${getSignStr(b)}$.`, 
+                                space: "h-20", answer: `Да`, 
+                                solution: `Заместваме $x=1 \\Rightarrow y = ${a}(1) ${getSignStr(b)} = ${a+b}$. Равенството е вярно.` 
+                            };
+                        },
+                        // Шаблон 6
+                        (i) => {
+                            const a = getRandomNonZeroIntSeeded(-2, 2); const b = getRandomIntSeeded(-3, 3);
+                            return { 
+                                question: `Намерете пресечната точка на графиката на линейната функция $y = ${a}x ${getSignStr(b)}$ с координатната ос $Oy$.`, 
+                                space: "h-20", answer: `$(0; ${b})$`, 
+                                solution: `Заместваме $x = 0 \\Rightarrow y = ${b}$. Координатите са $(0; ${b})$.` 
+                            };
+                        },
+                        // Шаблон 7
+                        (i) => {
+                            const a = getRandomNonZeroIntSeeded(-2, 2); const b = getRandomIntSeeded(-3, 3);
+                            return { 
+                                htmlElement: svgHelpers.grid(), 
+                                question: `Начертайте в дадената координатна система графиката на линейната функция $y = ${a === 1 ? '' : (a === -1 ? '-' : a)}x ${getSignStr(b)}$.`, 
+                                space: "h-24", answer: `Права през $(0; ${b})$ и $(1; ${a+b})$`, 
+                                solution: `Намираме две точки, например при $x=0 \\Rightarrow y=${b}$ и при $x=1 \\Rightarrow y=${a+b}$, и прокарваме права линия.` 
+                            };
+                        },
+                        // Шаблон 8
+                        (i) => {
+                            const a = getRandomNonZeroIntSeeded(-2, 2); const x0 = getRandomIntSeeded(-2, 2);
+                            const bCoeff = -2 * a * x0; const cCoeff = a * x0 * x0 + 1;
+                            return { 
+                                question: `Намерете абсцисата на върха на параболата на квадратната функция: $y = ${a}x^2 ${getSignStr(bCoeff)}x ${getSignStr(cCoeff)}$.`, 
+                                space: "h-20", answer: `$x_0 = ${x0}$`, 
+                                solution: `Прилагаме формулата за абсциса на върха: $x_0 = -\\frac{b}{2a} = -\\frac{${bCoeff}}{2 \\cdot ${a}} = ${x0}$.` 
+                            };
+                        }
+                    ];
 
-                        if (cLesson === 0) { 
-                            // --- УРОК 1: Стойност и Дефиниционна област ---
-                            if (cDiff === 'basic') {
-                                const a = getRandomNonZeroIntSeeded(-3, 3); const b = getRandomIntSeeded(-5, 5); const vX = getRandomIntSeeded(-3, 3);
-                                tasks.push({
-                                    question: `Намерете стойността на функцията $f(x) = ${a === 1 ? '' : (a === -1 ? '-' : a)}x ${getSignStr(b)}$ за стойност на аргумента $x = ${vX}$.`,
-                                    space: "h-20", answer: `$f(${vX}) = ${a * vX + b}$`,
-                                    solution: `Заместваме $x$: $f(${vX}) = ${a} \\cdot (${vX}) ${getSignStr(b)} = ${a * vX + b}$.`
-                                });
-                            } else if (cDiff === 'medium') {
-                                const a = getRandomIntSeeded(1, 5);
-                                tasks.push({
-                                    question: `Определете дефиниционната област на функцията: $f(x) = \\frac{2x+3}{x - ${a}}$.`,
-                                    space: "h-20", answer: `$x \\neq ${a}$`,
-                                    solution: `Знаменателят не може да бъде нула: $x - ${a} \\neq 0 \\Rightarrow x \\neq ${a}$.`
-                                });
-                            } else {
-                                const a = getRandomIntSeeded(1, 5);
-                                tasks.push({
-                                    question: `Определете дефиниционната област на функцията: $f(x) = \\frac{5}{\\sqrt{x - ${a}}}$.`,
-                                    space: "h-20", answer: `$x \\in (${a}; +\\infty)$`,
-                                    solution: `Подкоренната величина в знаменател трябва да е строго положителна: $x - ${a} > 0 \\Rightarrow x > ${a}$.`
-                                });
-                            }
-                        } else if (cLesson === 1) { 
-                            // --- УРОК 2: Линейна функция ---
-                            if (cDiff === 'basic') {
-                                const a = getRandomNonZeroIntSeeded(-2, 2); const b = getRandomIntSeeded(-3, 3); const ptX = getRandomIntSeeded(-2, 2); const ptY = a * ptX + b;
-                                tasks.push({
-                                    question: `Проверете дали точката $M(${ptX}; ${ptY})$ лежи на графиката на линейната функция $y = ${a === 1 ? '' : (a === -1 ? '-' : a)}x ${getSignStr(b)}$.`,
-                                    space: "h-20", answer: `Да, лежи.`,
-                                    solution: `Заместваме координатите: $y = ${a}(${ptX}) ${getSignStr(b)} = ${a * ptX + b}$. Получихме ${ptY}, следователно точката лежи на графиката.`
-                                });
-                            } else {
-                                const b = getRandomNonZeroIntSeeded(-4, 4);
-                                tasks.push({
-                                    question: `Намерете координатите на пресечните точки на графиката на функцията $y = 2x ${getSignStr(b)}$ с координатните оси.`,
-                                    space: "h-24", answer: `С Ox: $(${b/-2}; 0)$, с Oy: $(0; ${b})$`,
-                                    solution: `Пресечна с Oy: заместваме $x = 0 \\Rightarrow y = ${b}$. Точка $(0; ${b})$.<br>Пресечна с Ox: заместваме $y = 0 \\Rightarrow 2x ${getSignStr(b)} = 0 \\Rightarrow x = ${b/-2}$. Точка $(${b/-2}; 0)$.`
-                                });
-                            }
-                        } else if (cLesson === 2) { 
-                            // --- УРОК 3: Квадратна функция y = ax² ---
-                            const a = getRandomNonZeroIntSeeded(-3, 3);
-                            tasks.push({
-                                question: `За квадратната функция $y = ${a}x^2$, определете посоката на клоновете на параболата и намерете стойността ѝ при $x = 2$.`,
-                                space: "h-20", answer: `Клонове ${a > 0 ? 'нагоре' : 'надолу'}, $y(2) = ${a * 4}$`,
-                                solution: `Коефициентът пред $x^2$ е $a = ${a}$. Тъй като ${a > 0 ? 'a > 0' : 'a < 0'}, клоновете са ${a > 0 ? 'нагоре' : 'надолу'}. При $x=2 \\Rightarrow y = ${a} \\cdot 2^2 = ${a * 4}$.`
-                            });
-                        } else if (cLesson === 3) { 
-                            // --- УРОК 4: Квадратна функция y = ax² + bx + c ---
-                            const x0 = getRandomIntSeeded(-2, 2); const y0 = getRandomIntSeeded(-3, 3); const a = getRandomNonZeroIntSeeded(-1, 1);
-                            const bCoeff = -2 * a * x0; const cCoeff = a * x0 * x0 + y0;
-                            const fxStr = `${a === 1 ? '' : (a === -1 ? '-' : a)}x² ${bCoeff === 0 ? '' : getSignStr(bCoeff) + 'x'} ${cCoeff === 0 ? '' : getSignStr(cCoeff)}`;
-                            tasks.push({
-                                question: `Намерете координатите на върха $V(x_0, y_0)$ на параболата: $f(x) = ${fxStr}$.`,
-                                space: "h-24", answer: `$V(${x0}; ${y0})$`,
-                                solution: `По формулата: $x_0 = -\\frac{b}{2a} = -\\frac{${bCoeff}}{2 \\cdot ${a}} = ${x0}$. Заместваме $x_0$ във функцията: $y_0 = f(${x0}) = ${y0}$. Върхът е $V(${x0}; ${y0})$.`
-                            });
+                    if (!isTest && sheetType !== 'mixed_topic') {
+                        if (lessonIdx === 0) {
+                            templates = [templates[0], templates[1], templates[2], templates[3]];
+                        } else if (lessonIdx === 1) {
+                            templates = [templates[4], templates[5], templates[6]];
+                        } else {
+                            templates = [templates[7]];
                         }
                     }
-                    return tasks;
+
+                    const chosen = getShuffledTemplates(templates, count);
+                    return chosen.map((t, idx) => t(idx));
                 }
             },
+
+            // ==========================================
+            // РАЗДЕЛ 4: СИСТЕМИ ЛИНЕЙНИ УРАВНЕНИЯ
+            // ==========================================
             systems_linear: {
-                generate: function(lessonIdx, difficulty, count, seed, sheetType) {
+                generate: function(lessonIdx, difficulty, count, seed, sheetType, isTest) {
                     setSeed(seed * 31);
-                    const tasks = [];
-                    for (let i = 0; i < count; i++) {
-                        let cDiff = difficulty === 'mixed' ? ['basic', 'medium', 'hard'][i % 3] : difficulty;
-                        let cLesson = sheetType === 'mixed_topic' ? getRandomIntSeeded(0, 3) : lessonIdx;
-                        const tX = getRandomIntSeeded(-3, 3); const tY = getRandomIntSeeded(-3, 3);
+                    
+                    let templates = [
+                        (i) => {
+                            return { 
+                                question: `Решете системата линейни уравнения чрез заместване:<br><br>$$\\left| \\begin{array}{l} x - y = 2 \\\\ 2x + y = 7 \\end{array} \\right.$$`, 
+                                space: "h-28", answer: `$(3; 1)$`, 
+                                solution: `От първото уравнение $x = y + 2$. Заместваме във второто: $2(y+2)+y=7 \\Rightarrow 3y=3 \\Rightarrow y=1$. Тогава $x=3$.` 
+                            };
+                        },
+                        (i) => {
+                            return { 
+                                question: `Решете системата линейни уравнения чрез събиране:<br><br>$$\\left| \\begin{array}{l} 3x + y = 4 \\\\ 4x + 2y = 12 \\end{array} \\right.$$`, 
+                                space: "h-28", answer: `$(2; -2)$`, 
+                                solution: `Умножаваме първото по $-2$: $-6x - 2y = -8$. Събираме с второто: $-2x = 4 \\Rightarrow x = -2$. Заместваме: $y=10$.` 
+                            };
+                        },
+                        (i) => {
+                            return { 
+                                question: `Сборът на две числа е 15, а разликата им е 3. Намерете тези числа.`, 
+                                space: "h-24", answer: `$9$ и $6$`, 
+                                solution: `Съставяме системата: $\\left| \\begin{array}{l} x + y = 15 \\\\ x - y = 3 \\end{array} \\right.$. Събираме ги почленно: $2x=18 \\Rightarrow x=9$, съответно $y=6$.` 
+                            };
+                        },
+                        (i) => {
+                            return { 
+                                question: `Проверете коя от наредените двойки числа е решение на системата:<br><br>$$\\left| \\begin{array}{l} 4x + 5y = 3 \\\\ 3x - 5y = 11 \\end{array} \\right.$$<br>А) (-1; 2) &nbsp;&nbsp;&nbsp; Б) (2; -1) &nbsp;&nbsp;&nbsp; В) (3; -3) &nbsp;&nbsp;&nbsp; Г) (12; 5)`, 
+                                space: "h-20", answer: `Б) (2; -1)`, 
+                                solution: `Заместваме (2; -1): $4(2) + 5(-1) = 8 - 5 = 3$ (вярно) и $3(2) - 5(-1) = 6 + 5 = 11$ (вярно).` 
+                            };
+                        }
+                    ];
 
-                        if (cLesson === 0) { // Проверка
-                            tasks.push({
-                                question: `Проверете дали двойката число $(x; y) = (${tX}; ${tY})$ е решение на системата:<br>| $x + y = ${tX+tY}$<br>| $x - y = ${tX-tY}$`,
-                                space: "h-20", answer: `Да, решение е.`,
-                                solution: `Заместваме в първото: ${tX} + ${tY} = ${tX+tY} (вярно). Във второто: ${tX} - ${tY} = ${tX-tY} (вярно). Двойката е решение.`
-                            });
-                        } else if (cLesson === 1) { // Заместване
-                            tasks.push({
-                                question: `Решете системата линейни уравнения чрез <b>метода на заместването</b>:<br>| $x - y = ${tX-tY}$<br>| $2x + y = ${2*tX+tY}$`,
-                                space: "h-28", answer: `$(x; y) = (${tX}; ${tY})$`,
-                                solution: `От първото изразяваме $x = y + ${tX-tY}$. Заместваме във второто: $2(y + ${tX-tY}) + y = ${2*tX+tY} \\Rightarrow 3y = ${tY*3} \\Rightarrow y = ${tY}$. Тогава $x = ${tX}$.`
-                            });
-                        } else if (cLesson === 2) { // Събиране
-                            tasks.push({
-                                question: `Решете системата линейни уравнения чрез <b>метода на събирането</b>:<br>| $x + y = ${tX+tY}$<br>| $x - y = ${tX-tY}$`,
-                                space: "h-24", answer: `$(x; y) = (${tX}; ${tY})$`,
-                                solution: `Събираме ги почленно: $2x = ${(tX+tY)+(tX-tY)} \\Rightarrow x = ${tX}$. Заместваме в първото $\\Rightarrow y = ${tY}$.`
-                            });
-                        } else { // Текстови задачи
-                            const heads = getRandomIntSeeded(10, 20); const legs = heads * 2 + getRandomIntSeeded(2, 6) * 2;
-                            const x = (legs - (2 * heads)) / 2; const y = heads - x;
-                            tasks.push({
-                                question: `В двор има общо <b>${heads} глави</b> и <b>${legs} крака</b> от зайци и кокошки. Като съставите система, определете броя на зайците.`,
-                                space: "h-32", answer: `Зайци: ${x}`,
-                                solution: `Зайци $x$, кокошки $y$. Системата е: $x + y = ${heads}$ и $4x + 2y = ${legs}$. От решаването ѝ следва $x = ${x}$, $y = ${y}$.`
-                            });
-                        }
-                    }
-                    return tasks;
+                    const chosen = getShuffledTemplates(templates, count);
+                    return chosen.map((t, idx) => t(idx));
                 }
             },
+
+            // ==========================================
+            // РАЗДЕЛ 5: СИСТЕМИ УРАВНЕНИЯ ОТ ВТОРА СТЕПЕН
+            // ==========================================
             systems_quadratic: {
-                generate: function(lessonIdx, difficulty, count, seed, sheetType) {
+                generate: function(lessonIdx, difficulty, count, seed, sheetType, isTest) {
                     setSeed(seed * 45);
-                    const tasks = [];
-                    for (let i = 0; i < count; i++) {
-                        let cLesson = sheetType === 'mixed_topic' ? getRandomIntSeeded(0, 1) : lessonIdx;
-                        if (cLesson === 0) { // Линейно + Квадратно
-                            const x1 = getRandomIntSeeded(2, 4); const y1 = 1; const sum = x1+y1; const prod = x1*y1;
-                            tasks.push({
-                                question: `Решете системата уравнения (едното е от първа степен):<br>| $x + y = ${sum}$<br>| $x \\cdot y = ${prod}$`,
-                                space: "h-28", answer: `$(x;y) = (${x1}; ${y1})$ и $(${y1}; ${x1})$`,
-                                solution: `Изразяваме $y = ${sum} - x$ от линейното и заместваме във второто: $x(${sum} - x) = ${prod} \\Rightarrow x^2 - ${sum}x + ${prod} = 0$. Корени са $x_1=${x1}, x_2=${y1}$.`
-                            });
-                        } else { // Симетрични
-                            tasks.push({
-                                question: `Решете симетричната система уравнения от втора степен:<br>| $x^2 + y^2 = 10$<br>| $x + y = 4$`,
-                                space: "h-32", answer: `$(3; 1)$ и $(1; 3)$`,
-                                solution: `Използваме полагане $x+y=u=4, xy=v$. От $x^2+y^2 = (x+y)^2 - 2xy = 16 - 2v = 10 \\Rightarrow v = 3$. Системата $x+y=4, xy=3$ има решения (3;1) и (1;3).`
-                            });
+                    
+                    let templates = [
+                        (i) => {
+                            return { 
+                                question: `Решете системата уравнения:<br><br>$$\\left| \\begin{array}{l} (x - 2)(y + 3) = 0 \\\\ x^2 + y^2 - 3x = 7 \\end{array} \\right.$$`, 
+                                space: "h-28", answer: `$(2; 3), (2; -3), (1; -3)$`, 
+                                solution: `От първото уравнение следва $x=2$ или $y=-3$. Заместваме последователно във второто уравнение и намираме съответните реални решения.` 
+                            };
+                        },
+                        (i) => {
+                            return { 
+                                question: `Решете системата уравнения:<br><br>$$\\left| \\begin{array}{l} x^2 + xy - 2y^2 = 0 \\\\ xy + x - y = 1 \\end{array} \\right.$$`, 
+                                space: "h-32", answer: `Решения: $(1; 1)$, $(-1; -1)$`, 
+                                solution: `Първото уравнение е хомогенно. Разлагаме на $(x-y)(x+2y)=0$. Оттук имаме два случая: $x=y$ или $x=-2y$. Заместваме във второто уравнение и решаваме.` 
+                            };
+                        },
+                        (i) => {
+                            return { 
+                                question: `Решете системата уравнения от втора степен:<br><br>$$\\left| \\begin{array}{l} x^2 + y^2 = 10 \\\\ x + y = 4 \\end{array} \\right.$$`, 
+                                space: "h-32", answer: `$(3; 1)$ и $(1; 3)$`, 
+                                solution: `Изразяваме $x = 4 - y$ и заместваме в първото: $(4-y)^2 + y^2 = 10 \\Rightarrow 2y^2 - 8y + 6 = 0 \\Rightarrow y^2 - 4y + 3 = 0$. Получаваме решенията.` 
+                            };
+                        },
+                        (i) => {
+                            return { 
+                                question: `Иван трябвало да реши 300 задачи за определен срок, като решава по равен брой на ден. Той решил по 3 задачи повече на ден и приключил 5 дни преди срока. Намерете по колко задачи дневно е решавал и за колко дни.`, 
+                                space: "h-36", answer: `15 задачи на ден за 20 дни`, 
+                                solution: `Нека дневната норма е $x$, а срокът е $y$ дни. Системата е $\\left| \\begin{array}{l} x \\cdot y = 300 \\\\ (x + 3)(y - 5) = 300 \\end{array} \\right.$. Решаваме спрямо реалните положителни стойности.` 
+                            };
                         }
-                    }
-                    return tasks;
+                    ];
+
+                    const chosen = getShuffledTemplates(templates, count);
+                    return chosen.map((t, idx) => t(idx));
                 }
             },
+
+            // ==========================================
+            // РАЗДЕЛ 6: ПОДОБНИ ТРИЪГЪЛНИЦИ
+            // ==========================================
             similar_triangles: {
-                generate: function(lessonIdx, difficulty, count, seed, sheetType) {
+                generate: function(lessonIdx, difficulty, count, seed, sheetType, isTest) {
                     setSeed(seed * 52);
-                    const tasks = [];
-                    for (let i = 0; i < count; i++) {
-                        let cLesson = sheetType === 'mixed_topic' ? getRandomIntSeeded(0, 2) : lessonIdx;
-                        if (cLesson === 0 || cLesson === 1) { // Признаци
-                            const a = getRandomIntSeeded(3, 5); const k = getRandomIntSeeded(2, 3);
-                            tasks.push({
-                                question: `Триъгълниците $\\triangle ABC \\sim \\triangle A_1B_1C_1$ са подобни с коефициент $k = ${k}$. Ако $AB = ${a}$ cm, намерете $A_1B_1$.`,
-                                space: "h-20", answer: `$A_1B_1 = ${a * k}$ cm`,
-                                solution: `Поради подобието $\\frac{A_1B_1}{AB} = k \\Rightarrow A_1B_1 = AB \\cdot k = ${a} \\cdot ${k} = ${a*k}$ cm.`
-                            });
-                        } else { // Свойства (Лица)
-                            const k = 2; const s1 = 10;
-                            tasks.push({
-                                question: `Два подобни триъгълника имат коефициент на подобност $k = ${k}$. Лицето на по-малкия е $S = ${s1}$ cm². Намерете лицето на по-големия.`,
-                                space: "h-24", answer: `$S_1 = ${s1 * k * k}$ cm²`,
-                                solution: `Отношението на лицата на подобни триъгълници е равно на квадрата на коефициента на подобност: $\\frac{S_1}{S} = k^2 \\Rightarrow S_1 = ${s1} \\cdot 2^2 = ${s1 * 4}$ cm².`
-                            });
+                    
+                    let templates = [
+                        // Първи признак - Шаблон 1
+                        (i) => {
+                            const a = getRandomIntSeeded(3, 6); const k = getRandomIntSeeded(2, 4);
+                            return { 
+                                htmlElement: svgHelpers.similarTriangles(), 
+                                question: `В $\\triangle ABC$ и $\\triangle A_1B_1C_1$ имаме $\\angle A = \\angle A_1$ и $\\angle B = \\angle B_1$. Ако $AB = ${a}$ cm и $A_1B_1 = ${a * k}$ cm, намерете коефициента на подобност $k$.`, 
+                                space: "h-20", answer: `$k = ${k}$`, 
+                                solution: `Тъй като двата триъгълника имат по два равни ъгъла, те са подобни по Първи признак. $k = \\frac{A_1B_1}{AB} = \\frac{${a * k}}{${a}} = ${k}$.` 
+                            };
+                        },
+                        // Първи признак - Шаблон 2
+                        (i) => {
+                            const k = getRandomIntSeeded(2, 3); const mn_val = getRandomIntSeeded(3, 5); const ab_val = mn_val * k;
+                            const cm_val = getRandomIntSeeded(2, 4); const ac_val = cm_val * k; const ma_val = ac_val - cm_val;
+                            return { 
+                                question: `В $\\triangle ABC$ права $MN \\parallel AB$ пресича $AC$ в $M$ и $BC$ в $N$. Ако $CM = ${cm_val}$ cm, $AM = ${ma_val}$ cm и $MN = ${mn_val}$ cm, намерете дължината на основата $AB$.`, 
+                                space: "h-24", answer: `$AB = ${ab_val}$ cm`, 
+                                solution: `От $MN \\parallel AB$ следва $\\triangle MNC \\sim \\triangle ABC$ (Първи признак). $AC = CM + AM = ${ac_val}$ cm. $\\frac{MN}{AB} = \\frac{CM}{AC} \\Rightarrow \\frac{${mn_val}}{AB} = \\frac{${cm_val}}{${ac_val}} \\Rightarrow AB = ${ab_val}$ cm.` 
+                            };
+                        },
+                        // Първи признак - Шаблон 3
+                        (i) => {
+                            const a = getRandomIntSeeded(4, 7); const k = getRandomIntSeeded(2, 3);
+                            return { 
+                                question: `Триъгълниците $\\triangle ABC$ и $\\triangle MNP$ са подобни по първи признак. Ако $BC = ${a}$ cm и коефициентът на подобност е $k = ${k}$, намерете съответната страна $NP$ на по-големия триъгълник.`, 
+                                space: "h-20", answer: `$NP = ${a * k}$ cm`, 
+                                solution: `От подобрението следва $\\frac{NP}{BC} = k \\Rightarrow NP = BC \\cdot k = ${a} \\cdot ${k} = ${a * k}$ cm.` 
+                            };
+                        },
+                        // Втори признак - Шаблон 4
+                        (i) => {
+                            const c = getRandomIntSeeded(2, 4);
+                            return { 
+                                question: `Страните на $\\triangle ABC$ са $3$ cm, $4$ cm и $5$ cm, а страните на $\\triangle A_1B_1C_1$ са ${3*c}$ cm, ${4*c}$ cm и ${5*c}$ cm. Подобни ли са двата триъгълника?`, 
+                                space: "h-20", answer: `Да`, 
+                                solution: `Отношенията на съответните страни са $\\frac{${3*c}}{3} = \\frac{${4*c}}{4} = \\frac{${5*c}}{5} = ${c}$. Триъгълниците са подобни по Трети признак.` 
+                            };
+                        },
+                        // Втори признак - Шаблон 5
+                        (i) => {
+                            const k = getRandomIntSeeded(2, 4);
+                            return { 
+                                question: `Два триъгълника са подобни. Страните на малкия са 4 cm, 5 cm и 7 cm. Ако най-малката страна на големия е ${4*k}$ cm, намерете останалите му две страни.`, 
+                                space: "h-24", answer: `$${5*k}$ cm и $${7*k}$ cm`, 
+                                solution: `Коефициентът на подобност е $k = \\frac{${4*k}}{4} = ${k}$. Другите страни са $5 \\cdot ${k} = ${5*k}$ cm и $7 \\cdot ${k} = ${7*k}$ cm.` 
+                            };
+                        },
+                        // Свойства - Шаблон 6
+                        (i) => {
+                            const p1 = getRandomIntSeeded(12, 20); const k = getRandomIntSeeded(2, 4);
+                            return { 
+                                question: `Два подобни триъгълника имат коефициент на подобност $k = ${k}$. Ако периметърът на по-малкия е $P = ${p1}$ cm, намерете периметъра на по-големия.`, 
+                                space: "h-20", answer: `$${p1 * k}$ cm`, 
+                                solution: `Отношението на периметрите е равно на $k$: $\\frac{P_1}{P} = k \\Rightarrow P_1 = ${p1} \\cdot ${k} = ${p1 * k}$ cm.` 
+                            };
+                        },
+                        // Свойства - Шаблон 7
+                        (i) => {
+                            const s1 = getRandomIntSeeded(5, 12); const k = getRandomIntSeeded(2, 4);
+                            return { 
+                                question: `Два подобни триъгълника имат отношение на съответни страни $1 : ${k}$. Ако лицето на по-малкия е $S = ${s1}$ cm², намерете лицето на по-големия.`, 
+                                space: "h-24", answer: `$${s1 * k * k}$ cm²`, 
+                                solution: `Отношението на лицата се отнася като квадрата на коефициента: $k^2 = ${k*k}$. Лицето на големия е $S_{голям} = ${s1} \\cdot ${k*k} = ${s1 * k * k}$ cm².` 
+                            };
+                        }
+                    ];
+
+                    if (!isTest && sheetType !== 'mixed_topic') {
+                        if (lessonIdx === 0) {
+                            templates = [templates[0], templates[1], templates[2]];
+                        } else if (lessonIdx === 1) {
+                            templates = [templates[3], templates[4]];
+                        } else {
+                            templates = [templates[5], templates[6]];
                         }
                     }
-                    return tasks;
+
+                    const chosen = getShuffledTemplates(templates, count);
+                    return chosen.map((t, idx) => t(idx));
                 }
             },
+
+            // ==========================================
+            // РАЗДЕЛ 7: РАЦИОНАЛНИ НЕРАВЕНСТВА
+            // ==========================================
             rational_inequalities: {
-                generate: function(lessonIdx, difficulty, count, seed, sheetType) {
+                generate: function(lessonIdx, difficulty, count, seed, sheetType, isTest) {
                     setSeed(seed * 63);
-                    const tasks = [];
-                    for (let i = 0; i < count; i++) {
-                        let cLesson = sheetType === 'mixed_topic' ? getRandomIntSeeded(0, 1) : lessonIdx;
-                        const a = getRandomIntSeeded(1, 3); const b = getRandomIntSeeded(4, 7);
-                        if (cLesson === 0) { // Дробни неравенства
-                            tasks.push({
-                                question: `Решете дробното рационално неравенство: $\\frac{x - ${a}}{x - ${b}} \\ge 0$`,
-                                space: "h-24", answer: `$x \\in (-\\infty; ${a}] \\cup (${b}; +\\infty)$`,
-                                solution: `Нулата на числителя е $x = ${a}$ (включена), а на знаменателя $x = ${b}$ (изключена). Търсим положителните интервали.`
-                            });
-                        } else { // Метод на интервалите (полиноми)
-                            tasks.push({
-                                question: `Решете неравенството чрез метода на интервалите: $(x - ${a})(x - ${b}) < 0$`,
-                                space: "h-20", answer: `$x \\in (${a}; ${b})$`,
-                                solution: `Корените са $x = ${a}$ и $x = ${b}$. С определяне на знаците в интервалите (+, -, +), търсим отрицателния интервал: $x \\in (${a}; ${b})$.`
-                            });
+
+                    const rootPairs = [
+                        { a: 2, b: 5, sum: 7, prod: 10, a2: 4, b2: 25 },
+                        { a: 1, b: 4, sum: 5, prod: 4, a2: 1, b2: 16 },
+                        { a: 3, b: 6, sum: 9, prod: 18, a2: 9, b2: 36 },
+                        { a: -1, b: 3, sum: 2, prod: -3, a2: 1, b2: 9 },
+                        { a: -2, b: 4, sum: 2, prod: -8, a2: 4, b2: 16 },
+                        { a: 1, b: 3, sum: 4, prod: 3, a2: 1, b2: 9 }
+                    ];
+                    let shuffledPairs = seededShuffle(rootPairs);
+
+                    let templates = [
+                        // Квадратно неравенство
+                        (i) => {
+                            let p = shuffledPairs[i % shuffledPairs.length];
+                            // x^2 - sum*x + prod >= 0
+                            return {
+                                question: `Решете квадратното неравенство:<br><b>$x^2 ${getSignStr(-p.sum)}x ${getSignStr(p.prod)} \\ge 0$</b>`,
+                                space: "h-20",
+                                answer: `$x \\in (-\\infty; ${p.a}] \\cup [${p.b}; +\\infty)$`,
+                                solution: `Корените на квадратното уравнение са $x_1 = ${p.a}$ и $x_2 = ${p.b}$. Понеже коефициентът пред най-високата степен е положителен, стойностите са положителни извън интервала на корените.`
+                            };
+                        },
+                        // Квадратно неравенство (с отрицателен знак)
+                        (i) => {
+                            let p = shuffledPairs[i % shuffledPairs.length];
+                            // -x^2 + sum*x - prod >= 0
+                            return {
+                                question: `Решете квадратното неравенство:<br><b>$-x^2 ${getSignStr(p.sum)}x ${getSignStr(-p.prod)} \\ge 0$</b>`,
+                                space: "h-20",
+                                answer: `$x \\in [${p.a}; ${p.b}]$`,
+                                solution: `Корените са $x_1 = ${p.a}$ и $x_2 = ${p.b}$. Квадратният тричлен е положителен в затворения интервал между корените.`
+                            };
+                        },
+                        // Полиномно неравенство
+                        (i) => {
+                            let p = shuffledPairs[i % shuffledPairs.length];
+                            return {
+                                question: `Решете полиномното неравенство чрез метода на интервалите:<br><b>$(x - ${p.a})(x - ${p.b})^2(10 - x) \\ge 0$</b>`,
+                                space: "h-24",
+                                answer: `$x \\in [${p.a}; 10]$`,
+                                solution: `Нулите са $x = ${p.a}$, $x = ${p.b}$ (двоен корен) и $x = 10$. По метода на интервалите намираме търсения интервал.`
+                            };
+                        },
+                        // Биквадратно неравенство
+                        (i) => {
+                            return {
+                                question: `Решете биквадратното неравенство:<br><b>$x^4 - 10x^2 + 9 < 0$</b>`,
+                                space: "h-24",
+                                answer: `$x \\in (-3; -1) \\cup (1; 3)$`,
+                                solution: `Полагаме $t = x^2$. Получаваме $t^2 - 10t + 9 < 0 \\Rightarrow t \\in (1; 9)$. Оттук $1 < x^2 < 9$, което дава двата симетрични интервала.`
+                            };
+                        },
+                        // Дробно неравенство
+                        (i) => {
+                            let p = shuffledPairs[i % shuffledPairs.length];
+                            let low = Math.min(p.a, p.b);
+                            let high = Math.max(p.a, p.b);
+                            return {
+                                question: `Решете дробното неравенство:<br><b>$\\frac{x - ${low}}{${high} - x} \\ge 0$</b>`,
+                                space: "h-24",
+                                answer: `$x \\in [${low}; ${high})$`,
+                                solution: `Нулата на числителя е $x = ${low}$ (включена), а на знаменателя е $x = ${high}$ (изключена). Търсим положителните интервали.`
+                            };
+                        },
+                        // По-сложно дробно неравенство
+                        (i) => {
+                            return {
+                                question: `Решете неравенството чрез привеждане под общ знаменател:<br><b>$\\frac{x+2}{x+1} - \\frac{x^2-3}{1-x^2} > \\frac{x+1}{x-1}$</b>`,
+                                space: "h-32",
+                                answer: `$x \\in (-\\infty; -1) \\cup (1; +\\infty)$`,
+                                solution: `Общият знаменател е $(x-1)(x+1)$. Прехвърляме членовете отляво и опростяваме.`
+                            };
+                        }
+                    ];
+
+                    if (!isTest && sheetType !== 'mixed_topic') {
+                        if (lessonIdx === 0) {
+                            templates = [templates[4], templates[5]];
+                        } else {
+                            templates = [templates[0], templates[1], templates[2], templates[3]];
                         }
                     }
-                    return tasks;
+
+                    const chosen = getShuffledTemplates(templates, count);
+                    return chosen.map((t, idx) => t(idx));
                 }
             },
+
+            // ==========================================
+            // РАЗДЕЛ 8: МЕТРИЧНИ ЗАВИСИМОСТИ
+            // ==========================================
             metric_relations: {
-                generate: function(lessonIdx, difficulty, count, seed, sheetType) {
+                generate: function(lessonIdx, difficulty, count, seed, sheetType, isTest) {
                     setSeed(seed * 74);
-                    const tasks = [];
-                    for (let i = 0; i < count; i++) {
-                        let cLesson = sheetType === 'mixed_topic' ? getRandomIntSeeded(0, 1) : lessonIdx;
-                        if (cLesson === 0) { // Височини и проекции
-                            const a1 = 9; const b1 = 16;
-                            tasks.push({
-                                question: `В правоъгълен триъгълник проекциите на катетите върху хипотенузата са $a_1 = ${a1}$ cm и $b_1 = ${b1}$ cm. Пресметнете височината $h_c$.`,
-                                space: "h-24", answer: `$h_c = 12$ cm`,
-                                solution: `Използваме метричната зависимост: $h_c^2 = a_1 \\cdot b_1 = ${a1} \\cdot ${b1} = 144 \\Rightarrow h_c = 12$ cm.`
-                            });
-                        } else { // Питагорова теорема
-                            const a = getRandomIntSeeded(3, 4); const b = a === 3 ? 4 : 3;
-                            tasks.push({
-                                question: `В правоъгълен триъгълник катетите са $a = ${a}$ cm и $b = ${b}$ cm. Намерете дължината на хипотенузата $c$.`,
-                                space: "h-20", answer: `$c = 5$ cm`,
-                                solution: `По Питагорова теорема: $c^2 = a^2 + b^2 = ${a}^2 + ${b}^2 = 25 \\Rightarrow c = 5$ cm.`
-                            });
+                    
+                    const triangles = [
+                        { a: 15, b: 20, c: 25, a1: 9, b1: 16, hc: 12, aStr: "15", bStr: "20", cStr: "25", a1Str: "9", b1Str: "16", hcStr: "12" },
+                        { a: 10, b: 24, c: 26, a1: "50/13", b1: "288/13", hc: "120/13", aStr: "10", bStr: "24", cStr: "26", a1Str: "\\frac{50}{13}", b1Str: "\\frac{288}{13}", hcStr: "\\frac{120}{13}" },
+                        { a: 8, b: 6, c: 10, a1: 6.4, b1: 3.6, hc: 4.8, aStr: "8", bStr: "6", cStr: "10", a1Str: "6.4", b1Str: "3.6", hcStr: "4.8" },
+                        { a: 6, b: 8, c: 10, a1: 3.6, b1: 6.4, hc: 4.8, aStr: "6", bStr: "8", cStr: "10", a1Str: "3.6", b1Str: "6.4", hcStr: "4.8" },
+                        { a: 9, b: 12, c: 15, a1: 5.4, b1: 9.6, hc: 7.2, aStr: "9", bStr: "12", cStr: "15", a1Str: "5.4", b1Str: "9.6", hcStr: "7.2" },
+                        { a: 12, b: 16, c: 20, a1: 7.2, b1: 12.8, hc: 9.6, aStr: "12", bStr: "16", cStr: "20", a1Str: "7.2", b1Str: "12.8", hcStr: "9.6" },
+                        { a: 5, b: 12, c: 13, a1: "25/13", b1: "144/13", hc: "60/13", aStr: "5", bStr: "12", cStr: "13", a1Str: "\\frac{25}{13}", b1Str: "\\frac{144}{13}", hcStr: "\\frac{60}{13}" }
+                    ];
+
+                    let shuffledTriangles = seededShuffle(triangles);
+
+                    let templates = [
+                        // Шаблон 1
+                        (i) => {
+                            let t = shuffledTriangles[i % shuffledTriangles.length];
+                            return {
+                                htmlElement: svgHelpers.metricTriangle(`a = ${t.aStr}`, `b = ${t.bStr}`, `c = ${t.cStr}`, 'H', `a_1 = ${t.a1Str}`, `b_1 = ${t.b1Str}`, `h_c = ${t.hcStr}`),
+                                question: `В правоъгълен триъгълник $ABC$ ($\angle C=90^{\\circ}$) петата на височината $CH$ ($H \\in AB$) разделя хипотенузата на проекции $a_1 = ${t.a1Str}$ cm и $b_1 = ${t.b1Str}$ cm. Намерете хипотенузата $c$, височината $h_c$ и катетите $a, b$.`,
+                                space: "h-24",
+                                answer: `$c = ${t.cStr}$ cm, $h_c = ${t.hcStr}$ cm, $a = ${t.aStr}$ cm, $b = ${t.bStr}$ cm`,
+                                solution: `Хипотенузата е $c = a_1 + b_1 = ${t.a1Str} + ${t.b1Str} = ${t.cStr}$ cm. <br> Височината се намира по формулата: $h_c^2 = a_1 \\cdot b_1 \\Rightarrow h_c = ${t.hcStr}$ cm.<br> Катетите намираме от: $a^2 = a_1 \\cdot c \\Rightarrow a = ${t.aStr}$ cm и $b^2 = b_1 \\cdot c \\Rightarrow b = ${t.bStr}$ cm.`
+                            };
+                        },
+                        // Шаблон 2
+                        (i) => {
+                            let t = shuffledTriangles[i % shuffledTriangles.length];
+                            return {
+                                htmlElement: svgHelpers.metricTriangle(`a = ${t.aStr}`, `b = ${t.bStr}`, `c = ${t.cStr}`, 'H', `a_1 = ${t.a1Str}`, `b_1 = ${t.b1Str}`, `h_c = ${t.hcStr}`),
+                                question: `Даден е правоъгълен триъгълник с катет $a=${t.aStr}$ cm и височина към хипотенузата $h_c=${t.hcStr}$ cm. Намерете останалите му елементи: $b, c, a_1, b_1$.`,
+                                space: "h-28",
+                                answer: `$b = ${t.bStr}$ cm, $c = ${t.cStr}$ cm, $a_1 = ${t.a1Str}$ cm, $b_1 = ${t.b1Str}$ cm`,
+                                solution: `От правоъгълния $\\triangle AHC$: $a_1 = \\sqrt{a^2 - h_c^2} = ${t.a1Str}$ cm. <br> От формулата $a^2 = a_1 \\cdot c \\Rightarrow c = ${t.cStr}$ cm.<br> Намираме $b_1 = c - a_1 = ${t.b1Str}$ cm и вторият катет е $b = \\sqrt{b_1 \\cdot c} = ${t.bStr}$ cm.`
+                            };
+                        },
+                        // Шаблон 3
+                        (i) => {
+                            let t = shuffledTriangles[i % shuffledTriangles.length];
+                            return {
+                                htmlElement: svgHelpers.metricTriangle(`a = ${t.aStr}`, `b = ${t.bStr}`, `c = ${t.cStr}`, 'H', `a_1 = ${t.a1Str}`, `b_1 = ${t.b1Str}`, `h_c = ${t.hcStr}`),
+                                question: `В правоъгълен триъгълник $ABC$ височината към хипотенузата е $h_c = ${t.hcStr}$ cm, а проекцията на катета $a$ върху нея е $a_1 = ${t.a1Str}$ cm. Намерете останалите елементи: $a, b, c, b_1$.`,
+                                space: "h-28",
+                                answer: `$a = ${t.aStr}$ cm, $b = ${t.bStr}$ cm, $c = ${t.cStr}$ cm, $b_1 = ${t.b1Str}$ cm`,
+                                solution: `Намираме катета $a = \\sqrt{a_1^2 + h_c^2} = ${t.aStr}$ cm. От $a^2 = a_1 \\cdot c \\Rightarrow c = ${t.cStr}$ cm. Проекцията е $b_1 = c - a_1 = ${t.b1Str}$ cm, а катетът е $b = \\sqrt{b_1 \\cdot c} = ${t.bStr}$ cm.`
+                            };
+                        },
+                        // Шаблон 4
+                        (i) => {
+                            let t = shuffledTriangles[i % shuffledTriangles.length];
+                            return {
+                                question: `В правоъгълен триъгълник $ABC$ проекцията на катета $a$ върху хипотенузата е $a_1 = ${t.a1Str}$ cm, а височината към хипотенузата е $h_c = ${t.hcStr}$ cm. Намерете хипотенузата $c$ и другия катет $b$.`,
+                                space: "h-24",
+                                answer: `$c = ${t.cStr}$ cm, $b = ${t.bStr}$ cm`,
+                                solution: `От $h_c^2 = a_1 \\cdot b_1 \\Rightarrow b_1 = ${t.b1Str}$ cm. Тогава хипотенузата е $c = a_1 + b_1 = ${t.cStr}$ cm. Катетът е $b = \\sqrt{b_1 \\cdot c} = ${t.bStr}$ cm.`
+                            };
+                        },
+                        // Шаблон 5
+                        (i) => {
+                            const points = [
+                                { x1: 2, y1: 1, x2: -3, y2: 6, dist: "5\\sqrt{2}" },
+                                { x1: 1, y1: 2, x2: 4, y2: 6, dist: "5" },
+                                { x1: -1, y1: -1, x2: 5, y2: 7, dist: "10" }
+                            ];
+                            let p = points[getRandomIntSeeded(0, points.length - 1)];
+                            return {
+                                question: `Дадена е правоъгълна координатна система и точките $A(${p.x1};${p.y1})$ и $B(${p.x2};${p.y2})$. Като използвате Питагоровата теорема, намерете разстоянието между двете точки.`,
+                                space: "h-20",
+                                answer: `$AB = ${p.dist}$`,
+                                solution: `Прилагаме формулата за разстояние: $AB = \\sqrt{(x_B - x_A)^2 + (y_B - y_A)^2} = \\sqrt{(${p.x2} - ${p.x1})^2 + (${p.y2} - ${p.y1})^2} = ${p.dist}$.`
+                            };
+                        },
+                        // Шаблон 6
+                        (i) => {
+                            const traps = [
+                                { B: 18, b: 8, c: 13, h: 12 },
+                                { B: 20, b: 10, c: 10, h: "5\\sqrt{3}" }
+                            ];
+                            let t = traps[getRandomIntSeeded(0, traps.length - 1)];
+                            return {
+                                question: `Основите на равнобедрен трапец са $${t.B}$ cm и $${t.b}$ cm, а бедрото му е с дължина $${t.c}$ cm. Намерете височината на трапеца.`,
+                                space: "h-24",
+                                answer: `$h = ${t.h}$ cm`,
+                                solution: `Проекцията на бедрото върху основата е $x = \\frac{B-b}{2} = \\frac{${t.B}-${t.b}}{2} = ${Math.round((t.B-t.b)/2)}$ cm. От правоъгълния триъгълник намираме $h = \\sqrt{c^2 - x^2} = ${t.h}$ cm.`
+                            };
+                        },
+                        // Шаблон 7
+                        (i) => {
+                            const circles = [
+                                { a: 18, b: 24, c: 30, r: 6 },
+                                { a: 6, b: 8, c: 10, r: 2 }
+                            ];
+                            let c = circles[getRandomIntSeeded(0, circles.length - 1)];
+                            return {
+                                question: `В правоъгълен триъгълник катетите са $a=${c.a}$ cm и $b=${c.b}$ cm. Намерете хипотенузата $c$ и радиуса $r$ на вписаната окръжност.`,
+                                space: "h-24",
+                                answer: `$c = ${c.c}$ cm, $r = ${c.r}$ cm`,
+                                solution: `По Питагорова теорема $c = \\sqrt{${c.a}^2 + ${c.b}^2} = ${c.c}$ cm. Радиусът е $r = \\frac{a+b-c}{2} = \\frac{${c.a}+${c.b}-${c.c}}{2} = ${c.r}$ cm.`
+                            };
+                        },
+                        // Шаблон 8
+                        (i) => {
+                            let t = shuffledTriangles[i % shuffledTriangles.length];
+                            return {
+                                question: `В правоъгълен триъгълник $ABC$ ($\angle C=90^{\\circ}$) хипотенузата е $c=${t.cStr}$ cm, а проекцията на катета $a$ върху нея е $a_1=${t.a1Str}$ cm. Намерете височината $h_c$ и катетите $a, b$.`,
+                                space: "h-28",
+                                answer: `$a = ${t.aStr}$ cm, $b = ${t.bStr}$ cm, $h_c = ${t.hcStr}$ cm`,
+                                solution: `Намираме проекцията $b_1 = c - a_1 = ${t.b1Str}$ cm. Височината е $h_c = \\sqrt{a_1 \\cdot b_1} = ${t.hcStr}$ cm. Катетите са $a = \\sqrt{a_1 \\cdot c} = ${t.aStr}$ cm и $b = \\sqrt{b_1 \\cdot c} = ${t.bStr}$ cm.`
+                            };
+                        }
+                    ];
+
+                    if (!isTest && sheetType !== 'mixed_topic') {
+                        if (lessonIdx === 0) {
+                            templates = [templates[0], templates[1], templates[2], templates[3]];
+                        } else {
+                            templates = [templates[4], templates[5], templates[6], templates[7]];
                         }
                     }
-                    return tasks;
+
+                    const chosen = getShuffledTemplates(templates, count);
+                    return chosen.map((t, idx) => t(idx));
                 }
             },
+
+            // ==========================================
+            // РАЗДЕЛ 9: ТРИГОНОМЕТРИЧНИ ФУНКЦИИ
+            // ==========================================
             trig_acute: {
-                generate: function(lessonIdx, difficulty, count, seed, sheetType) {
+                generate: function(lessonIdx, difficulty, count, seed, sheetType, isTest) {
                     setSeed(seed * 85);
-                    const tasks = [];
-                    for (let i = 0; i < count; i++) {
-                        let cLesson = sheetType === 'mixed_topic' ? getRandomIntSeeded(0, 2) : lessonIdx;
-                        if (cLesson === 0) { // Определение
-                            tasks.push({
-                                question: `В правоъгълен триъгълник катетът срещу ъгъл $\\alpha$ е 3 cm, а хипотенузата е 5 cm. Намерете $\\sin \\alpha$ и $\\cos \\alpha$.`,
-                                space: "h-24", answer: `$\\sin \\alpha = \\frac{3}{5}, \\cos \\alpha = \\frac{4}{5}$`,
-                                solution: `По дефиниция $\\sin \\alpha = \\frac{\\text{срещулежащ}}{\\text{хипотенуза}} = \\frac{3}{5}$. Вторият катет е 4 cm (Питагорова теорема), следователно $\\cos \\alpha = \\frac{4}{5}$.`
-                            });
-                        } else if (cLesson === 1) { // 30, 45, 60
-                            tasks.push({
-                                question: `Пресметнете числената стойност на израза: $L = 2 \\cdot \\sin(30^\\circ) + \\tan(45^\\circ)$`,
-                                space: "h-20", answer: `$L = 2$`,
-                                solution: `Заместваме стойностите: $\\sin(30^\\circ) = \\frac{1}{2}$, $\\tan(45^\\circ) = 1 \\Rightarrow L = 2 \\cdot \\frac{1}{2} + 1 = 2$.`
-                            });
-                        } else { // Основни зависимости
-                            tasks.push({
-                                question: `За острия ъгъл $\\alpha$ е известно, че $\\sin \\alpha = \\frac{4}{5}$. Намерете $\\cos \\alpha$.`,
-                                space: "h-24", answer: `$\\cos \\alpha = \\frac{3}{5}$`,
-                                solution: `От $\\sin^2 \\alpha + \\cos^2 \\alpha = 1 \\Rightarrow \\cos^2 \\alpha = 1 - (\\frac{4}{5})^2 = \\frac{9}{25} \\Rightarrow \\cos \\alpha = \\frac{3}{5}$.`
-                            });
+                    
+                    let templates = [
+                        // Шаблон 1
+                        (i) => {
+                            return {
+                                htmlElement: svgHelpers.rightTriangle('a = 36', 'b = 15', 'c = 39', '<text x="140" y="100" fill="#f97316" font-weight="bold">α</text>'),
+                                question: `В правоъгълен триъгълник катетите са $a = 36$ cm и $b = 15$ cm. Намерете стойностите на $\\sin \\alpha$, $\\cos \\alpha$, $\\tan \\alpha$ и $\\cot \\alpha$ за острия ъгъл $\\alpha$, лежащ срещу $a$.`,
+                                space: "h-24",
+                                answer: `$\\sin \\alpha = \\frac{12}{13}$, $\\cos \\alpha = \\frac{5}{13}$, $\\tan \\alpha = \\frac{12}{5}$, $\\cot \\alpha = \\frac{5}{12}$`,
+                                solution: `$c = \\sqrt{36^2 + 15^2} = 39$ cm.<br> $\\sin \\alpha = \\frac{36}{39} = \\frac{12}{13}$, $\\cos \\alpha = \\frac{15}{39} = \\frac{5}{13}$.`
+                            };
+                        },
+                        // Шаблон 2
+                        (i) => {
+                            const c = getRandomIntSeeded(2, 3) * 5;
+                            return {
+                                question: `В правоъгълен триъгълник хипотенузата е $c=${c}$ cm, а за острия ъгъл $\\alpha$ е известно, че $\\sin \\alpha = \\frac{3}{5}$. Намерете дължините на катетите на триъгълника.`,
+                                space: "h-24",
+                                answer: `$a = ${c * 3 / 5}$ cm, $b = ${c * 4 / 5}$ cm`,
+                                solution: `$\\sin \\alpha = \\frac{a}{c} \\Rightarrow a = ${c * 3 / 5}$ cm. $b = \\sqrt{${c}^2 - ${c*3/5}^2} = ${c*4/5}$ cm.`
+                            };
+                        },
+                        // Шаблон 3
+                        (i) => {
+                            return {
+                                question: `Пресметнете числената стойност на тригонометричния израз:<br><br><b>$A = \\sin 60^\\circ \\cdot \\tan 30^\\circ + \\cos 45^\\circ \\cdot \\sin 45^\\circ$</b>`,
+                                space: "h-20",
+                                answer: `$A = 1$`,
+                                solution: `$A = \\frac{\\sqrt{3}}{2} \\cdot \\frac{\\sqrt{3}}{3} + \\frac{\\sqrt{2}}{2} \\cdot \\frac{\\sqrt{2}}{2} = \\frac{3}{6} + \\frac{2}{4} = 1$.`
+                            };
+                        },
+                        // Шаблон 4
+                        (i) => {
+                            return {
+                                question: `Пресметнете числената стойност на тригонометричния израз:<br><br><b>$B = \\cos^2 45^\\circ + \\sin 30^\\circ - 2 \\cdot \\cotg 45^\\circ$</b>`,
+                                space: "h-20",
+                                answer: `$B = -1$`,
+                                solution: `$B = (\\frac{\\sqrt{2}}{2})^2 + \\frac{1}{2} - 2 \\cdot 1 = \\frac{1}{2} + \\frac{1}{2} - 2 = -1$.`
+                            };
+                        },
+                        // Шаблон 5
+                        (i) => {
+                            return {
+                                question: `Опростете тригонометричния израз за остър ъгъл $\\alpha$:<br><br><b>$X = \\sin^2 \\alpha \\cdot \\cotg^2 \\alpha + \\sin^2 \\alpha$</b>`,
+                                space: "h-20",
+                                answer: `$X = 1$`,
+                                solution: `$X = \\sin^2 \\alpha \\cdot \\frac{\\cos^2 \\alpha}{\\sin^2 \\alpha} + \\sin^2 \\alpha = \\cos^2 \\alpha + \\sin^2 \\alpha = 1$.`
+                            };
+                        },
+                        // Шаблон 6
+                        (i) => {
+                            const side = getRandomIntSeeded(1, 2) * 10;
+                            return {
+                                question: `Бедрото на равнобедрен триъгълник е $${side}$ cm, а синусът на ъгъла при основата му е $\\sin \\alpha = \\frac{4}{5}$. Намерете основата, височината към нея и радиуса на описаната окръжност $R$.`,
+                                space: "h-32",
+                                answer: `основа $= ${side * 1.2}$ cm, височина $= ${side * 0.8}$ cm`,
+                                solution: `Височината е $CH = ${side * 0.8}$ cm. $AH = ${side * 0.6}$ cm. Основата $AB = ${side * 1.2}$ cm. Описаният радиус е $R = \\frac{BC}{2 \\sin \\alpha} = ${side * 0.625}$ cm.`
+                            };
+                        }
+                    ];
+
+                    if (!isTest && sheetType !== 'mixed_topic') {
+                        if (lessonIdx === 0) {
+                            templates = [templates[0], templates[1]];
+                        } else if (lessonIdx === 1) {
+                            templates = [templates[2], templates[3]];
+                        } else {
+                            templates = [templates[4], templates[5]];
                         }
                     }
-                    return tasks;
+
+                    const chosen = getShuffledTemplates(templates, count);
+                    return chosen.map((t, idx) => t(idx));
                 }
             },
             assessment: {
-                generate: function(lessonIdx, difficulty, count, seed, sheetType) {
+                generate: function(lessonIdx, difficulty, count, seed, sheetType, isTest) {
                     setSeed(seed * 96);
                     const tasks = [];
                     for (let i = 0; i < count; i++) {
-                        tasks.push({
-                            question: `В правоъгълен триъгълник катет е 12 cm, а синусът на срещулежащия ъгъл е $\\frac{3}{5}$. Намерете хипотенузата.`,
-                            space: "h-24", answer: `$c = 20$ cm`,
-                            solution: `$\\sin \\alpha = \\frac{12}{c} = \\frac{3}{5} \\Rightarrow c = \\frac{12 \\cdot 5}{3} = 20$ cm.`
-                        });
+                        let varMode = i % 2;
+                        if (varMode === 0) {
+                            tasks.push({ question: `Решете квадратното уравнение:<br><b>$x^2 - 5x + 6 = 0$</b>`, space: "h-24", answer: `$x_1=2, x_2=3$`, solution: `$D = 25 - 24 = 1$. $x = \\frac{5 \\pm 1}{2}$.` });
+                        } else {
+                            tasks.push({ question: `Намерете лицето на правоъгълен триъгълник с катет 5 cm и хипотенуза 13 cm.`, space: "h-28", answer: `$30$ cm²`, solution: `Втори катет: $\\sqrt{13^2 - 5^2} = 12$. Лице $S = \\frac{5 \\cdot 12}{2} = 30$.` });
+                        }
                     }
                     return tasks;
                 }
             }
         };
 
-        // КЛИЕНТСКИ КОНТРОЛ
         function generateWorksheet() {
             const themeId = themeSelect.value;
             const themeObj = curriculumData.find(t => t.id === themeId);
             const lessonIdx = parseInt(lessonSelect.value);
             const sheetType = document.getElementById('sheetType').value;
             
-            // Заглавието зависи от това дали е смесен лист или конкретен урок
-            const lessonName = sheetType === 'mixed_topic' ? "Смесен лист (всички уроци от темата)" : themeObj.lessons[lessonIdx];
+            const isTest = themeObj.lessons[lessonIdx].includes("Контролна работа") || themeObj.id === "linear_work";
+            const lessonName = isTest ? themeObj.lessons[lessonIdx] : (sheetType === 'mixed_topic' ? "Смесен лист (всички уроци от темата)" : themeObj.lessons[lessonIdx]);
             
-            const difficulty = document.querySelector('input[name="difficulty"]:checked').value;
-            const count = parseInt(document.getElementById('tasksCount').value);
+            let difficulty = document.querySelector('input[name="difficulty"]:checked').value;
+            let count = parseInt(document.getElementById('tasksCount').value);
+            
+            // За контролна или класна работа форсираме броя задачи съобразно Вашите варианти
+            if (isTest) {
+                difficulty = 'mixed';
+                if (themeId === "linear_work") {
+                    count = 5; // Класна работа №1 има точно 5 задачи
+                } else if (themeId === "rational_inequalities") {
+                    count = 9; 
+                } else if (themeId === "similar_triangles") {
+                    count = 7; 
+                } else if (themeId === "systems_quadratic") {
+                    count = 4; 
+                } else if (themeId === "probability") {
+                    count = 5; 
+                } else {
+                    count = 8; 
+                }
+                document.getElementById('tasksCount').value = count;
+            }
+            
             const variant = parseInt(document.getElementById('variantNum').value);
-
-            // ПОДАВАМЕ 'sheetType' В ГЕНЕРАТОРА ЗА ДА ЗНАЕ ДАЛИ ДА ОГРАНИЧАВА ПО УРОК
-            let tasks = taskGenerator[themeId].generate(lessonIdx, difficulty, count, variant, sheetType);
+            let tasks = taskGenerator[themeId].generate(lessonIdx, difficulty, count, variant, sheetType, isTest);
 
             const sheetTitle = `${themeObj.title.split('. ')[1]} - ${lessonName}`;
-            const typeLabel = sheetTypeNames[sheetType];
+            const typeLabel = isTest ? lessonName : sheetTypeNames[sheetType];
             
+            // СЪЗДАВАНЕ НА ИНТЕЛИГЕНТНО РАЗПРЕДЕЛЕНИЕ ЗА 40 ТОЧКИ ОБЩО
+            let ptsArr = [];
+            if (isTest) {
+                if (themeId === "linear_work" && count === 5) {
+                    ptsArr = [9, 11, 5, 7, 8]; // Сбор = точно 40 точки!
+                } else if (themeId === "rational_inequalities" && count === 9) {
+                    ptsArr = [3, 3, 4, 4, 4, 4, 5, 7, 6]; 
+                } else if (themeId === "similar_triangles" && count === 7) {
+                    ptsArr = [3, 4, 6, 6, 7, 6, 8];
+                } else if (themeId === "systems_quadratic" && count === 4) {
+                    ptsArr = [10, 10, 10, 10];
+                } else if (themeId === "probability" && count === 5) {
+                    ptsArr = [6, 7, 8, 9, 10];
+                } else if ((themeId === "metric_relations" || themeId === "trig_acute") && count === 8) {
+                    ptsArr = [3, 3, 4, 5, 5, 6, 7, 7]; 
+                } else {
+                    let base = Math.floor(40 / count);
+                    let remainder = 40 % count;
+                    ptsArr = Array(count).fill(base);
+                    for (let r = 0; r < remainder; r++) {
+                        ptsArr[ptsArr.length - 1 - r]++;
+                    }
+                }
+            }
+
             let html = `
-                <div class="border-b-2 border-teal-800 pb-4 mb-6">
+                <div class="border-b-2 ${isTest ? 'border-orange-600' : 'border-teal-800'} pb-4 mb-6">
                     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                         <div>
-                            <span class="text-xs font-bold text-orange-500 uppercase tracking-widest">${typeLabel}</span>
-                            <h2 class="text-xl md:text-2xl font-bold text-teal-900 comfortaa mt-1">${sheetTitle}</h2>
+                            <span class="text-xs font-bold ${isTest ? 'text-red-500' : 'text-orange-500'} uppercase tracking-widest">${typeLabel}</span>
+                            <h2 class="text-xl md:text-2xl font-bold ${isTest ? 'text-orange-900' : 'text-teal-900'} comfortaa mt-1">${sheetTitle}</h2>
                             <p class="text-xs text-slate-500 mt-0.5">Генератор на работни листове по Математика за 9. клас • Вариант ${variant}</p>
                         </div>
                         <div class="bg-teal-50 border border-teal-200 rounded-xl p-2.5 text-xs text-teal-800 font-semibold self-stretch md:self-auto text-center md:text-left">
-                            Трудност: <span class="capitalize text-orange-600 font-bold">${difficulty === 'basic' ? 'базово' : (difficulty === 'medium' ? 'средно' : (difficulty === 'hard' ? 'по-трудно' : 'смесено'))}</span>
+                            Трудност: <span class="capitalize text-orange-600 font-bold">${isTest ? 'Смесена' : (difficulty === 'basic' ? 'базово' : (difficulty === 'medium' ? 'средно' : (difficulty === 'hard' ? 'по-трудно' : 'смесено')))}</span>
                         </div>
                     </div>
                     
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6 text-sm">
-                        <div class="flex items-center gap-2">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-6 text-sm">
+                        <div class="flex items-center gap-2 col-span-2 md:col-span-1">
                             <span class="text-slate-500 font-medium">Име:</span>
                             <div class="flex-grow border-b border-slate-400 h-6"></div>
                         </div>
                         <div class="flex items-center gap-2">
                             <span class="text-slate-500 font-medium">Клас:</span>
-                            <div class="w-20 border-b border-slate-400 h-6"></div>
+                            <div class="w-12 border-b border-slate-400 h-6"></div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-slate-500 font-medium">№:</span>
+                            <div class="w-12 border-b border-slate-400 h-6"></div>
                         </div>
                         <div class="flex items-center gap-2">
                             <span class="text-slate-500 font-medium">Дата:</span>
@@ -725,27 +1486,37 @@
                     </div>
                 </div>
 
+                ${!isTest ? `
                 <div class="bg-amber-50/70 border border-amber-200/80 rounded-xl p-4 mb-6 text-sm text-slate-700 shadow-sm">
                     <h3 class="font-bold text-amber-800 flex items-center gap-1.5 mb-1">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                         Припомни си важните формули и указания:
                     </h3>
                     <div>${reminders[themeId] || "Няма добавени указания за тази тема."}</div>
+                </div>` : `
+                <div class="bg-orange-50 border border-orange-200 rounded-xl p-4 mb-6 text-sm text-orange-800 shadow-sm font-semibold">
+                    Внимание: Това е контролна/класна работа. Време за работа: 45 минути. Максимален брой точки: 40.
                 </div>
+                `}
 
                 <div class="space-y-6">
             `;
 
+            let totalPoints = 0;
             tasks.forEach((task, idx) => {
+                let pts = isTest ? ptsArr[idx] : 0;
+                totalPoints += pts;
+
                 html += `
-                    <div class="task-block border border-slate-100 rounded-xl p-4 hover:bg-slate-50/50 transition">
+                    <div class="task-block border border-slate-100 rounded-xl p-4 hover:bg-slate-50/50 transition svg-print-fix">
                         <div class="flex gap-2">
                             <span class="font-bold text-teal-800 text-base flex-shrink-0">Задача ${idx + 1}.</span>
                             <div class="flex-grow">
                                 <div class="text-slate-800 text-sm md:text-base leading-relaxed">${task.question}</div>
-                                <div class="writing-space border border-dashed border-slate-300 rounded-lg bg-slate-50/30 w-full ${task.space} mt-3 p-3 text-slate-400 text-xs italic flex items-end justify-between">
+                                ${task.htmlElement ? task.htmlElement : ''}
+                                <div class="writing-space border border-dashed border-slate-300 rounded-lg bg-slate-50/30 w-full ${isTest ? 'h-36' : task.space} mt-3 p-3 text-slate-400 text-xs italic flex items-end justify-between">
                                     <span>Решение:</span>
-                                    <span class="text-[10px] text-slate-300">Използвай мястото за изчисления</span>
+                                    <span class="text-[10px] text-slate-300">${isTest ? `Носи ${pts} точки` : 'Използвай мястото за изчисления'}</span>
                                 </div>
                             </div>
                         </div>
@@ -753,19 +1524,58 @@
                 `;
             });
 
+            // Добавяме Бонус задача за Рационални неравенства
+            if (isTest && themeId === "rational_inequalities") {
+                html += `
+                    <div class="task-block border border-orange-200 bg-orange-50/30 rounded-xl p-4 transition svg-print-fix mt-6">
+                        <div class="flex gap-2">
+                            <span class="font-bold text-orange-800 text-base flex-shrink-0">Задача 10.</span>
+                            <div class="flex-grow">
+                                <div class="text-orange-950 text-sm md:text-base leading-relaxed"><b>Бонус задача (за отличен):</b><br> Решете неравенството чрез полагане:<br><b>$\\left(\\frac{x+1}{x-2}\\right)^2 - 4\\left(\\frac{x+1}{x-2}\\right) + 3 > 0$</b></div>
+                                <div class="writing-space border border-dashed border-orange-300 rounded-lg bg-orange-50/10 w-full h-36 mt-3 p-3 text-orange-800/60 text-xs italic flex items-end justify-between">
+                                    <span>Решение на бонус задачата:</span>
+                                    <span class="text-[10px] text-orange-600 font-semibold">Носи бонус точки</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
             html += `
                 </div>
-
+                
+                ${isTest ? `
+                <div class="border-t border-slate-200 pt-5 mt-8">
+                    <div class="bg-slate-50 border border-slate-200 rounded-xl p-5 flex flex-col items-center gap-3 text-sm">
+                        <div class="font-bold text-slate-800 text-base">Скала за оценяване (Максимален брой точки: ${totalPoints})</div>
+                        <div class="text-slate-700 bg-white px-5 py-2.5 border border-slate-200 rounded-lg shadow-sm">
+                            Формула за пресмятане: <b>Оценка = 2 + <span class="text-lg">$\\frac{\\text{точки}}{10}$</span></b>
+                        </div>
+                        <div class="flex flex-wrap justify-center gap-x-4 gap-y-2 text-xs text-slate-700 mt-2 font-medium">
+                            <span class="bg-red-50 text-red-700 px-2.5 py-1.5 rounded-md border border-red-100">0 - 4 т. = Слаб (2)</span>
+                            <span class="bg-orange-50 text-orange-700 px-2.5 py-1.5 rounded-md border border-orange-100">5 - 14 т. = Среден (3)</span>
+                            <span class="bg-yellow-50 text-yellow-700 px-2.5 py-1.5 rounded-md border border-yellow-100">15 - 24 т. = Добър (4)</span>
+                            <span class="bg-blue-50 text-blue-700 px-2.5 py-1.5 rounded-md border border-blue-100">25 - 34 т. = Мн. Добър (5)</span>
+                            <span class="bg-green-50 text-green-700 px-2.5 py-1.5 rounded-md border border-green-100">35 - 40 т. = Отличен (6)</span>
+                        </div>
+                        <div class="mt-6 border-b-2 border-slate-800 w-full max-w-xs flex justify-between items-end pb-1 text-slate-800 font-bold text-lg">
+                            <span>ОЦЕНКА:</span>
+                            <span class="text-slate-400 font-normal italic text-sm">/ ____________ /</span>
+                        </div>
+                    </div>
+                </div>
+                ` : `
                 <div class="border-t border-slate-200 pt-5 mt-8">
                     <div class="bg-slate-50 rounded-xl p-4 flex flex-col md:flex-row justify-between items-center gap-4 text-sm">
                         <div class="font-medium text-slate-700">Как се справихте с този работен лист? (Самооценка)</div>
                         <div class="flex gap-4">
                             <label class="flex items-center gap-1.5 cursor-pointer"><input type="radio" name="self-eval" class="text-teal-600"> 🟢 Лесно</label>
-                            <label class="flex items-center gap-1.5 cursor-pointer"><input type="radio" name="self-eval" class="text-teal-600"> 🟡 Имах затруднения</label>
+                            <label class="flex items-center gap-1.5 cursor-pointer"><input type="radio" name="self-eval" class="text-teal-600"> 🟡 Затрудних се</label>
                             <label class="flex items-center gap-1.5 cursor-pointer"><input type="radio" name="self-eval" class="text-teal-600"> 🔴 Много трудно</label>
                         </div>
                     </div>
-                </div>
+                </div>`}
 
                 <div class="answers-section bg-teal-50/70 border border-teal-200 rounded-xl p-4 mt-8 page-break">
                     <h3 class="font-bold text-teal-800 text-base border-b border-teal-200 pb-1.5 mb-2.5">Блок с отговори</h3>
@@ -774,9 +1584,17 @@
 
             tasks.forEach((task, idx) => { html += `<div class="flex gap-2"><span class="font-semibold text-teal-700">Зад. ${idx + 1}:</span><span class="text-slate-700">${task.answer}</span></div>`; });
 
+            if (isTest && themeId === "rational_inequalities") {
+                html += `<div class="flex gap-2"><span class="font-semibold text-orange-700">Зад. 10 (Бонус):</span><span class="text-slate-700">$x \\in (-\\infty; 1) \\cup (3; +\\infty)$</span></div>`;
+            }
+
             html += `</div></div><div class="solutions-section bg-blue-50/70 border border-blue-200 rounded-xl p-4 mt-4"><h3 class="font-bold text-blue-800 text-base border-b border-blue-200 pb-1.5 mb-2.5">Кратки решения и упътвания</h3><div class="space-y-3.5 text-sm">`;
 
             tasks.forEach((task, idx) => { html += `<div><span class="font-semibold text-blue-700 block">Задача ${idx + 1}:</span><div class="text-slate-700 mt-0.5">${task.solution}</div></div>`; });
+
+            if (isTest && themeId === "rational_inequalities") {
+                html += `<div><span class="font-semibold text-orange-700 block">Задача 10 (Бонус):</span><div class="text-slate-700 mt-0.5">Полагаме $t = \\frac{x+1}{x-2}$. Неравенството става $t^2-4t+3 > 0 \\Rightarrow (t-1)(t-3) > 0 \\Rightarrow t \\in (-\\infty; 1) \\cup (3; +\\infty)$. Връщаме се към полагането: $\\frac{x+1}{x-2} < 1$ или $\\frac{x+1}{x-2} > 3$. Решаваме дробните неравенства и намираме крайния отговор.</div></div>`;
+            }
 
             html += `</div></div>`;
             document.getElementById('worksheetPaper').innerHTML = html;
@@ -798,6 +1616,73 @@
             isChecked ? document.body.classList.remove('hide-solutions-print') : document.body.classList.add('hide-solutions-print');
         }
 
+        function showTableOfContents() {
+            document.getElementById('settingsPanel').classList.add('hidden');
+            let html = `
+                <div class="border-b-2 border-teal-800 pb-4 mb-8 text-center animate-fade-in">
+                    <h2 class="text-3xl font-bold text-teal-900 comfortaa">Съдържание</h2>
+                    <p class="text-slate-500 mt-2">Изберете урок, класна или контролна работа, за да генерирате писмена работа</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 animate-fade-in">
+            `;
+
+            curriculumData.forEach((theme, tIdx) => {
+                html += `
+                    <div class="bg-slate-50 border border-slate-200 rounded-xl p-5 shadow-sm hover:shadow-md transition">
+                        <h3 class="font-bold text-teal-800 text-lg mb-3 border-b border-slate-200 pb-2 cursor-pointer hover:text-orange-600 transition" onclick="selectAndGenerate(${tIdx}, 0)">${theme.title}</h3>
+                        <ul class="space-y-2 text-sm text-slate-700">
+                `;
+                theme.lessons.forEach((lesson, lIdx) => {
+                    const isTest = lesson.includes("Контролна работа") || lesson.includes("Класна работа");
+                    html += `
+                        <li class="flex items-start gap-2 cursor-pointer transition group ${isTest ? 'text-orange-600 font-semibold hover:text-orange-800' : 'hover:text-teal-600'}" onclick="selectAndGenerate(${tIdx}, ${lIdx})">
+                            <svg class="w-4 h-4 mt-0.5 flex-shrink-0 ${isTest ? 'text-orange-500' : 'text-slate-400 group-hover:text-teal-500'}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                ${isTest ? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>' : '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>'}
+                            </svg>
+                            <span>${lesson}</span>
+                        </li>
+                    `;
+                });
+                html += `</ul></div>`;
+            });
+
+            html += `</div>`;
+            document.getElementById('worksheetPaper').innerHTML = html;
+        }
+
+        function selectAndGenerate(themeIdx, lessonIdx) {
+            document.getElementById('settingsPanel').classList.remove('hidden');
+            document.getElementById('themeSelect').selectedIndex = themeIdx;
+            updateLessons();
+            document.getElementById('lessonSelect').selectedIndex = lessonIdx;
+            
+            const themeObj = curriculumData[themeIdx];
+            const isTest = themeObj.lessons[lessonIdx].includes("Контролна работа") || themeObj.id === "linear_work";
+            
+            if (isTest) {
+                if (themeObj.id === "linear_work") {
+                    document.getElementById('tasksCount').value = 5;
+                } else if (themeObj.id === "rational_inequalities") {
+                    document.getElementById('tasksCount').value = 9;
+                } else if (themeObj.id === "similar_triangles") {
+                    document.getElementById('tasksCount').value = 7;
+                } else if (themeObj.id === "systems_quadratic") {
+                    document.getElementById('tasksCount').value = 4;
+                } else if (themeObj.id === "probability") {
+                    document.getElementById('tasksCount').value = 5;
+                } else if (themeObj.id === "metric_relations" || themeObj.id === "trig_acute") {
+                    document.getElementById('tasksCount').value = 8;
+                } else {
+                    document.getElementById('tasksCount').value = 8;
+                }
+            } else {
+                document.getElementById('tasksCount').value = 5;
+            }
+            
+            generateWorksheet();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
         function enterApp() {
             const lp = document.getElementById('landingPage');
             const app = document.getElementById('appContainer');
@@ -805,7 +1690,7 @@
             setTimeout(() => {
                 lp.classList.add('hidden'); app.classList.remove('hidden');
                 document.body.className = "bg-slate-100 text-slate-800 min-h-screen flex flex-col transition-colors duration-500";
-                generateWorksheet();
+                showTableOfContents();
             }, 500);
         }
 
@@ -820,7 +1705,7 @@
         }
 
         // ==========================================
-        // 3D АНИМАЦИЯ 
+        // 3D АНИМАЦИЯ (THREE.JS BACKGROUND)
         // ==========================================
         let scene, camera, renderer, mathGroup;
         let mouseX = 0, mouseY = 0;
@@ -877,14 +1762,66 @@
             renderer.render(scene, camera);
         }
 
+        // Обновяване на броя задачи при ръчна промяна на урока през менюто
+        document.getElementById('lessonSelect').addEventListener('change', () => {
+            const themeId = themeSelect.value;
+            const themeObj = curriculumData.find(t => t.id === themeId);
+            const lessonIdx = parseInt(lessonSelect.value);
+            if (themeObj && (themeObj.lessons[lessonIdx].includes("Контролна работа") || themeObj.id === "linear_work")) {
+                if (themeId === "linear_work") {
+                    document.getElementById('tasksCount').value = 5;
+                } else if (themeId === "rational_inequalities") {
+                    document.getElementById('tasksCount').value = 9;
+                } else if (themeId === "similar_triangles") {
+                    document.getElementById('tasksCount').value = 7;
+                } else if (themeId === "systems_quadratic") {
+                    document.getElementById('tasksCount').value = 4;
+                } else if (themeId === "probability") {
+                    document.getElementById('tasksCount').value = 5;
+                } else if (themeId === "metric_relations" || themeId === "trig_acute") {
+                    document.getElementById('tasksCount').value = 8;
+                } else {
+                    document.getElementById('tasksCount').value = 8;
+                }
+            } else {
+                document.getElementById('tasksCount').value = 5;
+            }
+            generateWorksheet();
+        });
+
+        document.getElementById('themeSelect').addEventListener('change', () => {
+            updateLessons();
+            const themeId = themeSelect.value;
+            const themeObj = curriculumData.find(t => t.id === themeId);
+            const lessonIdx = parseInt(lessonSelect.value);
+            if (themeObj && (themeObj.lessons[lessonIdx].includes("Контролна работа") || themeObj.id === "linear_work")) {
+                if (themeId === "linear_work") {
+                    document.getElementById('tasksCount').value = 5;
+                } else if (themeId === "rational_inequalities") {
+                    document.getElementById('tasksCount').value = 9;
+                } else if (themeId === "similar_triangles") {
+                    document.getElementById('tasksCount').value = 7;
+                } else if (themeId === "systems_quadratic") {
+                    document.getElementById('tasksCount').value = 4;
+                } else if (themeId === "probability") {
+                    document.getElementById('tasksCount').value = 5;
+                } else if (themeId === "metric_relations" || themeId === "trig_acute") {
+                    document.getElementById('tasksCount').value = 8;
+                } else {
+                    document.getElementById('tasksCount').value = 8;
+                }
+            } else {
+                document.getElementById('tasksCount').value = 5;
+            }
+            generateWorksheet();
+        });
+
         document.getElementById('btnGenerate').addEventListener('click', generateWorksheet);
         document.getElementById('btnNewVariant').addEventListener('click', () => { document.getElementById('variantNum').value++; generateWorksheet(); });
         document.getElementById('chkShowAnswers').addEventListener('change', toggleAnswers);
         document.getElementById('chkShowSolutions').addEventListener('change', toggleSolutions);
         document.getElementById('btnPrint').addEventListener('click', () => window.print());
-        document.getElementById('btnClear').addEventListener('click', () => {
-            document.getElementById('worksheetPaper').innerHTML = `<div class="text-center py-20 text-slate-400"><p class="text-lg font-medium">Работният лист е изчистен.</p></div>`;
-        });
+        document.getElementById('btnTOC').addEventListener('click', showTableOfContents);
 
         window.onload = function() { initDropdowns(); init3DScene(); };
     </script>
