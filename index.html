@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Генератор на работни листове – 9. клас</title>
+    <!-- Tailwind CSS за модерен и адаптивен дизайн -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            blue: '#1e40af', 
+                            green: '#10b981', 
+                            petrol: '#0f766e', 
+                            orange: '#f97316', 
+                            light: '#f8fafc'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- MathJax за безупречно рендиране на LaTeX математически формули -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']]
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <!-- Three.js за 3D анимация на началната страница -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a; 
+            overflow-x: hidden;
+        }
+        
+        .comfortaa {
+            font-family: 'Comfortaa', cursive;
+        }
+
+        /* Настройки за прецизен печат във формат А4 */
+        @media print {
+            body {
+                background-color: #ffffff;
+                font-size: 11pt;
+                color: #000000;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .print-container {
+                width: 100% !important;
+                max-width: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                box-shadow: none !important;
+                border: none !important;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+            body.hide-answers-print .answers-section {
+                display: none !important;
+            }
+            body.hide-solutions-print .solutions-section {
+                display: none !important;
+            }
+            .writing-space {
+                border-bottom: 1px dotted #94a3b8 !important;
+                background-color: transparent !important;
+            }
+        }
+
+        .writing-space {
+            background-image: linear-gradient(to bottom, transparent 95%, #e2e8f0 95%);
+            background-size: 100% 24px;
+            line-height: 24px;
+        }
+
+        .glass-card {
+            background: rgba(15, 23, 42, 0.65);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body class="text-slate-200 min-h-screen flex flex-col transition-colors duration-500">
+
+    <!-- НАЧАЛНА СТРАНИЦА (LANDING PAGE) -->
+    <div id="landingPage" class="no-print fixed inset-0 z-50 flex flex-col justify-between transition-opacity duration-1000">
+        <div id="canvas3dContainer" class="absolute inset-0 z-0"></div>
+
+        <header class="relative z-10 p-6 max-w-7xl w-full mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <span class="bg-teal-500 text-white font-bold px-3 py-1.5 rounded-xl text-sm tracking-wider shadow-lg">9. КЛАС</span>
+                <h1 class="text-lg font-bold text-white comfortaa">Математика</h1>
+            </div>
+            <div class="text-xs text-slate-400 font-semibold tracking-wider uppercase bg-slate-900/40 px-3 py-1.5 rounded-lg border border-slate-700/50 backdrop-blur">
+                Учебна програма на МОН
+            </div>
+        </header>
+
+        <main class="relative z-10 flex flex-col items-center justify-center px-4 text-center my-auto">
+            <div class="glass-card max-w-2xl p-8 md:p-12 rounded-3xl shadow-2xl border border-slate-700/50 animate-fade-in">
+                <span class="text-xs font-bold text-teal-400 uppercase tracking-widest bg-teal-500/10 px-4 py-1.5 rounded-full border border-teal-500/20">Интелигентен софтуер</span>
+                <h2 class="text-3xl md:text-5xl font-extrabold text-white comfortaa mt-4 leading-tight">
+                    Генератор на <br class="hidden md:inline">работни листове
+                </h2>
+                <p class="text-slate-300 text-sm md:text-base mt-6 leading-relaxed max-w-lg mx-auto">
+                    Генерирайте моментално персонализирани писмени изпитвания, домашни работи и класни упражнения със строго съобразени задачи за всеки урок.
+                </p>
+                <div class="mt-8">
+                    <button onclick="enterApp()" class="group relative inline-flex items-center justify-center gap-2 bg-gradient-to-r from-teal-500 to-cyan-600 hover:from-teal-600 hover:to-cyan-700 text-white text-base font-bold py-4 px-8 rounded-2xl shadow-lg hover:shadow-teal-500/20 transition-all duration-300 hover:scale-105 active:scale-95">
+                        <span>Влез в генератора</span>
+                        <svg class="w-5 h-5 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <footer class="relative z-10 p-6 w-full max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-slate-400 border-t border-slate-800/40">
+            <p>© 2026 Всички права запазени. Дигитален ресурс за девети клас.</p>
+            <div class="bg-slate-900/60 backdrop-blur px-4 py-2 rounded-xl border border-slate-700/50 flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-teal-500 animate-pulse"></span>
+                <span class="font-medium text-slate-300">Идея: <strong class="text-white">Валя Витковска</strong> · Реализация: <strong class="text-white">Gemini</strong></span>
+            </div>
+        </footer>
+    </div>
+
+
+    <!-- РАБОТЕН ГЕНЕРАТОР -->
+    <div id="appContainer" class="hidden min-h-screen flex flex-col bg-slate-100 text-slate-800">
+        
+        <header class="bg-gradient-to-r from-teal-800 via-cyan-900 to-blue-900 text-white shadow-md no-print py-4 px-6">
+            <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="flex items-center gap-3">
+                    <button onclick="exitApp()" class="bg-slate-800/60 hover:bg-slate-800 text-slate-300 p-2 rounded-xl border border-slate-700 transition flex items-center gap-1.5 text-xs font-semibold mr-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l-7 7m7-7h18"></path>
+                        </svg>
+                        Назад
+                    </button>
+                    <div class="bg-orange-500 text-white p-2.5 rounded-xl shadow-lg hidden sm:block">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold comfortaa tracking-wide">Генератор на работни листове</h1>
+                        <p class="text-xs text-slate-300">Интелигентно помагало по Математика за 9. клас</p>
+                    </div>
+                </div>
+                <div class="flex gap-2">
+                    <span class="bg-teal-700 text-white text-xs px-3 py-1.5 rounded-full font-semibold">СТРОГО ПО УРОК</span>
+                    <span class="bg-orange-500 text-white text-xs px-3 py-1.5 rounded-full font-semibold">ХОРИЗОНТАЛНИ ДРОБИ</span>
+                </div>
+            </div>
+        </header>
+
+        <main class="max-w-7xl w-full mx-auto p-4 md:p-6 flex-grow flex flex-col lg:flex-row gap-6">
+            
+            <aside class="w-full lg:w-80 flex-shrink-0 no-print">
+                <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 sticky top-6">
+                    <h2 class="text-lg font-bold text-teal-800 mb-4 flex items-center gap-2 border-b pb-2">
+                        <svg class="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
+                        </svg>
+                        Настройки на листа
+                    </h2>
+
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Изберете тема:</label>
+                            <select id="themeSelect" class="w-full bg-slate-50 border border-slate-300 text-slate-700 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"></select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Урок/Подтема:</label>
+                            <select id="lessonSelect" class="w-full bg-slate-50 border border-slate-300 text-slate-700 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"></select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Вид работен лист:</label>
+                            <select id="sheetType" class="w-full bg-slate-50 border border-slate-300 text-slate-700 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500">
+                                <option value="classwork">Упражнение в час</option>
+                                <option value="homework">Домашна работа</option>
+                                <option value="test_prep">Подготовка за тест</option>
+                                <option value="mixed_topic">Смесен лист от темата (Всички уроци)</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Ниво на трудност (в рамките на урока):</label>
+                            <div class="grid grid-cols-2 gap-1.5">
+                                <label class="flex items-center gap-1.5 p-1.5 border border-slate-200 rounded bg-slate-50 text-xs cursor-pointer hover:bg-slate-100">
+                                    <input type="radio" name="difficulty" value="basic" checked class="text-teal-600 focus:ring-teal-500"> Базово
+                                </label>
+                                <label class="flex items-center gap-1.5 p-1.5 border border-slate-200 rounded bg-slate-50 text-xs cursor-pointer hover:bg-slate-100">
+                                    <input type="radio" name="difficulty" value="medium" class="text-teal-600 focus:ring-teal-500"> Средно
+                                </label>
+                                <label class="flex items-center gap-1.5 p-1.5 border border-slate-200 rounded bg-slate-50 text-xs cursor-pointer hover:bg-slate-100">
+                                    <input type="radio" name="difficulty" value="hard" class="text-teal-600 focus:ring-teal-500"> По-трудно
+                                </label>
+                                <label class="flex items-center gap-1.5 p-1.5 border border-slate-200 rounded bg-slate-50 text-xs cursor-pointer hover:bg-slate-100">
+                                    <input type="radio" name="difficulty" value="mixed" class="text-teal-600 focus:ring-teal-500"> Смесено
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-600 mb-1">Брой задачи:</label>
+                                <input type="number" id="tasksCount" min="2" max="10" value="4" class="w-full bg-slate-50 border border-slate-300 text-slate-700 rounded-lg p-2 text-sm text-center focus:outline-none focus:ring-2 focus:ring-teal-500">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-600 mb-1">Вариант №:</label>
+                                <input type="number" id="variantNum" min="1" max="100" value="1" class="w-full bg-slate-50 border border-slate-300 text-slate-700 rounded-lg p-2 text-sm text-center focus:outline-none focus:ring-2 focus:ring-teal-500">
+                            </div>
+                        </div>
+
+                        <div class="pt-2 space-y-2">
+                            <button id="btnGenerate" class="w-full bg-teal-700 hover:bg-teal-800 text-white font-bold py-2.5 px-4 rounded-xl shadow transition duration-250 flex items-center justify-center gap-2">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 12H18M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+                                Генерирай лист
+                            </button>
+                            <button id="btnNewVariant" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded-xl shadow transition duration-250 flex items-center justify-center gap-2 text-sm">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+                                Нов вариант
+                            </button>
+                        </div>
+
+                        <div class="border-t pt-3 space-y-2">
+                            <label class="flex items-center gap-2 cursor-pointer text-sm font-medium text-slate-700">
+                                <input type="checkbox" id="chkShowAnswers" checked class="w-4 h-4 text-teal-600 border-slate-300 rounded focus:ring-teal-500"> Покажи отговорите
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer text-sm font-medium text-slate-700">
+                                <input type="checkbox" id="chkShowSolutions" checked class="w-4 h-4 text-teal-600 border-slate-300 rounded focus:ring-teal-500"> Покажи решенията
+                            </label>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2 border-t pt-3">
+                            <button id="btnPrint" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-3 rounded-lg text-xs flex items-center justify-center gap-1">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg> Печат
+                            </button>
+                            <button id="btnClear" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold py-2 px-3 rounded-lg text-xs flex items-center justify-center gap-1">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg> Изчисти
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <section class="flex-grow flex justify-center text-slate-800">
+                <div id="worksheetPaper" class="print-container bg-white w-full max-w-4xl min-h-[297mm] p-6 md:p-10 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between transition-all duration-300">
+                    <div class="text-center py-20 text-slate-400">
+                        <svg class="w-16 h-16 mx-auto mb-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        <p class="text-lg font-medium">Конфигурирайте параметрите вляво и натиснете бутона „Генерирай лист“.</p>
+                    </div>
+                </div>
+            </section>
+            
+        </main>
+
+        <footer class="bg-slate-800 text-slate-400 py-6 px-4 border-t border-slate-700 text-center text-sm no-print">
+            <p>© 2026 Генератор на работни листове – 9. клас. Оригинално дигитално помагало без нужда от инсталация.</p>
+            <p class="text-xs text-slate-500 mt-1">Продуктът е разработен съвместно спрямо учебния план на МОН.</p>
+        </footer>
+    </div>
+
+    <!-- Скриптове и логика -->
+    <script>
+        const curriculumData = [
+            {
+                id: "probability", title: "1. Класическа вероятност",
+                lessons: ["Урок 1: Събития и вероятности", "Урок 2: Класическа вероятност – основни задачи", "Урок 3: Вероятност на сума и произведение на събития"]
+            },
+            {
+                id: "functions", title: "2. Функции",
+                lessons: ["Урок 1: Намиране стойност и дефиниционна област", "Урок 2: Линейна функция y = ax + b. Графика", "Урок 3: Квадратна функция y = ax²", "Урок 4: Квадратна функция y = ax² + bx + c. Връх на парабола"]
+            },
+            {
+                id: "systems_linear", title: "3. Системи линейни уравнения с две неизвестни",
+                lessons: ["Урок 1: Проверка за решение и графично тълкуване", "Урок 2: Решаване чрез заместване", "Урок 3: Решаване чрез събиране", "Урок 4: Текстови задачи със системи"]
+            },
+            {
+                id: "systems_quadratic", title: "4. Системи уравнения от втора степен с две неизвестни",
+                lessons: ["Урок 1: Системи, на които едното уравнение е линейно", "Урок 2: Решаване на системи от втора степен (симетрични)"]
+            },
+            {
+                id: "similar_triangles", title: "5. Подобни триъгълници",
+                lessons: ["Урок 1: Първи признак за подобност", "Урок 2: Втори и трети признак за подобност", "Урок 3: Свойства на подобните триъгълници"]
+            },
+            {
+                id: "rational_inequalities", title: "6. Рационални неравенства",
+                lessons: ["Урок 1: Дробни неравенства", "Урок 2: Метод на интервалите"]
+            },
+            {
+                id: "metric_relations", title: "7. Метрични зависимости между отсечки",
+                lessons: ["Урок 1: Метрични зависимости в правоъгълен триъгълник", "Урок 2: Питагорова теорема"]
+            },
+            {
+                id: "trig_acute", title: "8. Тригонометрични функции на остър ъгъл",
+                lessons: ["Урок 1: Определение за sin, cos, tg, cotg", "Урок 2: Стойности за 30°, 45° и 60°", "Урок 3: Основни тригонометрични зависимости"]
+            },
+            {
+                id: "assessment", title: "9. Входно и изходно ниво",
+                lessons: ["Входно ниво – тест и задачи", "Изходно ниво – подготовка за изпит"]
+            }
+        ];
+
+        const sheetTypeNames = {
+            classwork: "Упражнение в час",
+            homework: "Домашна работа",
+            test_prep: "Подготовка за тест",
+            mixed_topic: "Смесен лист от темата"
+        };
+
+        const reminders = {
+            probability: "Вероятност $P = \\frac{m}{n}$, където $m$ е броят на благоприятните изходи, а $n$ е общият брой възможни изходи. $0 \\le P \\le 1$.",
+            functions: "За $f(x) = ax + b$, графиката е права. За $f(x) = ax^2 + bx + c$, графиката е парабола с връх $x_0 = -\\frac{b}{2a}$, $y_0 = f(x_0)$.",
+            systems_linear: "Методи за решаване: заместване, събиране или графично. При успоредни прави – няма решение, при съвпадащи – безброй много.",
+            systems_quadratic: "При системи с линейно уравнение, изразете променливата от него и заместете в квадратното.",
+            similar_triangles: "Признаци: 1) два равни ъгъла, 2) две пропорционални страни и ъгъл между тях, 3) три пропорционални страни.",
+            rational_inequalities: "Метод на интервалите: намерете нулите на числителя и знаменателя, нанесете ги на числова ос (знаменателят винаги е с 'празна' точка).",
+            metric_relations: "Питагорова теорема: $c^2 = a^2 + b^2$. Височина: $h_c^2 = a_1 \\cdot b_1$. Катети: $a^2 = a_1 \\cdot c$, $b^2 = b_1 \\cdot c$.",
+            trig_acute: "В правоъгълен триъгълник: $\\sin = \\frac{\\text{срещулежащ}}{\\text{хипотенуза}}$, $\\cos = \\frac{\\text{прилежащ}}{\\text{хипотенуза}}$. Основно тъждество: $\\sin^2 \\alpha + \\cos^2 \\alpha = 1$.",
+            assessment: "Внимателно проверявайте изчисленията си. При текстови задачи винаги дефинирайте ясно неизвестните."
+        };
+
+        const themeSelect = document.getElementById('themeSelect');
+        const lessonSelect = document.getElementById('lessonSelect');
+
+        function initDropdowns() {
+            themeSelect.innerHTML = '';
+            curriculumData.forEach((theme, index) => {
+                const opt = document.createElement('option');
+                opt.value = theme.id;
+                opt.textContent = theme.title;
+                if (index === 1) opt.selected = true; // Функции по подразбиране
+                themeSelect.appendChild(opt);
+            });
+            updateLessons();
+        }
+
+        function updateLessons() {
+            const selectedThemeId = themeSelect.value;
+            const theme = curriculumData.find(t => t.id === selectedThemeId);
+            lessonSelect.innerHTML = '';
+            
+            if (theme) {
+                theme.lessons.forEach((lesson, index) => {
+                    const opt = document.createElement('option');
+                    opt.value = index;
+                    opt.textContent = lesson;
+                    lessonSelect.appendChild(opt);
+                });
+            }
+        }
+
+        themeSelect.addEventListener('change', updateLessons);
+
+        let currentSeed = 1;
+        function setSeed(seed) { currentSeed = seed; }
+        function seededRandom() { let x = Math.sin(currentSeed++) * 10000; return x - Math.floor(x); }
+        function getRandomIntSeeded(min, max) { return Math.floor(seededRandom() * (max - min + 1)) + min; }
+        function getRandomNonZeroIntSeeded(min, max) { let val = 0; while(val === 0) val = getRandomIntSeeded(min, max); return val; }
+        function getSignStr(val) { return val >= 0 ? `+ ${val}` : `- ${Math.abs(val)}`; }
+
+        // ==========================================
+        // ПРЕРАБОТЕНИ ГЕНЕРАТОРИ СТРОГО СПОРЕД УРОКА
+        // ==========================================
+        const taskGenerator = {
+            probability: {
+                generate: function(lessonIdx, difficulty, count, seed, sheetType) {
+                    setSeed(seed * 15);
+                    const tasks = [];
+                    for (let i = 0; i < count; i++) {
+                        let cDiff = difficulty === 'mixed' ? ['basic', 'medium', 'hard'][i % 3] : difficulty;
+                        let cLesson = sheetType === 'mixed_topic' ? getRandomIntSeeded(0, 2) : lessonIdx;
+
+                        if (cLesson === 0 || cLesson === 1) { // Урок 1 и 2: Базова вероятност
+                            if (cDiff === 'basic') {
+                                const r = getRandomIntSeeded(4, 8); const g = getRandomIntSeeded(3, 6);
+                                tasks.push({
+                                    question: `В кутия има <b>${r} червени</b> и <b>${g} зелени</b> топки. Изтегля се една топка. Намерете вероятността тя да бъде зелена.`,
+                                    space: "h-20", answer: `$P = \\frac{${g}}{${r+g}}$`,
+                                    solution: `Благоприятни изходи: $m = ${g}$. Всички изходи: $n = ${r} + ${g} = ${r+g}$. Вероятност: $P = \\frac{m}{n} = \\frac{${g}}{${r+g}}$.`
+                                });
+                            } else {
+                                tasks.push({
+                                    question: `Хвърлят се едновременно два зара. Каква е вероятността сумата от точките да бъде <b>точно 7</b>?`,
+                                    space: "h-24", answer: `$P = \\frac{1}{6}$`,
+                                    solution: `Общ брой изходи: $6 \\cdot 6 = 36$. Благоприятни (сума 7): (1,6), (2,5), (3,4), (4,3), (5,2), (6,1) $\\Rightarrow m=6$. $P = \\frac{6}{36} = \\frac{1}{6}$.`
+                                });
+                            }
+                        } else { // Урок 3: Сума/Произведение
+                            tasks.push({
+                                question: `В една партида от <b>20 детайла</b> има <b>4 дефектни</b>. Намерете вероятността при случайно избиране на 2 детайла едновременно, те да са без дефект.`,
+                                space: "h-28", answer: `$P = \\frac{12}{19}$`,
+                                solution: `Детайли без дефект: 16. $n = C_2^{20} = 190$. $m = C_2^{16} = 120$. $P = \\frac{120}{190} = \\frac{12}{19}$.`
+                            });
+                        }
+                    }
+                    return tasks;
+                }
+            },
+            functions: {
+                generate: function(lessonIdx, difficulty, count, seed, sheetType) {
+                    setSeed(seed * 22);
+                    const tasks = [];
+                    for (let i = 0; i < count; i++) {
+                        let cDiff = difficulty === 'mixed' ? ['basic', 'medium', 'hard'][i % 3] : difficulty;
+                        let cLesson = sheetType === 'mixed_topic' ? getRandomIntSeeded(0, 3) : lessonIdx;
+
+                        if (cLesson === 0) { 
+                            // --- УРОК 1: Стойност и Дефиниционна област ---
+                            if (cDiff === 'basic') {
+                                const a = getRandomNonZeroIntSeeded(-3, 3); const b = getRandomIntSeeded(-5, 5); const vX = getRandomIntSeeded(-3, 3);
+                                tasks.push({
+                                    question: `Намерете стойността на функцията $f(x) = ${a === 1 ? '' : (a === -1 ? '-' : a)}x ${getSignStr(b)}$ за стойност на аргумента $x = ${vX}$.`,
+                                    space: "h-20", answer: `$f(${vX}) = ${a * vX + b}$`,
+                                    solution: `Заместваме $x$: $f(${vX}) = ${a} \\cdot (${vX}) ${getSignStr(b)} = ${a * vX + b}$.`
+                                });
+                            } else if (cDiff === 'medium') {
+                                const a = getRandomIntSeeded(1, 5);
+                                tasks.push({
+                                    question: `Определете дефиниционната област на функцията: $f(x) = \\frac{2x+3}{x - ${a}}$.`,
+                                    space: "h-20", answer: `$x \\neq ${a}$`,
+                                    solution: `Знаменателят не може да бъде нула: $x - ${a} \\neq 0 \\Rightarrow x \\neq ${a}$.`
+                                });
+                            } else {
+                                const a = getRandomIntSeeded(1, 5);
+                                tasks.push({
+                                    question: `Определете дефиниционната област на функцията: $f(x) = \\frac{5}{\\sqrt{x - ${a}}}$.`,
+                                    space: "h-20", answer: `$x \\in (${a}; +\\infty)$`,
+                                    solution: `Подкоренната величина в знаменател трябва да е строго положителна: $x - ${a} > 0 \\Rightarrow x > ${a}$.`
+                                });
+                            }
+                        } else if (cLesson === 1) { 
+                            // --- УРОК 2: Линейна функция ---
+                            if (cDiff === 'basic') {
+                                const a = getRandomNonZeroIntSeeded(-2, 2); const b = getRandomIntSeeded(-3, 3); const ptX = getRandomIntSeeded(-2, 2); const ptY = a * ptX + b;
+                                tasks.push({
+                                    question: `Проверете дали точката $M(${ptX}; ${ptY})$ лежи на графиката на линейната функция $y = ${a === 1 ? '' : (a === -1 ? '-' : a)}x ${getSignStr(b)}$.`,
+                                    space: "h-20", answer: `Да, лежи.`,
+                                    solution: `Заместваме координатите: $y = ${a}(${ptX}) ${getSignStr(b)} = ${a * ptX + b}$. Получихме ${ptY}, следователно точката лежи на графиката.`
+                                });
+                            } else {
+                                const b = getRandomNonZeroIntSeeded(-4, 4);
+                                tasks.push({
+                                    question: `Намерете координатите на пресечните точки на графиката на функцията $y = 2x ${getSignStr(b)}$ с координатните оси.`,
+                                    space: "h-24", answer: `С Ox: $(${b/-2}; 0)$, с Oy: $(0; ${b})$`,
+                                    solution: `Пресечна с Oy: заместваме $x = 0 \\Rightarrow y = ${b}$. Точка $(0; ${b})$.<br>Пресечна с Ox: заместваме $y = 0 \\Rightarrow 2x ${getSignStr(b)} = 0 \\Rightarrow x = ${b/-2}$. Точка $(${b/-2}; 0)$.`
+                                });
+                            }
+                        } else if (cLesson === 2) { 
+                            // --- УРОК 3: Квадратна функция y = ax² ---
+                            const a = getRandomNonZeroIntSeeded(-3, 3);
+                            tasks.push({
+                                question: `За квадратната функция $y = ${a}x^2$, определете посоката на клоновете на параболата и намерете стойността ѝ при $x = 2$.`,
+                                space: "h-20", answer: `Клонове ${a > 0 ? 'нагоре' : 'надолу'}, $y(2) = ${a * 4}$`,
+                                solution: `Коефициентът пред $x^2$ е $a = ${a}$. Тъй като ${a > 0 ? 'a > 0' : 'a < 0'}, клоновете са ${a > 0 ? 'нагоре' : 'надолу'}. При $x=2 \\Rightarrow y = ${a} \\cdot 2^2 = ${a * 4}$.`
+                            });
+                        } else if (cLesson === 3) { 
+                            // --- УРОК 4: Квадратна функция y = ax² + bx + c ---
+                            const x0 = getRandomIntSeeded(-2, 2); const y0 = getRandomIntSeeded(-3, 3); const a = getRandomNonZeroIntSeeded(-1, 1);
+                            const bCoeff = -2 * a * x0; const cCoeff = a * x0 * x0 + y0;
+                            const fxStr = `${a === 1 ? '' : (a === -1 ? '-' : a)}x² ${bCoeff === 0 ? '' : getSignStr(bCoeff) + 'x'} ${cCoeff === 0 ? '' : getSignStr(cCoeff)}`;
+                            tasks.push({
+                                question: `Намерете координатите на върха $V(x_0, y_0)$ на параболата: $f(x) = ${fxStr}$.`,
+                                space: "h-24", answer: `$V(${x0}; ${y0})$`,
+                                solution: `По формулата: $x_0 = -\\frac{b}{2a} = -\\frac{${bCoeff}}{2 \\cdot ${a}} = ${x0}$. Заместваме $x_0$ във функцията: $y_0 = f(${x0}) = ${y0}$. Върхът е $V(${x0}; ${y0})$.`
+                            });
+                        }
+                    }
+                    return tasks;
+                }
+            },
+            systems_linear: {
+                generate: function(lessonIdx, difficulty, count, seed, sheetType) {
+                    setSeed(seed * 31);
+                    const tasks = [];
+                    for (let i = 0; i < count; i++) {
+                        let cDiff = difficulty === 'mixed' ? ['basic', 'medium', 'hard'][i % 3] : difficulty;
+                        let cLesson = sheetType === 'mixed_topic' ? getRandomIntSeeded(0, 3) : lessonIdx;
+                        const tX = getRandomIntSeeded(-3, 3); const tY = getRandomIntSeeded(-3, 3);
+
+                        if (cLesson === 0) { // Проверка
+                            tasks.push({
+                                question: `Проверете дали двойката число $(x; y) = (${tX}; ${tY})$ е решение на системата:<br>| $x + y = ${tX+tY}$<br>| $x - y = ${tX-tY}$`,
+                                space: "h-20", answer: `Да, решение е.`,
+                                solution: `Заместваме в първото: ${tX} + ${tY} = ${tX+tY} (вярно). Във второто: ${tX} - ${tY} = ${tX-tY} (вярно). Двойката е решение.`
+                            });
+                        } else if (cLesson === 1) { // Заместване
+                            tasks.push({
+                                question: `Решете системата линейни уравнения чрез <b>метода на заместването</b>:<br>| $x - y = ${tX-tY}$<br>| $2x + y = ${2*tX+tY}$`,
+                                space: "h-28", answer: `$(x; y) = (${tX}; ${tY})$`,
+                                solution: `От първото изразяваме $x = y + ${tX-tY}$. Заместваме във второто: $2(y + ${tX-tY}) + y = ${2*tX+tY} \\Rightarrow 3y = ${tY*3} \\Rightarrow y = ${tY}$. Тогава $x = ${tX}$.`
+                            });
+                        } else if (cLesson === 2) { // Събиране
+                            tasks.push({
+                                question: `Решете системата линейни уравнения чрез <b>метода на събирането</b>:<br>| $x + y = ${tX+tY}$<br>| $x - y = ${tX-tY}$`,
+                                space: "h-24", answer: `$(x; y) = (${tX}; ${tY})$`,
+                                solution: `Събираме ги почленно: $2x = ${(tX+tY)+(tX-tY)} \\Rightarrow x = ${tX}$. Заместваме в първото $\\Rightarrow y = ${tY}$.`
+                            });
+                        } else { // Текстови задачи
+                            const heads = getRandomIntSeeded(10, 20); const legs = heads * 2 + getRandomIntSeeded(2, 6) * 2;
+                            const x = (legs - (2 * heads)) / 2; const y = heads - x;
+                            tasks.push({
+                                question: `В двор има общо <b>${heads} глави</b> и <b>${legs} крака</b> от зайци и кокошки. Като съставите система, определете броя на зайците.`,
+                                space: "h-32", answer: `Зайци: ${x}`,
+                                solution: `Зайци $x$, кокошки $y$. Системата е: $x + y = ${heads}$ и $4x + 2y = ${legs}$. От решаването ѝ следва $x = ${x}$, $y = ${y}$.`
+                            });
+                        }
+                    }
+                    return tasks;
+                }
+            },
+            systems_quadratic: {
+                generate: function(lessonIdx, difficulty, count, seed, sheetType) {
+                    setSeed(seed * 45);
+                    const tasks = [];
+                    for (let i = 0; i < count; i++) {
+                        let cLesson = sheetType === 'mixed_topic' ? getRandomIntSeeded(0, 1) : lessonIdx;
+                        if (cLesson === 0) { // Линейно + Квадратно
+                            const x1 = getRandomIntSeeded(2, 4); const y1 = 1; const sum = x1+y1; const prod = x1*y1;
+                            tasks.push({
+                                question: `Решете системата уравнения (едното е от първа степен):<br>| $x + y = ${sum}$<br>| $x \\cdot y = ${prod}$`,
+                                space: "h-28", answer: `$(x;y) = (${x1}; ${y1})$ и $(${y1}; ${x1})$`,
+                                solution: `Изразяваме $y = ${sum} - x$ от линейното и заместваме във второто: $x(${sum} - x) = ${prod} \\Rightarrow x^2 - ${sum}x + ${prod} = 0$. Корени са $x_1=${x1}, x_2=${y1}$.`
+                            });
+                        } else { // Симетрични
+                            tasks.push({
+                                question: `Решете симетричната система уравнения от втора степен:<br>| $x^2 + y^2 = 10$<br>| $x + y = 4$`,
+                                space: "h-32", answer: `$(3; 1)$ и $(1; 3)$`,
+                                solution: `Използваме полагане $x+y=u=4, xy=v$. От $x^2+y^2 = (x+y)^2 - 2xy = 16 - 2v = 10 \\Rightarrow v = 3$. Системата $x+y=4, xy=3$ има решения (3;1) и (1;3).`
+                            });
+                        }
+                    }
+                    return tasks;
+                }
+            },
+            similar_triangles: {
+                generate: function(lessonIdx, difficulty, count, seed, sheetType) {
+                    setSeed(seed * 52);
+                    const tasks = [];
+                    for (let i = 0; i < count; i++) {
+                        let cLesson = sheetType === 'mixed_topic' ? getRandomIntSeeded(0, 2) : lessonIdx;
+                        if (cLesson === 0 || cLesson === 1) { // Признаци
+                            const a = getRandomIntSeeded(3, 5); const k = getRandomIntSeeded(2, 3);
+                            tasks.push({
+                                question: `Триъгълниците $\\triangle ABC \\sim \\triangle A_1B_1C_1$ са подобни с коефициент $k = ${k}$. Ако $AB = ${a}$ cm, намерете $A_1B_1$.`,
+                                space: "h-20", answer: `$A_1B_1 = ${a * k}$ cm`,
+                                solution: `Поради подобието $\\frac{A_1B_1}{AB} = k \\Rightarrow A_1B_1 = AB \\cdot k = ${a} \\cdot ${k} = ${a*k}$ cm.`
+                            });
+                        } else { // Свойства (Лица)
+                            const k = 2; const s1 = 10;
+                            tasks.push({
+                                question: `Два подобни триъгълника имат коефициент на подобност $k = ${k}$. Лицето на по-малкия е $S = ${s1}$ cm². Намерете лицето на по-големия.`,
+                                space: "h-24", answer: `$S_1 = ${s1 * k * k}$ cm²`,
+                                solution: `Отношението на лицата на подобни триъгълници е равно на квадрата на коефициента на подобност: $\\frac{S_1}{S} = k^2 \\Rightarrow S_1 = ${s1} \\cdot 2^2 = ${s1 * 4}$ cm².`
+                            });
+                        }
+                    }
+                    return tasks;
+                }
+            },
+            rational_inequalities: {
+                generate: function(lessonIdx, difficulty, count, seed, sheetType) {
+                    setSeed(seed * 63);
+                    const tasks = [];
+                    for (let i = 0; i < count; i++) {
+                        let cLesson = sheetType === 'mixed_topic' ? getRandomIntSeeded(0, 1) : lessonIdx;
+                        const a = getRandomIntSeeded(1, 3); const b = getRandomIntSeeded(4, 7);
+                        if (cLesson === 0) { // Дробни неравенства
+                            tasks.push({
+                                question: `Решете дробното рационално неравенство: $\\frac{x - ${a}}{x - ${b}} \\ge 0$`,
+                                space: "h-24", answer: `$x \\in (-\\infty; ${a}] \\cup (${b}; +\\infty)$`,
+                                solution: `Нулата на числителя е $x = ${a}$ (включена), а на знаменателя $x = ${b}$ (изключена). Търсим положителните интервали.`
+                            });
+                        } else { // Метод на интервалите (полиноми)
+                            tasks.push({
+                                question: `Решете неравенството чрез метода на интервалите: $(x - ${a})(x - ${b}) < 0$`,
+                                space: "h-20", answer: `$x \\in (${a}; ${b})$`,
+                                solution: `Корените са $x = ${a}$ и $x = ${b}$. С определяне на знаците в интервалите (+, -, +), търсим отрицателния интервал: $x \\in (${a}; ${b})$.`
+                            });
+                        }
+                    }
+                    return tasks;
+                }
+            },
+            metric_relations: {
+                generate: function(lessonIdx, difficulty, count, seed, sheetType) {
+                    setSeed(seed * 74);
+                    const tasks = [];
+                    for (let i = 0; i < count; i++) {
+                        let cLesson = sheetType === 'mixed_topic' ? getRandomIntSeeded(0, 1) : lessonIdx;
+                        if (cLesson === 0) { // Височини и проекции
+                            const a1 = 9; const b1 = 16;
+                            tasks.push({
+                                question: `В правоъгълен триъгълник проекциите на катетите върху хипотенузата са $a_1 = ${a1}$ cm и $b_1 = ${b1}$ cm. Пресметнете височината $h_c$.`,
+                                space: "h-24", answer: `$h_c = 12$ cm`,
+                                solution: `Използваме метричната зависимост: $h_c^2 = a_1 \\cdot b_1 = ${a1} \\cdot ${b1} = 144 \\Rightarrow h_c = 12$ cm.`
+                            });
+                        } else { // Питагорова теорема
+                            const a = getRandomIntSeeded(3, 4); const b = a === 3 ? 4 : 3;
+                            tasks.push({
+                                question: `В правоъгълен триъгълник катетите са $a = ${a}$ cm и $b = ${b}$ cm. Намерете дължината на хипотенузата $c$.`,
+                                space: "h-20", answer: `$c = 5$ cm`,
+                                solution: `По Питагорова теорема: $c^2 = a^2 + b^2 = ${a}^2 + ${b}^2 = 25 \\Rightarrow c = 5$ cm.`
+                            });
+                        }
+                    }
+                    return tasks;
+                }
+            },
+            trig_acute: {
+                generate: function(lessonIdx, difficulty, count, seed, sheetType) {
+                    setSeed(seed * 85);
+                    const tasks = [];
+                    for (let i = 0; i < count; i++) {
+                        let cLesson = sheetType === 'mixed_topic' ? getRandomIntSeeded(0, 2) : lessonIdx;
+                        if (cLesson === 0) { // Определение
+                            tasks.push({
+                                question: `В правоъгълен триъгълник катетът срещу ъгъл $\\alpha$ е 3 cm, а хипотенузата е 5 cm. Намерете $\\sin \\alpha$ и $\\cos \\alpha$.`,
+                                space: "h-24", answer: `$\\sin \\alpha = \\frac{3}{5}, \\cos \\alpha = \\frac{4}{5}$`,
+                                solution: `По дефиниция $\\sin \\alpha = \\frac{\\text{срещулежащ}}{\\text{хипотенуза}} = \\frac{3}{5}$. Вторият катет е 4 cm (Питагорова теорема), следователно $\\cos \\alpha = \\frac{4}{5}$.`
+                            });
+                        } else if (cLesson === 1) { // 30, 45, 60
+                            tasks.push({
+                                question: `Пресметнете числената стойност на израза: $L = 2 \\cdot \\sin(30^\\circ) + \\tan(45^\\circ)$`,
+                                space: "h-20", answer: `$L = 2$`,
+                                solution: `Заместваме стойностите: $\\sin(30^\\circ) = \\frac{1}{2}$, $\\tan(45^\\circ) = 1 \\Rightarrow L = 2 \\cdot \\frac{1}{2} + 1 = 2$.`
+                            });
+                        } else { // Основни зависимости
+                            tasks.push({
+                                question: `За острия ъгъл $\\alpha$ е известно, че $\\sin \\alpha = \\frac{4}{5}$. Намерете $\\cos \\alpha$.`,
+                                space: "h-24", answer: `$\\cos \\alpha = \\frac{3}{5}$`,
+                                solution: `От $\\sin^2 \\alpha + \\cos^2 \\alpha = 1 \\Rightarrow \\cos^2 \\alpha = 1 - (\\frac{4}{5})^2 = \\frac{9}{25} \\Rightarrow \\cos \\alpha = \\frac{3}{5}$.`
+                            });
+                        }
+                    }
+                    return tasks;
+                }
+            },
+            assessment: {
+                generate: function(lessonIdx, difficulty, count, seed, sheetType) {
+                    setSeed(seed * 96);
+                    const tasks = [];
+                    for (let i = 0; i < count; i++) {
+                        tasks.push({
+                            question: `В правоъгълен триъгълник катет е 12 cm, а синусът на срещулежащия ъгъл е $\\frac{3}{5}$. Намерете хипотенузата.`,
+                            space: "h-24", answer: `$c = 20$ cm`,
+                            solution: `$\\sin \\alpha = \\frac{12}{c} = \\frac{3}{5} \\Rightarrow c = \\frac{12 \\cdot 5}{3} = 20$ cm.`
+                        });
+                    }
+                    return tasks;
+                }
+            }
+        };
+
+        // КЛИЕНТСКИ КОНТРОЛ
+        function generateWorksheet() {
+            const themeId = themeSelect.value;
+            const themeObj = curriculumData.find(t => t.id === themeId);
+            const lessonIdx = parseInt(lessonSelect.value);
+            const sheetType = document.getElementById('sheetType').value;
+            
+            // Заглавието зависи от това дали е смесен лист или конкретен урок
+            const lessonName = sheetType === 'mixed_topic' ? "Смесен лист (всички уроци от темата)" : themeObj.lessons[lessonIdx];
+            
+            const difficulty = document.querySelector('input[name="difficulty"]:checked').value;
+            const count = parseInt(document.getElementById('tasksCount').value);
+            const variant = parseInt(document.getElementById('variantNum').value);
+
+            // ПОДАВАМЕ 'sheetType' В ГЕНЕРАТОРА ЗА ДА ЗНАЕ ДАЛИ ДА ОГРАНИЧАВА ПО УРОК
+            let tasks = taskGenerator[themeId].generate(lessonIdx, difficulty, count, variant, sheetType);
+
+            const sheetTitle = `${themeObj.title.split('. ')[1]} - ${lessonName}`;
+            const typeLabel = sheetTypeNames[sheetType];
+            
+            let html = `
+                <div class="border-b-2 border-teal-800 pb-4 mb-6">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                        <div>
+                            <span class="text-xs font-bold text-orange-500 uppercase tracking-widest">${typeLabel}</span>
+                            <h2 class="text-xl md:text-2xl font-bold text-teal-900 comfortaa mt-1">${sheetTitle}</h2>
+                            <p class="text-xs text-slate-500 mt-0.5">Генератор на работни листове по Математика за 9. клас • Вариант ${variant}</p>
+                        </div>
+                        <div class="bg-teal-50 border border-teal-200 rounded-xl p-2.5 text-xs text-teal-800 font-semibold self-stretch md:self-auto text-center md:text-left">
+                            Трудност: <span class="capitalize text-orange-600 font-bold">${difficulty === 'basic' ? 'базово' : (difficulty === 'medium' ? 'средно' : (difficulty === 'hard' ? 'по-трудно' : 'смесено'))}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6 text-sm">
+                        <div class="flex items-center gap-2">
+                            <span class="text-slate-500 font-medium">Име:</span>
+                            <div class="flex-grow border-b border-slate-400 h-6"></div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-slate-500 font-medium">Клас:</span>
+                            <div class="w-20 border-b border-slate-400 h-6"></div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-slate-500 font-medium">Дата:</span>
+                            <div class="flex-grow border-b border-slate-400 h-6"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-amber-50/70 border border-amber-200/80 rounded-xl p-4 mb-6 text-sm text-slate-700 shadow-sm">
+                    <h3 class="font-bold text-amber-800 flex items-center gap-1.5 mb-1">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        Припомни си важните формули и указания:
+                    </h3>
+                    <div>${reminders[themeId] || "Няма добавени указания за тази тема."}</div>
+                </div>
+
+                <div class="space-y-6">
+            `;
+
+            tasks.forEach((task, idx) => {
+                html += `
+                    <div class="task-block border border-slate-100 rounded-xl p-4 hover:bg-slate-50/50 transition">
+                        <div class="flex gap-2">
+                            <span class="font-bold text-teal-800 text-base flex-shrink-0">Задача ${idx + 1}.</span>
+                            <div class="flex-grow">
+                                <div class="text-slate-800 text-sm md:text-base leading-relaxed">${task.question}</div>
+                                <div class="writing-space border border-dashed border-slate-300 rounded-lg bg-slate-50/30 w-full ${task.space} mt-3 p-3 text-slate-400 text-xs italic flex items-end justify-between">
+                                    <span>Решение:</span>
+                                    <span class="text-[10px] text-slate-300">Използвай мястото за изчисления</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += `
+                </div>
+
+                <div class="border-t border-slate-200 pt-5 mt-8">
+                    <div class="bg-slate-50 rounded-xl p-4 flex flex-col md:flex-row justify-between items-center gap-4 text-sm">
+                        <div class="font-medium text-slate-700">Как се справихте с този работен лист? (Самооценка)</div>
+                        <div class="flex gap-4">
+                            <label class="flex items-center gap-1.5 cursor-pointer"><input type="radio" name="self-eval" class="text-teal-600"> 🟢 Лесно</label>
+                            <label class="flex items-center gap-1.5 cursor-pointer"><input type="radio" name="self-eval" class="text-teal-600"> 🟡 Имах затруднения</label>
+                            <label class="flex items-center gap-1.5 cursor-pointer"><input type="radio" name="self-eval" class="text-teal-600"> 🔴 Много трудно</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="answers-section bg-teal-50/70 border border-teal-200 rounded-xl p-4 mt-8 page-break">
+                    <h3 class="font-bold text-teal-800 text-base border-b border-teal-200 pb-1.5 mb-2.5">Блок с отговори</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+            `;
+
+            tasks.forEach((task, idx) => { html += `<div class="flex gap-2"><span class="font-semibold text-teal-700">Зад. ${idx + 1}:</span><span class="text-slate-700">${task.answer}</span></div>`; });
+
+            html += `</div></div><div class="solutions-section bg-blue-50/70 border border-blue-200 rounded-xl p-4 mt-4"><h3 class="font-bold text-blue-800 text-base border-b border-blue-200 pb-1.5 mb-2.5">Кратки решения и упътвания</h3><div class="space-y-3.5 text-sm">`;
+
+            tasks.forEach((task, idx) => { html += `<div><span class="font-semibold text-blue-700 block">Задача ${idx + 1}:</span><div class="text-slate-700 mt-0.5">${task.solution}</div></div>`; });
+
+            html += `</div></div>`;
+            document.getElementById('worksheetPaper').innerHTML = html;
+            toggleAnswers();
+            toggleSolutions();
+
+            if (window.MathJax) { MathJax.typesetPromise().catch(err => console.log(err.message)); }
+        }
+
+        function toggleAnswers() {
+            const isChecked = document.getElementById('chkShowAnswers').checked;
+            document.querySelectorAll('.answers-section').forEach(el => el.style.display = isChecked ? 'block' : 'none');
+            isChecked ? document.body.classList.remove('hide-answers-print') : document.body.classList.add('hide-answers-print');
+        }
+
+        function toggleSolutions() {
+            const isChecked = document.getElementById('chkShowSolutions').checked;
+            document.querySelectorAll('.solutions-section').forEach(el => el.style.display = isChecked ? 'block' : 'none');
+            isChecked ? document.body.classList.remove('hide-solutions-print') : document.body.classList.add('hide-solutions-print');
+        }
+
+        function enterApp() {
+            const lp = document.getElementById('landingPage');
+            const app = document.getElementById('appContainer');
+            lp.classList.add('opacity-0');
+            setTimeout(() => {
+                lp.classList.add('hidden'); app.classList.remove('hidden');
+                document.body.className = "bg-slate-100 text-slate-800 min-h-screen flex flex-col transition-colors duration-500";
+                generateWorksheet();
+            }, 500);
+        }
+
+        function exitApp() {
+            const lp = document.getElementById('landingPage');
+            const app = document.getElementById('appContainer');
+            app.classList.add('hidden'); lp.classList.remove('hidden');
+            setTimeout(() => {
+                lp.classList.remove('opacity-0');
+                document.body.className = "bg-slate-950 text-slate-200 min-h-screen flex flex-col transition-colors duration-500";
+            }, 50);
+        }
+
+        // ==========================================
+        // 3D АНИМАЦИЯ 
+        // ==========================================
+        let scene, camera, renderer, mathGroup;
+        let mouseX = 0, mouseY = 0;
+
+        function init3DScene() {
+            const container = document.getElementById('canvas3dContainer');
+            if (!container) return;
+
+            scene = new THREE.Scene();
+            scene.fog = new THREE.FogExp2(0x0f172a, 0.045);
+            camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100);
+            camera.position.z = 15;
+
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            container.appendChild(renderer.domElement);
+
+            scene.add(new THREE.AmbientLight(0xffffff, 0.4));
+            const pointLight = new THREE.PointLight(0x06b6d4, 2, 50); pointLight.position.set(10, 10, 10); scene.add(pointLight);
+            const dirLight = new THREE.DirectionalLight(0x14b8a6, 1.5); dirLight.position.set(-10, -10, 10); scene.add(dirLight);
+
+            mathGroup = new THREE.Group(); scene.add(mathGroup);
+
+            const gridHelper = new THREE.GridHelper(40, 40, 0x14b8a6, 0x334155);
+            gridHelper.rotation.x = Math.PI / 2.5; gridHelper.position.y = -4; mathGroup.add(gridHelper);
+
+            const torus = new THREE.Mesh(new THREE.TorusGeometry(3, 0.8, 16, 100), new THREE.MeshPhongMaterial({ color: 0x0f766e, shininess: 100, wireframe: true }));
+            torus.position.set(-4, 2, -2); mathGroup.add(torus);
+
+            const cone = new THREE.Mesh(new THREE.ConeGeometry(2, 4, 4), new THREE.MeshPhongMaterial({ color: 0xf97316, flatShading: true }));
+            cone.position.set(5, -1, -3); mathGroup.add(cone);
+
+            const sphere = new THREE.Mesh(new THREE.SphereGeometry(1.5, 16, 16), new THREE.MeshPhongMaterial({ color: 0x06b6d4, wireframe: true }));
+            sphere.position.set(0, 3, 2); mathGroup.add(sphere);
+
+            const starPositions = new Float32Array(200 * 3);
+            for (let i = 0; i < 600; i++) starPositions[i] = (Math.random() - 0.5) * 40;
+            const starGeo = new THREE.BufferGeometry(); starGeo.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
+            scene.add(new THREE.Points(starGeo, new THREE.PointsMaterial({ size: 0.15, color: 0xffffff })));
+
+            window.addEventListener('resize', () => { camera.aspect = window.innerWidth / window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight); });
+            window.addEventListener('mousemove', (e) => { mouseX = (e.clientX - window.innerWidth / 2) / 200; mouseY = (e.clientY - window.innerHeight / 2) / 200; });
+
+            animate3D();
+        }
+
+        function animate3D() {
+            requestAnimationFrame(animate3D);
+            mathGroup.rotation.y += 0.003; mathGroup.rotation.x += 0.001;
+            camera.position.x += (mouseX - camera.position.x) * 0.05;
+            camera.position.y += (-mouseY - camera.position.y) * 0.05;
+            camera.lookAt(scene.position);
+            renderer.render(scene, camera);
+        }
+
+        document.getElementById('btnGenerate').addEventListener('click', generateWorksheet);
+        document.getElementById('btnNewVariant').addEventListener('click', () => { document.getElementById('variantNum').value++; generateWorksheet(); });
+        document.getElementById('chkShowAnswers').addEventListener('change', toggleAnswers);
+        document.getElementById('chkShowSolutions').addEventListener('change', toggleSolutions);
+        document.getElementById('btnPrint').addEventListener('click', () => window.print());
+        document.getElementById('btnClear').addEventListener('click', () => {
+            document.getElementById('worksheetPaper').innerHTML = `<div class="text-center py-20 text-slate-400"><p class="text-lg font-medium">Работният лист е изчистен.</p></div>`;
+        });
+
+        window.onload = function() { initDropdowns(); init3DScene(); };
+    </script>
+</body>
+</html>
