@@ -141,7 +141,7 @@
             <p>© 2026 Всички права запазени. Дигитален ресурс за девети клас.</p>
             <div class="bg-slate-900/60 backdrop-blur px-4 py-2 rounded-xl border border-slate-700/50 flex items-center gap-2">
                 <span class="w-2 h-2 rounded-full bg-teal-500 animate-pulse"></span>
-                <span class="font-medium text-slate-300">Идея: <strong class="text-white">Валя Витковска</strong> · Реализация: <strong class="text-white">Gemini</strong></span>
+                <span class="font-medium text-slate-300">Идея: <strong class="text-white">Валя Витковска</strong> · Реализация: <strong class="text-white">Gemini и Claude</strong></span>
             </div>
         </footer>
     </div>
@@ -236,6 +236,9 @@
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
                                 Нов вариант
                             </button>
+                            <button id="btnRandomVariant" class="w-full bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-xl border border-amber-200 transition duration-250 flex items-center justify-center gap-2 text-sm">
+                                <span class="text-base">&#127922;</span> Случайни задачи
+                            </button>
                         </div>
                         <div class="border-t pt-3 space-y-2">
                             <label class="flex items-center gap-2 cursor-pointer text-sm font-medium text-slate-700">
@@ -243,6 +246,9 @@
                             </label>
                             <label class="flex items-center gap-2 cursor-pointer text-sm font-medium text-slate-700">
                                 <input type="checkbox" id="chkShowSolutions" checked class="w-4 h-4 text-teal-600 border-slate-300 rounded focus:ring-teal-500"> Покажи решенията
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer text-sm font-medium text-slate-700">
+                                <input type="checkbox" id="chkRandomStart" checked class="w-4 h-4 text-teal-600 border-slate-300 rounded focus:ring-teal-500"> Случаен вариант при отваряне
                             </label>
                         </div>
                         <div class="grid grid-cols-2 gap-2 border-t pt-3">
@@ -253,6 +259,9 @@
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg> Съдържание
                             </button>
                         </div>
+                        <button id="btnReference" class="w-full bg-amber-100 hover:bg-amber-200 text-amber-800 font-semibold py-2 px-3 rounded-lg text-xs flex items-center justify-center gap-1.5 border border-amber-200 mt-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg> Справочник с формули
+                        </button>
                     </div>
                 </div>
             </aside>
@@ -480,12 +489,17 @@
                 </svg></div>`,
             
             rightTriangle: (lblA, lblB, lblC, extra='') => `<div class="flex justify-center mt-4 mb-2 svg-print-fix">
-                <svg width="180" height="120" viewBox="0 0 180 120" class="overflow-visible">
-                    <polygon points="10,110 160,110 10,10" fill="#f8fafc" stroke="#0f766e" stroke-width="2" stroke-linejoin="round"/>
-                    <polyline points="10,95 25,95 25,110" fill="none" stroke="#0f766e" stroke-width="1.5"/>
-                    <text x="85" y="125" font-family="Arial" font-size="14" fill="#334155" text-anchor="middle">${lblB}</text>
-                    <text x="-5" y="60" font-family="Arial" font-size="14" fill="#334155" text-anchor="end">${lblA}</text>
-                    <text x="95" y="50" font-family="Arial" font-size="14" fill="#334155">${lblC}</text>
+                <svg width="244" height="154" viewBox="0 0 262 156" class="overflow-visible">
+                    <polygon points="30,130 230,130 102,34" fill="#f0fdfa" stroke="#0f766e" stroke-width="2" stroke-linejoin="round"/>
+                    <polyline points="91,48 104,57 116,44" fill="none" stroke="#0f766e" stroke-width="1.4"/>
+                    <path d="M 60 130 A 30 30 0 0 0 48 106" fill="none" stroke="#f97316" stroke-width="1.7"/>
+                    <text x="56" y="119" font-family="Arial" font-size="15" fill="#f97316">&#945;</text>
+                    <text x="18" y="146" font-family="Arial" font-size="13" font-weight="bold" fill="#0f766e">A</text>
+                    <text x="234" y="146" font-family="Arial" font-size="13" font-weight="bold" fill="#0f766e">B</text>
+                    <text x="96" y="26" font-family="Arial" font-size="13" font-weight="bold" fill="#0f766e">C</text>
+                    <text x="170" y="80" font-family="Arial" font-size="15" font-style="italic" fill="#334155">${lblA}</text>
+                    <text x="48" y="84" font-family="Arial" font-size="15" font-style="italic" fill="#334155">${lblB}</text>
+                    <text x="124" y="148" font-family="Arial" font-size="15" font-style="italic" fill="#334155">${lblC}</text>
                     ${extra}
                 </svg></div>`,
             
@@ -496,7 +510,7 @@
                 </svg>
                 <svg width="60" height="48" viewBox="0 0 100 80" class="overflow-visible mt-auto">
                     <polygon points="10,70 90,70 30,10" fill="#f8fafc" stroke="#0f766e" stroke-width="2" stroke-linejoin="round"/>
-                    <text x="0" y="85" font-family="Arial" font-size="14" fill="#475569">A₁</text><text x="90" y="85" font-family="Arial" font-size="14" fill="#475569">B₁</text><text x="20" y="-2" font-family="Arial" font-size="14" fill="#475569">C₁</text>
+                    <text x="0" y="85" font-family="Arial" font-size="14" font-weight="bold" fill="#475569">A<tspan font-size="10" dy="3">1</tspan></text><text x="88" y="85" font-family="Arial" font-size="14" font-weight="bold" fill="#475569">B<tspan font-size="10" dy="3">1</tspan></text><text x="18" y="-2" font-family="Arial" font-size="14" font-weight="bold" fill="#475569">C<tspan font-size="10" dy="3">1</tspan></text>
                 </svg></div>`,
             numberLine: (roots) => `<div class="flex justify-center mt-6 mb-4 svg-print-fix">
                 <svg width="250" height="40" viewBox="0 0 250 40" class="overflow-visible">
@@ -506,14 +520,20 @@
                 </svg></div>`,
             // Чист чертеж без означения на дължини – ученикът сам нанася данните от условието
             metricTriangle: () => `<div class="flex justify-center mt-4 mb-2 svg-print-fix">
-                <svg width="220" height="150" viewBox="0 0 220 150" class="overflow-visible">
-                    <polygon points="20,130 200,130 55,40" fill="#f8fafc" stroke="#0f766e" stroke-width="2" stroke-linejoin="round"/>
-                    <line x1="55" y1="40" x2="55" y2="130" stroke="#b91c1c" stroke-width="1.8" stroke-dasharray="3,3"/>
-                    <polyline points="55,120 65,120 65,130" fill="none" stroke="#b91c1c" stroke-width="1"/>
-                    <text x="55" y="30" font-family="Arial" font-size="13" font-weight="bold" fill="#0f766e" text-anchor="middle">C</text>
-                    <text x="12" y="135" font-family="Arial" font-size="13" font-weight="bold" fill="#0f766e">A</text>
-                    <text x="205" y="135" font-family="Arial" font-size="13" font-weight="bold" fill="#0f766e">B</text>
-                    <text x="55" y="143" font-family="Arial" font-size="12" fill="#b91c1c" text-anchor="middle">H</text>
+                <svg width="300" height="172" viewBox="0 0 330 178" class="overflow-visible">
+                    <polygon points="35,150 295,150 115,30" fill="#f8fafc" stroke="#0f766e" stroke-width="2" stroke-linejoin="round"/>
+                    <line x1="115" y1="30" x2="115" y2="150" stroke="#b91c1c" stroke-width="1.6" stroke-dasharray="4,3"/>
+                    <polyline points="107,42 119,51 128,38" fill="none" stroke="#0f766e" stroke-width="1.3"/>
+                    <polyline points="115,138 127,138 127,150" fill="none" stroke="#b91c1c" stroke-width="1.1"/>
+                    <text x="115" y="22" font-family="Arial" font-size="13" font-weight="bold" fill="#0f766e" text-anchor="middle">C</text>
+                    <text x="24" y="165" font-family="Arial" font-size="13" font-weight="bold" fill="#0f766e">A</text>
+                    <text x="299" y="165" font-family="Arial" font-size="13" font-weight="bold" fill="#0f766e">B</text>
+                    <text x="115" y="167" font-family="Arial" font-size="11" fill="#b91c1c" text-anchor="middle">D</text>
+                    <text x="58" y="92" font-family="Arial" font-size="15" font-style="italic" fill="#334155">b</text>
+                    <text x="206" y="92" font-family="Arial" font-size="15" font-style="italic" fill="#334155">a</text>
+                    <text x="120" y="98" font-family="Arial" font-size="14" font-style="italic" fill="#b91c1c">h<tspan font-size="9" dy="3">c</tspan></text>
+                    <text x="58" y="168" font-family="Arial" font-size="14" font-style="italic" fill="#475569">b<tspan font-size="9" dy="3">1</tspan></text>
+                    <text x="192" y="168" font-family="Arial" font-size="14" font-style="italic" fill="#475569">a<tspan font-size="9" dy="3">1</tspan></text>
                 </svg></div>`,
             linearFunctionGraph: (a, b) => {
                 const x1 = -3, y1 = a * x1 + b;
@@ -636,23 +656,18 @@
                         htmlElement: optsHtml,
                         space: "h-20", answer: t3Answer, solution: activeT3.s
                     });
-                    // --- ЗАДЪЛЖИТЕЛНА ЗАДАЧА 4 ---
+                    // --- ЗАДЪЛЖИТЕЛНА ЗАДАЧА 4 (надградена: връх и екстремум) ---
                     const task4Variations = [
-                        {
-                            ptCoords: "(\\sqrt{3}; \\frac{3}{2})",
-                            a: "$a = \\frac{1}{2}$",
-                            s: `Заместваме координатите в $f(x) = ax^2$: $\\frac{3}{2} = a \\cdot (\\sqrt{3})^2 \\Rightarrow \\frac{3}{2} = 3a \\Rightarrow a = \\frac{1}{2}$.`
-                        },
-                        {
-                            ptCoords: "(2; -\\frac{4}{3})",
-                            a: "$a = -\\frac{1}{3}$",
-                            s: `Заместваме координатите: $-\\frac{4}{3} = a \\cdot 2^2 \\Rightarrow -\\frac{4}{3} = 4a \\Rightarrow a = -\\frac{1}{3}$.`
-                        }
+                        { f: "x^2 - 6x + 5", x0: 3, y0: -4 },
+                        { f: "x^2 - 4x + 1", x0: 2, y0: -3 },
+                        { f: "x^2 + 2x - 3", x0: -1, y0: -4 }
                     ];
                     const activeT4 = task4Variations[getRandomIntSeeded(0, task4Variations.length - 1)];
                     tasks.push({
-                        question: `Графиката на квадратната функция <b>$f(x) = ax^2$</b> минава през точка <b>$A${activeT4.ptCoords}$</b>. Определете коефициента $a$.`,
-                        space: "h-20", answer: activeT4.a, solution: activeT4.s
+                        question: `Дадена е квадратната функция <b>$f(x) = ${activeT4.f}$</b>. Намерете координатите на върха на параболата, посоката на отваряне и най-малката стойност на функцията.`,
+                        space: "h-24",
+                        answer: `връх $V(${activeT4.x0}; ${activeT4.y0})$, отваря се нагоре, най-малка стойност $= ${activeT4.y0}$`,
+                        solution: `Абсцисата на върха: $x_0 = -\\frac{b}{2a} = ${activeT4.x0}$. Ординатата: $y_0 = f(${activeT4.x0}) = ${activeT4.y0}$. Тъй като $a = 1 > 0$, параболата се отваря нагоре и във върха функцията достига най-малката си стойност $= ${activeT4.y0}$.`
                     });
                     // --- ЗАДЪЛЖИТЕЛНА ЗАДАЧА 5 ---
                     const task5Variations = [
@@ -796,6 +811,13 @@
                                 space: "h-32", answer: `$\\frac{13}{20}$`,
                                 solution: `Общ брой числа: $V_5^3 = 5 \\cdot 4 \\cdot 3 = 60$. <br>А (числото е нечетно): завършва на 3, 7 или 9. Начини: $3 \\cdot (4 \\cdot 3) = 36$.<br>B (числото е < 300): започва с 2. Начини: $1 \\cdot (4 \\cdot 3) = 12$.<br>А ∩ B (нечетно и < 300): започва с 2, завършва на 3, 7 или 9. Начини: $1 \\cdot 3 \\cdot 3 = 9$.<br>$P(A \\cup B) = \\frac{36 + 12 - 9}{60} = \\frac{39}{60} = \\frac{13}{20}$ .`
                             };
+                        },
+                        (i) => {
+                            return {
+                                question: `В кутия има <b>4 бели</b> и <b>5 черни топки</b>. Изтегляме наслуки 3 топки. Намерете вероятността <b>точно две от тях да са бели</b>.`,
+                                space: "h-28", answer: `$\\frac{5}{14}$`,
+                                solution: `Всички начини за избор на 3 от 9 топки: $C_9^3 = 84$. Благоприятни изходи: 2 бели от 4 ($C_4^2 = 6$) и 1 черна от 5 ($C_5^1 = 5$), т.е. $6 \\cdot 5 = 30$. $P = \\frac{30}{84} = \\frac{5}{14}$.`
+                            };
                         }
                     ];
                     if (!isTest && sheetType !== 'mixed_topic') {
@@ -890,6 +912,13 @@
                                 space: "h-28",
                                 answer: `$b = ${b}$, $c = ${c}$, връх $V(${vx}; ${vy})$`,
                                 solution: `Абсцисите на пресечните точки са корени на $f(x) = 0$. По формулите на Виет: $x_1 + x_2 = -b \\Rightarrow b = ${b}$ и $x_1 \\cdot x_2 = c = ${c}$.<br>Върхът лежи на оста на симетрия, по средата между корените: $x_0 = \\frac{${p.x1} + ${p.x2}}{2} = ${vx}$, а $y_0 = f(${vx}) = ${vy}$.`
+                            };
+                        },
+                        (i) => {
+                            return {
+                                question: `Намерете всички стойности на параметъра $m$, за които уравнението <b>$x^2 - 2x + m = 0$</b> има <b>два различни реални корена</b>.`,
+                                space: "h-20", answer: `$m \\in (-\\infty; 1)$`,
+                                solution: `Уравнението има два различни реални корена при положителна дискриминанта: $D = (-2)^2 - 4 \\cdot 1 \\cdot m = 4 - 4m > 0 \\Rightarrow m < 1$. Следователно $m \\in (-\\infty; 1)$.`
                             };
                         }
                     ];
@@ -1073,6 +1102,26 @@
                             ];
                             const v = variants[getRandomIntSeeded(0, variants.length - 1)];
                             return { question: `${v.cond}. ${v.q}`, space: "h-24", answer: v.a, solution: v.s };
+                        },
+                        (i) => {
+                            const opts = [
+                                { k1: "3", k2: "\\frac{5}{6}", res: "\\frac{5}{2}" },
+                                { k1: "\\frac{4}{3}", k2: "\\frac{3}{5}", res: "\\frac{4}{5}" },
+                                { k1: "\\frac{5}{2}", k2: "\\frac{4}{15}", res: "\\frac{2}{3}" }
+                            ];
+                            const o = opts[getRandomIntSeeded(0, opts.length - 1)];
+                            return {
+                                question: `Дадено е, че $\\triangle ABC \\sim \\triangle A_1B_1C_1$ с коефициент на подобие $${o.k1}$, а $\\triangle A_1B_1C_1 \\sim \\triangle A_2B_2C_2$ с коефициент на подобие $${o.k2}$. Намерете коефициента на подобие на $\\triangle ABC$ и $\\triangle A_2B_2C_2$.`,
+                                space: "h-24", answer: `$k = ${o.res}$`,
+                                solution: `Коефициентите на подобие се умножават: $\\frac{AB}{A_2B_2} = \\frac{AB}{A_1B_1} \\cdot \\frac{A_1B_1}{A_2B_2} = ${o.k1} \\cdot ${o.k2} = ${o.res}$.`
+                            };
+                        },
+                        (i) => {
+                            return {
+                                question: `Равнобедрен триъгълник има бедро $9$ cm и периметър $24$ cm. Подобен на него триъгълник има периметър $32$ cm. Намерете коефициента на подобие и основите на двата триъгълника.`,
+                                space: "h-28", answer: `$k = \\frac{3}{4}$; основи $6$ cm и $8$ cm`,
+                                solution: `Основата на първия триъгълник е $24 - 2 \\cdot 9 = 6$ cm. Коефициентът на подобие е равен на отношението на периметрите: $k = \\frac{24}{32} = \\frac{3}{4}$. Страните на втория са $\\frac{4}{3}$ пъти по-големи: бедро $12$ cm и основа $8$ cm (проверка: $12 + 12 + 8 = 32$ cm).`
+                            };
                         }
                     ];
                     const chosen = getShuffledTemplates(templates, count);
@@ -1266,6 +1315,20 @@
                                 answer: `$a = ${t.aStr}$ cm, $b = ${t.bStr}$ cm, $h_c = ${t.hcStr}$ cm`,
                                 solution: `Намираме проекцията $b_1 = c - a_1 = ${t.b1Str}$ cm. Височината е $h_c = \\sqrt{a_1 \\cdot b_1} = ${t.hcStr}$ cm. Катетите са $a = \\sqrt{a_1 \\cdot c} = ${t.aStr}$ cm  и $b = \\sqrt{b_1 \\cdot c} = ${t.bStr}$ cm.`
                             };
+                        },
+                        (i) => {
+                            const opts = [
+                                { c: "10", r: "1 : 4", p1: "2", p2: "8", h: "4", a: "2\\sqrt{5}", b: "4\\sqrt{5}" },
+                                { c: "20", r: "1 : 4", p1: "4", p2: "16", h: "8", a: "4\\sqrt{5}", b: "8\\sqrt{5}" }
+                            ];
+                            const o = opts[getRandomIntSeeded(0, opts.length - 1)];
+                            return {
+                                htmlElement: svgHelpers.metricTriangle(),
+                                question: `В правоъгълен триъгълник $ABC$ ($\\angle C = 90^{\\circ}$) височината към хипотенузата я разделя на части в отношение $${o.r}$. Хипотенузата е $c = ${o.c}$ cm. Намерете височината $h_c$ и катетите $a$ и $b$.`,
+                                space: "h-28",
+                                answer: `$h_c = ${o.h}$ cm, $a = ${o.a}$ cm, $b = ${o.b}$ cm`,
+                                solution: `Частите са в отношение $${o.r}$ и сборът им е $c = ${o.c}$ cm, откъдето $a_1 = ${o.p1}$ cm и $b_1 = ${o.p2}$ cm. Височината: $h_c = \\sqrt{a_1 \\cdot b_1} = ${o.h}$ cm. Катетите: $a = \\sqrt{a_1 \\cdot c} = ${o.a}$ cm и $b = \\sqrt{b_1 \\cdot c} = ${o.b}$ cm.`
+                            };
                         }
                     ];
                     if (!isTest && sheetType !== 'mixed_topic') {
@@ -1289,7 +1352,7 @@
                     let templates = [
                         (i) => {
                             return {
-                                htmlElement: svgHelpers.rightTriangle('a', 'b', 'c', '<text x="140" y="100" fill="#f97316" font-weight="bold">α</text>'),
+                                htmlElement: svgHelpers.rightTriangle('a', 'b', 'c'),
                                 question: `В правоъгълен триъгълник катетите са $a = 36$ cm и $b = 15$ cm. Намерете стойностите на $\\sin \\alpha$, $\\cos \\alpha$, $\\text{tg } \\alpha$ и $\\text{cotg } \\alpha$ за острия ъгъл $\\alpha$, лежащ срещу $a$.`,
                                 space: "h-24",
                                 answer: `$\\sin \\alpha = \\frac{12}{13}$, $\\cos \\alpha = \\frac{5}{13}$, $\\text{tg } \\alpha = \\frac{12}{5}$, $\\text{cotg } \\alpha = \\frac{5}{12}$`,
@@ -1349,6 +1412,20 @@
                             return {
                                 question: `${v.obj}. ${v.q}<br><i>Направете си чертеж и означете кой елемент на правоъгълния триъгълник търсите.</i>`,
                                 space: "h-32", answer: v.a, solution: v.s
+                            };
+                        },
+                        (i) => {
+                            const opts = [
+                                { a: 7, c: 14, b: "7\\sqrt{3}" },
+                                { a: 5, c: 10, b: "5\\sqrt{3}" }
+                            ];
+                            const o = opts[getRandomIntSeeded(0, opts.length - 1)];
+                            return {
+                                htmlElement: svgHelpers.rightTriangle('a', 'b', 'c'),
+                                question: `В правоъгълен триъгълник острият ъгъл е $\\alpha = 30^\\circ$, а срещулежащият му катет е $a = ${o.a}$ cm. Намерете хипотенузата $c$ и другия катет $b$.`,
+                                space: "h-28",
+                                answer: `$c = ${o.c}$ cm, $b = ${o.b}$ cm`,
+                                solution: `$\\sin \\alpha = \\frac{a}{c} \\Rightarrow c = \\frac{a}{\\sin 30^\\circ} = \\frac{${o.a}}{\\frac{1}{2}} = ${o.c}$ cm. По Питагорова теорема $b = \\sqrt{c^2 - a^2} = ${o.b}$ cm.`
                             };
                         }
                     ];
@@ -1577,12 +1654,244 @@
             document.querySelectorAll('.solutions-section').forEach(el => el.style.display = isChecked ? 'block' : 'none');
             isChecked ? document.body.classList.remove('hide-solutions-print') : document.body.classList.add('hide-solutions-print');
         }
+        // ==========================================
+        // СПРАВОЧНИК С ВСИЧКИ ФОРМУЛИ И ТЕОРЕМИ ЗА 9. КЛАС
+        // ==========================================
+        function showReference() {
+            document.getElementById('settingsPanel').classList.add('hidden');
+            const ref = [
+                {
+                    t: "1. Комбинаторика и вероятности",
+                    rows: [
+                        ["Пермутации &mdash; брой подреждания на $n$ елемента", "$P_n = n! = 1 \\cdot 2 \\cdot 3 \\cdots n$"],
+                        ["Вариации &mdash; наредени $k$-торки от $n$ елемента", "$V_n^k = \\frac{n!}{(n-k)!} = n(n-1)\\cdots(n-k+1)$"],
+                        ["Комбинации &mdash; ненаредени $k$-торки от $n$", "$C_n^k = \\frac{n!}{k!\\,(n-k)!}$"],
+                        ["Свойство на комбинациите", "$C_n^k = C_n^{\\,n-k}, \\quad C_n^0 = C_n^n = 1$"],
+                        ["Класическа вероятност", "$P(A) = \\dfrac{m}{n}$ ($m$ &mdash; благоприятни, $n$ &mdash; всички изходи)"],
+                        ["Граници на вероятността", "$0 \\le P(A) \\le 1$"],
+                        ["Невъзможно и достоверно събитие", "$P(\\varnothing) = 0, \\quad P(\\Omega) = 1$"],
+                        ["Противоположно събитие", "$P(\\bar{A}) = 1 - P(A)$"],
+                        ["Вероятност на сума (обединение)", "$P(A \\cup B) = P(A) + P(B) - P(A \\cap B)$"],
+                        ["Сума на несъвместими събития", "$P(A \\cup B) = P(A) + P(B)$"],
+                        ["Произведение на независими събития", "$P(A \\cap B) = P(A) \\cdot P(B)$"]
+                    ]
+                },
+                {
+                    t: "2. Функции",
+                    rows: [
+                        ["Линейна функция", "$y = ax + b$ ($a$ &mdash; ъглов коеф., $b$ &mdash; отрязък по $Oy$)"],
+                        ["Монотонност на линейната функция", "$a > 0$ &mdash; растяща; $a < 0$ &mdash; намаляваща"],
+                        ["Нула на линейната функция", "$x = -\\dfrac{b}{a}$"],
+                        ["Квадратна функция", "$y = ax^2 + bx + c, \\quad a \\ne 0$"],
+                        ["Дискриминанта", "$D = b^2 - 4ac$"],
+                        ["Корени на квадратното уравнение", "$x_{1,2} = \\dfrac{-b \\pm \\sqrt{D}}{2a}$ (при $D \\ge 0$)"],
+                        ["Брой реални корени", "$D > 0$ &mdash; два; $D = 0$ &mdash; един (двоен); $D < 0$ &mdash; няма"],
+                        ["Връх на параболата", "$x_0 = -\\dfrac{b}{2a}, \\quad y_0 = -\\dfrac{D}{4a}$"],
+                        ["Ос на симетрия", "$x = x_0 = -\\dfrac{b}{2a}$"],
+                        ["Каноничен (вершинен) вид", "$y = a(x - x_0)^2 + y_0$"],
+                        ["Разлагане по корени", "$ax^2 + bx + c = a(x - x_1)(x - x_2)$"],
+                        ["Формули на Виет", "$x_1 + x_2 = -\\dfrac{b}{a}, \\quad x_1 \\cdot x_2 = \\dfrac{c}{a}$"],
+                        ["Посока на отваряне", "$a > 0$ &mdash; нагоре (минимум); $a < 0$ &mdash; надолу (максимум)"]
+                    ]
+                },
+                {
+                    t: "3. Системи линейни уравнения с две неизвестни",
+                    rows: [
+                        ["Методи за решаване", "заместване, събиране (алгебричен), графичен"],
+                        ["Общ вид", "$\\begin{cases} a_1x + b_1y = c_1 \\\\ a_2x + b_2y = c_2 \\end{cases}$"],
+                        ["Единствено решение", "$\\dfrac{a_1}{a_2} \\ne \\dfrac{b_1}{b_2}$ &mdash; правите се пресичат"],
+                        ["Няма решение", "$\\dfrac{a_1}{a_2} = \\dfrac{b_1}{b_2} \\ne \\dfrac{c_1}{c_2}$ &mdash; успоредни прави"],
+                        ["Безброй много решения", "$\\dfrac{a_1}{a_2} = \\dfrac{b_1}{b_2} = \\dfrac{c_1}{c_2}$ &mdash; съвпадащи прави"]
+                    ]
+                },
+                {
+                    t: "4. Системи уравнения от втора степен",
+                    rows: [
+                        ["Едното уравнение е от първа степен", "изразяваме едната променлива и заместваме в другото"],
+                        ["Хомогенно уравнение", "$Ax^2 + Bxy + Cy^2 = 0$ &mdash; разлага се на множители"],
+                        ["Симетрична система &mdash; полагане", "$s = x + y, \\quad p = xy$"],
+                        ["Полезно тъждество", "$x^2 + y^2 = (x + y)^2 - 2xy = s^2 - 2p$"],
+                        ["$x$ и $y$ са корени на уравнението", "$t^2 - st + p = 0$"]
+                    ]
+                },
+                {
+                    t: "5. Подобни триъгълници",
+                    rows: [
+                        ["Теорема на Талес", "Успоредни прави, пресичащи рамената на ъгъл, отсичат върху тях пропорционални отсечки."],
+                        ["Първи признак (ъгъл &mdash; ъгъл)", "Два ъгъла на единия са равни на два ъгъла на другия."],
+                        ["Втори признак (страна &mdash; ъгъл &mdash; страна)", "Две страни са пропорционални и ъглите между тях са равни."],
+                        ["Трети признак (три страни)", "Трите страни на единия са пропорционални на трите страни на другия."],
+                        ["Коефициент на подобие $k$", "$\\dfrac{a}{a_1} = \\dfrac{b}{b_1} = \\dfrac{c}{c_1} = k$"],
+                        ["Отношение на периметрите", "$\\dfrac{P}{P_1} = k$"],
+                        ["Височини, медиани и ъглополовящи", "отнасят се както съответните страни, т.е. $= k$"],
+                        ["Отношение на лицата", "$\\dfrac{S}{S_1} = k^2$"],
+                        ["Свойство на вътрешната ъглополовяща", "$\\dfrac{AB}{AC} = \\dfrac{BL}{LC}$ (за ъглополовяща от $A$)"]
+                    ]
+                },
+                {
+                    t: "6. Рационални неравенства",
+                    rows: [
+                        ["Квадратно неравенство", "разглежда се по корените и знака на $a$"],
+                        ["Положителни стойности при $a > 0$", "решението е извън интервала на корените (два лъча)"],
+                        ["Отрицателни стойности при $a > 0$", "решението е между корените"],
+                        ["Метод на интервалите", "нули на числител и знаменател &rarr; знаци по интервалите"],
+                        ["Множител с четна степен", "знакът НЕ се сменя при преминаване през корена"],
+                        ["Дробно неравенство", "знаменателят е различен от нула (ОДЗ)"]
+                    ]
+                },
+                {
+                    t: "7. Метрични зависимости в правоъгълен триъгълник",
+                    rows: [
+                        ["Теорема на Питагор", "$a^2 + b^2 = c^2$ (сборът от квадратите на катетите = квадрата на хипотенузата)"],
+                        ["Обратна теорема на Питагор", "Ако $a^2 + b^2 = c^2$, триъгълникът е правоъгълен."],
+                        ["Височина към хипотенузата", "$h_c^2 = a_1 \\cdot b_1$"],
+                        ["Катет и проекцията му върху хипотенузата", "$a^2 = a_1 \\cdot c, \\quad b^2 = b_1 \\cdot c$"],
+                        ["Сбор на проекциите", "$a_1 + b_1 = c$"],
+                        ["Височина чрез катетите", "$h_c = \\dfrac{a \\cdot b}{c}$"],
+                        ["Лице на правоъгълния триъгълник", "$S = \\dfrac{a \\cdot b}{2} = \\dfrac{c \\cdot h_c}{2}$"],
+                        ["Медиана към хипотенузата", "$m_c = \\dfrac{c}{2}$"],
+                        ["Радиус на описаната окръжност", "$R = \\dfrac{c}{2}$"],
+                        ["Радиус на вписаната окръжност", "$r = \\dfrac{a + b - c}{2}$"],
+                        ["Разстояние между две точки в равнината", "$d = \\sqrt{(x_2 - x_1)^2 + (y_2 - y_1)^2}$"]
+                    ]
+                },
+                {
+                    t: "8. Тригонометрични функции на остър ъгъл",
+                    rows: [
+                        ["Синус", "$\\sin \\alpha = \\dfrac{\\text{срещулежащ катет}}{\\text{хипотенуза}} = \\dfrac{a}{c}$"],
+                        ["Косинус", "$\\cos \\alpha = \\dfrac{\\text{прилежащ катет}}{\\text{хипотенуза}} = \\dfrac{b}{c}$"],
+                        ["Тангенс", "$\\text{tg } \\alpha = \\dfrac{\\text{срещулежащ}}{\\text{прилежащ}} = \\dfrac{a}{b} = \\dfrac{\\sin \\alpha}{\\cos \\alpha}$"],
+                        ["Котангенс", "$\\text{cotg } \\alpha = \\dfrac{\\text{прилежащ}}{\\text{срещулежащ}} = \\dfrac{b}{a} = \\dfrac{\\cos \\alpha}{\\sin \\alpha}$"],
+                        ["Основно тригонометрично тъждество", "$\\sin^2 \\alpha + \\cos^2 \\alpha = 1$"],
+                        ["Връзка между тангенс и котангенс", "$\\text{tg } \\alpha \\cdot \\text{cotg } \\alpha = 1$"],
+                        ["Граници за остър ъгъл", "$0 < \\sin \\alpha < 1, \\quad 0 < \\cos \\alpha < 1$"],
+                        ["Функции на допълнителни ъгли", "$\\sin(90^\\circ - \\alpha) = \\cos \\alpha, \\quad \\cos(90^\\circ - \\alpha) = \\sin \\alpha$"],
+                        ["Тангенс/котангенс на допълнителни ъгли", "$\\text{tg}(90^\\circ - \\alpha) = \\text{cotg } \\alpha, \\quad \\text{cotg}(90^\\circ - \\alpha) = \\text{tg } \\alpha$"]
+                    ]
+                },
+                {
+                    t: "9. Тъждества за съкратено умножение",
+                    rows: [
+                        ["Квадрат на сбор / разлика", "$(a \\pm b)^2 = a^2 \\pm 2ab + b^2$"],
+                        ["Разлика на квадрати", "$a^2 - b^2 = (a - b)(a + b)$"],
+                        ["Куб на сбор / разлика", "$(a \\pm b)^3 = a^3 \\pm 3a^2 b + 3ab^2 \\pm b^3$"],
+                        ["Сбор / разлика на кубове", "$a^3 \\pm b^3 = (a \\pm b)(a^2 \\mp ab + b^2)$"]
+                    ]
+                }
+            ];
+            const figs = {
+                "2. Функции": `<div class="flex justify-center my-3 svg-print-fix"><svg width="220" height="180" viewBox="0 0 230 185" class="overflow-visible">
+                    <line x1="10" y1="120" x2="215" y2="120" stroke="#64748b" stroke-width="1.3"/><polygon points="215,120 208,116 208,124" fill="#64748b"/>
+                    <line x1="110" y1="172" x2="110" y2="12" stroke="#64748b" stroke-width="1.3"/><polygon points="110,12 106,19 114,19" fill="#64748b"/>
+                    <text x="205" y="135" font-family="Arial" font-size="11" fill="#475569">x</text><text x="116" y="20" font-family="Arial" font-size="11" fill="#475569">y</text><text x="99" y="134" font-family="Arial" font-size="10" fill="#475569">O</text>
+                    <line x1="130" y1="18" x2="130" y2="166" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4,3"/>
+                    <path d="M70,40 Q130,260 190,40" fill="none" stroke="#1e40af" stroke-width="2.5"/>
+                    <circle cx="130" cy="150" r="3.5" fill="#f97316"/><text x="137" y="157" font-family="Arial" font-size="12" font-weight="bold" fill="#f97316">V</text>
+                </svg></div>`,
+                "5. Подобни триъгълници": `<div class="flex justify-center my-3 svg-print-fix"><svg width="290" height="135" viewBox="0 0 295 135" class="overflow-visible">
+                    <polygon points="20,110 150,110 60,20" fill="#f0fdfa" stroke="#0f766e" stroke-width="2" stroke-linejoin="round"/>
+                    <text x="12" y="123" font-family="Arial" font-size="12" font-weight="bold" fill="#0f766e">A</text><text x="148" y="123" font-family="Arial" font-size="12" font-weight="bold" fill="#0f766e">B</text><text x="55" y="15" font-family="Arial" font-size="12" font-weight="bold" fill="#0f766e">C</text>
+                    <polygon points="185,110 260,110 220,58" fill="#f0fdfa" stroke="#0f766e" stroke-width="2" stroke-linejoin="round"/>
+                    <text x="173" y="123" font-family="Arial" font-size="12" font-weight="bold" fill="#0f766e">A<tspan font-size="9" dy="3">1</tspan></text><text x="261" y="123" font-family="Arial" font-size="12" font-weight="bold" fill="#0f766e">B<tspan font-size="9" dy="3">1</tspan></text><text x="215" y="52" font-family="Arial" font-size="12" font-weight="bold" fill="#0f766e">C<tspan font-size="9" dy="3">1</tspan></text>
+                </svg></div>`,
+                "7. Метрични зависимости в правоъгълен триъгълник": `<div class="flex justify-center my-3 svg-print-fix"><svg width="320" height="195" viewBox="0 0 340 195" class="overflow-visible">
+                    <polygon points="40,160 300,160 120,40" fill="#f0fdfa" stroke="#0f766e" stroke-width="2" stroke-linejoin="round"/>
+                    <line x1="120" y1="40" x2="120" y2="160" stroke="#b91c1c" stroke-width="1.6" stroke-dasharray="4,3"/>
+                    <polyline points="113,50 124,57 131,47" fill="none" stroke="#0f766e" stroke-width="1.2"/>
+                    <polyline points="120,148 132,148 132,160" fill="none" stroke="#b91c1c" stroke-width="1.2"/>
+                    <text x="120" y="32" font-family="Arial" font-size="13" font-weight="bold" fill="#0f766e" text-anchor="middle">C</text>
+                    <text x="30" y="174" font-family="Arial" font-size="13" font-weight="bold" fill="#0f766e">A</text>
+                    <text x="304" y="174" font-family="Arial" font-size="13" font-weight="bold" fill="#0f766e">B</text>
+                    <text x="120" y="178" font-family="Arial" font-size="12" fill="#b91c1c" text-anchor="middle">D</text>
+                    <text x="68" y="100" font-family="Arial" font-size="13" fill="#334155">b</text>
+                    <text x="214" y="100" font-family="Arial" font-size="13" fill="#334155">a</text>
+                    <text x="127" y="106" font-family="Arial" font-size="13" font-style="italic" fill="#b91c1c">h<tspan font-size="9" dy="3">c</tspan></text>
+                    <text x="74" y="153" font-family="Arial" font-size="13" font-style="italic" fill="#475569">b<tspan font-size="9" dy="3">1</tspan></text>
+                    <text x="200" y="153" font-family="Arial" font-size="13" font-style="italic" fill="#475569">a<tspan font-size="9" dy="3">1</tspan></text>
+                </svg></div>`,
+                "8. Тригонометрични функции на остър ъгъл": `<div class="flex justify-center my-3 svg-print-fix"><svg width="280" height="175" viewBox="0 0 290 175" class="overflow-visible">
+                    <polygon points="30,150 250,150 80,58" fill="#f0fdfa" stroke="#0f766e" stroke-width="2" stroke-linejoin="round"/>
+                    <polyline points="72,68 86,72 82,58" fill="none" stroke="#0f766e" stroke-width="1.2"/>
+                    <path d="M 70 150 A 40 40 0 0 0 56 122" fill="none" stroke="#f97316" stroke-width="1.6"/>
+                    <text x="58" y="142" font-family="Arial" font-size="13" font-weight="bold" fill="#f97316">α</text>
+                    <text x="22" y="164" font-family="Arial" font-size="13" font-weight="bold" fill="#0f766e">A</text>
+                    <text x="252" y="164" font-family="Arial" font-size="13" font-weight="bold" fill="#0f766e">B</text>
+                    <text x="78" y="52" font-family="Arial" font-size="13" font-weight="bold" fill="#0f766e">C</text>
+                    <text x="172" y="100" font-family="Arial" font-size="13" fill="#334155">a</text>
+                    <text x="46" y="104" font-family="Arial" font-size="13" fill="#334155">b</text>
+                    <text x="140" y="166" font-family="Arial" font-size="13" fill="#334155">c</text>
+                </svg></div>`
+            };
+            let html = `
+                <div class="border-b-2 border-teal-800 pb-4 mb-8 text-center animate-fade-in">
+                    <h2 class="text-3xl font-bold text-teal-900 comfortaa">Справочник на формулите и теоремите</h2>
+                    <p class="text-slate-500 mt-2">Всички основни теореми и формули по математика за 9. клас (учебна програма на МОН). Отпечатва се с бутона „Печат“.</p>
+                </div>
+                <div class="space-y-5 animate-fade-in">
+            `;
+            ref.forEach(sec => {
+                html += `
+                    <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm svg-print-fix">
+                        <h3 class="font-bold text-teal-800 text-lg mb-3 comfortaa">${sec.t}</h3>
+                        ${figs[sec.t] || ''}
+                        <table class="w-full text-left text-sm border-collapse">
+                            <thead>
+                                <tr class="text-[11px] uppercase tracking-wide text-slate-400">
+                                    <th class="p-2 font-semibold border-b border-slate-200">Понятие / теорема</th>
+                                    <th class="p-2 font-semibold border-b border-slate-200">Формула / твърдение</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                `;
+                sec.rows.forEach(r => {
+                    html += `
+                        <tr>
+                            <td class="border border-slate-200 p-2 align-top text-slate-700 font-medium bg-slate-50 md:w-2/5">${r[0]}</td>
+                            <td class="border border-slate-200 p-2 align-top text-slate-900">${r[1]}</td>
+                        </tr>
+                    `;
+                });
+                html += `</tbody></table></div>`;
+            });
+            // Таблица с табличните стойности за 30, 45 и 60 градуса
+            const cell = "border border-teal-300 p-2";
+            html += `
+                <div class="bg-teal-50/70 border border-teal-200 rounded-xl p-5 shadow-sm svg-print-fix">
+                    <h3 class="font-bold text-teal-800 text-lg mb-3 comfortaa">Таблица с табличните стойности ($30^\\circ$, $45^\\circ$, $60^\\circ$)</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-center text-base border-collapse">
+                            <thead>
+                                <tr class="bg-teal-100 text-teal-900 font-bold">
+                                    <th class="${cell}">Функция</th>
+                                    <th class="${cell}">$30^\\circ$</th>
+                                    <th class="${cell}">$45^\\circ$</th>
+                                    <th class="${cell}">$60^\\circ$</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white">
+                                <tr><td class="${cell} font-bold text-teal-800">$\\sin$</td><td class="${cell}">$\\dfrac{1}{2}$</td><td class="${cell}">$\\dfrac{\\sqrt{2}}{2}$</td><td class="${cell}">$\\dfrac{\\sqrt{3}}{2}$</td></tr>
+                                <tr><td class="${cell} font-bold text-teal-800">$\\cos$</td><td class="${cell}">$\\dfrac{\\sqrt{3}}{2}$</td><td class="${cell}">$\\dfrac{\\sqrt{2}}{2}$</td><td class="${cell}">$\\dfrac{1}{2}$</td></tr>
+                                <tr><td class="${cell} font-bold text-teal-800">$\\text{tg}$</td><td class="${cell}">$\\dfrac{\\sqrt{3}}{3}$</td><td class="${cell}">$1$</td><td class="${cell}">$\\sqrt{3}$</td></tr>
+                                <tr><td class="${cell} font-bold text-teal-800">$\\text{cotg}$</td><td class="${cell}">$\\sqrt{3}$</td><td class="${cell}">$1$</td><td class="${cell}">$\\dfrac{\\sqrt{3}}{3}$</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>`;
+            document.getElementById('worksheetPaper').innerHTML = html;
+            if (window.MathJax) { MathJax.typesetPromise().catch(err => console.log(err.message)); }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
         function showTableOfContents() {
             document.getElementById('settingsPanel').classList.add('hidden');
             let html = `
                 <div class="border-b-2 border-teal-800 pb-4 mb-8 text-center animate-fade-in">
                     <h2 class="text-3xl font-bold text-teal-900 comfortaa">Съдържание</h2>
                     <p class="text-slate-500 mt-2">Изберете урок, класна или контролна работа, за да генерирате писмена работа</p>
+                    <button onclick="showReference()" class="mt-4 inline-flex items-center gap-2 bg-amber-100 hover:bg-amber-200 text-amber-800 font-semibold py-2 px-4 rounded-xl border border-amber-200 text-sm transition">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                        Отвори справочника с всички формули и теореми
+                    </button>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 animate-fade-in">
             `;
@@ -1624,6 +1933,10 @@
             
             applyRecommendedTaskCount(themeObj, finalLessonIdx);
 
+            const chkRnd = document.getElementById('chkRandomStart');
+            if (chkRnd && chkRnd.checked) {
+                document.getElementById('variantNum').value = Math.floor(Math.random() * 9999) + 1;
+            }
             generateWorksheet();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
@@ -1712,6 +2025,11 @@
         document.getElementById('chkShowSolutions').addEventListener('change', toggleSolutions);
         document.getElementById('btnPrint').addEventListener('click', () => window.print());
         document.getElementById('btnTOC').addEventListener('click', showTableOfContents);
+        document.getElementById('btnReference').addEventListener('click', showReference);
+        document.getElementById('btnRandomVariant').addEventListener('click', () => {
+            document.getElementById('variantNum').value = Math.floor(Math.random() * 9999) + 1;
+            generateWorksheet();
+        });
         window.onload = function() { initDropdowns(); init3DScene(); };
         // v2 – редактирано: изчистени чертежи, повишена трудност, поправени отговори
     </script>
