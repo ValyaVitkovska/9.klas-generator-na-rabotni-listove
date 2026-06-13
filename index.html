@@ -472,6 +472,10 @@
         function applyRecommendedTaskCount(themeObj, lessonIdx) {
             document.getElementById('tasksCount').value = isTestLesson(themeObj, lessonIdx) ? (TEST_TASK_COUNTS[themeObj.id] || 8) : 5;
         }
+        
+        // ==========================================
+        // АКТУАЛИЗИРАНИ SVG ЧЕРТЕЖИ
+        // ==========================================
         const svgHelpers = {
             grid: () => `<div class="flex justify-center mt-3 mb-2 svg-print-fix">
                 <svg width="180" height="180" viewBox="-10 -10 20 20" class="border border-slate-200 bg-slate-50 shadow-sm rounded">
@@ -481,6 +485,27 @@
                     <polygon points="10,0 9,-0.5 9,0.5" fill="#64748b"/><polygon points="0,-10 -0.5,-9 0.5,-9" fill="#64748b"/>
                     <text x="8" y="1.5" font-family="serif" font-style="italic" font-size="2" fill="#64748b">x</text>
                     <text x="0.5" y="-8" font-family="serif" font-style="italic" font-size="2" fill="#64748b">y</text>
+                </svg></div>`,
+                
+            drawingGrid: () => `<div class="flex justify-center mt-5 mb-3 svg-print-fix">
+                <svg width="240" height="240" viewBox="-60 -60 120 120" class="border border-slate-300 bg-white shadow-sm rounded">
+                    <defs>
+                        <pattern id="drawingGridPattern" width="10" height="10" patternUnits="userSpaceOnUse">
+                            <path d="M 10 0 L 0 0 0 10" fill="none" stroke="#e2e8f0" stroke-width="1"/>
+                        </pattern>
+                    </defs>
+                    <rect x="-60" y="-60" width="120" height="120" fill="url(#drawingGridPattern)" />
+                    <line x1="-60" y1="0" x2="55" y2="0" stroke="#475569" stroke-width="1.5"/>
+                    <line x1="0" y1="-55" x2="0" y2="60" stroke="#475569" stroke-width="1.5"/>
+                    <polygon points="58,0 52,-3 52,3" fill="#475569"/>
+                    <polygon points="0,-58 -3,-52 3,-52" fill="#475569"/>
+                    <text x="52" y="-8" font-family="serif" font-style="italic" font-size="10" fill="#475569">x</text>
+                    <text x="6" y="-52" font-family="serif" font-style="italic" font-size="10" fill="#475569">y</text>
+                    <text x="-8" y="12" font-family="serif" font-style="italic" font-size="10" fill="#475569">O</text>
+                    <line x1="10" y1="-2" x2="10" y2="2" stroke="#475569" stroke-width="1.5"/>
+                    <text x="8" y="12" font-family="sans-serif" font-size="8" fill="#475569">1</text>
+                    <line x1="-2" y1="-10" x2="2" y2="-10" stroke="#475569" stroke-width="1.5"/>
+                    <text x="-10" y="-7" font-family="sans-serif" font-size="8" fill="#475569">1</text>
                 </svg></div>`,
             
             rightTriangle: (lblA, lblB, lblC, extra='') => `<div class="flex justify-center mt-4 mb-2 svg-print-fix">
@@ -569,112 +594,8 @@
                     </svg></div>`;
             }
         };
+
         const taskGenerator = {
-            linear_work: {
-                generate: function(lessonIdx, difficulty, count, seed, sheetType, isTest) {
-                    setSeed(seed * 77);
-                    const tasks = [];
-                    
-                    const task1Variations = [
-                        { q: "да е вале или спатия", a: "$\\frac{11}{32}$", s: `Всички карти в тестето са $n = 32$. Броят на валетата е 4. Броят на спатиите е 8. Едно вале е спатия (застъпване). Благоприятните изходи са: $m = 4 + 8 - 1 = 11$. Вероятността е $P = \\frac{11}{32}$.` },
-                        { q: "да е червена или поп", a: "$\\frac{9}{16}$", s: `Всички карти в тестето са $n = 32$. Червените карти са 16. Поповете са 4. Два от поповете са червени (купа и каро). Благоприятните изходи са: $m = 16 + 4 - 2 = 18$. Вероятността е $P = \\frac{18}{32} = \\frac{9}{16}$.` },
-                        { q: "да е дама или купа", a: "$\\frac{11}{32}$", s: `Всички карти в тестето са $n = 32$. Дамите са 4. Купите са 8. Една дама е купа. Благоприятните изходи са: $m = 4 + 8 - 1 = 11$. Вероятността е $P = \\frac{11}{32}$.` }
-                    ];
-                    const activeT1 = task1Variations[getRandomIntSeeded(0, task1Variations.length - 1)];
-                    tasks.push({
-                        question: `От тесте с 32 карти теглим една карта. Каква е вероятността тази карта <b>${activeT1.q}</b>?`,
-                        space: "h-32", answer: activeT1.a, solution: activeT1.s
-                    });
-                    
-                    const task2Variations = [
-                        { digits: "0, 2, 3, 5, 6 и 7", q: "всички четирицифрени числа с различни цифри. Каква е вероятността първата цифра на случайно избрано число да е 2?", a: "$\\frac{1}{5}$", s: `Цифрите са общо 6. Брой на всички четирицифрени числа с различни цифри ($n$): Първата цифра не може да е 0 (5 избора). За следващите три цифри избираме $V_5^3 = 60$. Общо $n = 300$. Благоприятни числа ($m$), започващи с 2: Първата цифра е фиксирана (2). За останалите три цифри избираме $V_5^3 = 60$. Общо $m = 60$. Вероятността е $P = \\frac{60}{300} = \\frac{1}{5}$.` },
-                        { digits: "0, 2, 3, 5, 6 и 7", q: "всички петцифрени числа с различни цифри. Каква е вероятността произволно избрано от тези числа да започва с 67?", a: "$\\frac{1}{25}$", s: `Цифрите са 6. Брой на всички петцифрени числа ($n$): Първата цифра не може да бъде 0 (5 избора). За останалите 4 цифри избираме $V_5^4 = 120$. Общо $n = 600$. Благоприятни изходи ($m$), започващи с 67: Първите две цифри са фиксирани. За останалите 3 цифри избираме $V_4^3 = 24$. Общо $m = 24$. Вероятността е $P = \\frac{24}{600} = \\frac{1}{25}$.` }
-                    ];
-                    const activeT2 = task2Variations[getRandomIntSeeded(0, task2Variations.length - 1)];
-                    tasks.push({
-                        question: `С помощта на цифрите <b>${activeT2.digits}</b> са съставени ${activeT2.q}`,
-                        space: "h-40", answer: activeT2.a, solution: activeT2.s
-                    });
-                    
-                    const task3Variations = [
-                        { func: "y = 7 - 2x", opts: [{ text: "$(0; 7)$", correct: true }, { text: "$(2; -3)$", correct: false }, { text: "$(3; -1)$", correct: false }, { text: "$(1; -5)$", correct: false }], s: `Заместваме координатите на точките в уравнението $y = 7 - 2x$: За точка $(0;7) \\Rightarrow 7 = 7 - 2(0) \\Rightarrow 7 = 7$ (Вярно).` },
-                        { func: "y = 5 - 3x", opts: [{ text: "$(1; 2)$", correct: true }, { text: "$(0; -3)$", correct: false }, { text: "$(2; 1)$", correct: false }, { text: "$(-1; 4)$", correct: false }], s: `Заместваме точките в $y = 5 - 3x$: За $(1; 2) \\Rightarrow 2 = 5 - 3(1) \\Rightarrow 2 = 2$ (Вярно).` }
-                    ];
-                    const activeT3 = task3Variations[getRandomIntSeeded(0, task3Variations.length - 1)];
-                    const letters3 = ['А', 'Б', 'В', 'Г'];
-                    const shuffledOpts3 = seededShuffle(activeT3.opts);
-                    let t3Answer = '';
-                    let optsHtml = `<div class="grid grid-cols-2 gap-2 mt-2 font-medium">`;
-                    shuffledOpts3.forEach((o, oi) => {
-                        const lbl = `${letters3[oi]}) ${o.text}`;
-                        if (o.correct) t3Answer = lbl;
-                        optsHtml += `<span>${lbl}</span>`;
-                    });
-                    optsHtml += `</div>`;
-
-                    tasks.push({
-                        question: `Коя от точките лежи на графиката на функцията <b>$${activeT3.func}$</b>?`,
-                        htmlElement: optsHtml,
-                        space: "h-32", answer: t3Answer, solution: activeT3.s
-                    });
-                    
-                    const task4Variations = [
-                        { f: "x^2 - 6x + 5", x0: 3, y0: -4 },
-                        { f: "x^2 - 4x + 1", x0: 2, y0: -3 },
-                        { f: "x^2 + 2x - 3", x0: -1, y0: -4 }
-                    ];
-                    const activeT4 = task4Variations[getRandomIntSeeded(0, task4Variations.length - 1)];
-                    tasks.push({
-                        question: `Дадена е квадратната функция <b>$f(x) = ${activeT4.f}$</b>. Намерете координатите на върха на параболата, посоката на отваряне и най-малката стойност на функцията.`,
-                        space: "h-40",
-                        answer: `връх $V(${activeT4.x0}; ${activeT4.y0})$, отваря се нагоре, най-малка стойност $= ${activeT4.y0}$`,
-                        solution: `Абсцисата на върха: $x_0 = -\\frac{b}{2a} = ${activeT4.x0}$. Ординатата: $y_0 = f(${activeT4.x0}) = ${activeT4.y0}$. Тъй като $a = 1 > 0$, параболата се отваря нагоре и във върха функцията достига най-малката си стойност $= ${activeT4.y0}$.`
-                    });
-                    
-                    const task5Variations = [
-                        { a: 2, b: 2, opts: [{ text: "$y = 2x + 2$", correct: true }, { text: "$y = -2x - 2$", correct: false }, { text: "$y = 2x - 2$", correct: false }, { text: "$y = -2x + 2$", correct: false }], s: `Правата пресича ординатната ос $Oy$ в точка $(0; 2) \\Rightarrow b = 2$. Пресича абсцисната ос $Ox$ в точка $(-1; 0) \\Rightarrow 0 = a(-1) + 2 \\Rightarrow a = 2$.` },
-                        { a: -2, b: 2, opts: [{ text: "$y = -2x + 2$", correct: true }, { text: "$y = 2x - 2$", correct: false }, { text: "$y = -2x - 2$", correct: false }, { text: "$y = 2x + 2$", correct: false }], s: `Правата пресича оста $Oy$ в точка $(0; 2) \\Rightarrow b = 2$. Пресича оста $Ox$ в точка $(1; 0) \\Rightarrow 0 = a(1) + 2 \\Rightarrow a = -2$.` }
-                    ];
-                    const activeT5 = task5Variations[getRandomIntSeeded(0, task5Variations.length - 1)];
-                    const letters5 = ['а', 'б', 'в', 'г'];
-                    const shuffledOpts5 = seededShuffle(activeT5.opts);
-                    let t5Answer = '';
-                    let opts5Html = `<div class="grid grid-cols-2 gap-2 mt-2 font-medium">`;
-                    shuffledOpts5.forEach((o, oi) => {
-                        const lbl = `${letters5[oi]}) ${o.text}`;
-                        if (o.correct) t5Answer = lbl;
-                        opts5Html += `<span>${lbl}</span>`;
-                    });
-                    opts5Html += `</div>`;
-                    tasks.push({
-                        question: `Графиката на коя линейна функция е изобразена на предоставения по-долу чертеж?`,
-                        htmlElement: svgHelpers.linearFunctionGraph(activeT5.a, activeT5.b) + opts5Html,
-                        space: "h-32", answer: t5Answer, solution: activeT5.s
-                    });
-                    
-                    // Добавени са допълнителни задачи, покриващи предишните 3 теми
-                    tasks.push(taskGenerator.probability.generate(1, 'mixed', 1, seed * 7 + 13, 'mixed_topic', true)[0]);
-                    tasks.push(taskGenerator.functions.generate(0, 'mixed', 1, seed * 9 + 17, 'mixed_topic', true)[0]);
-                    tasks.push(taskGenerator.systems_linear.generate(0, 'mixed', 1, seed * 11 + 21, 'mixed_topic', true)[0]);
-
-                    return tasks;
-                }
-            },
-            linear_work2: {
-                generate: function(lessonIdx, difficulty, count, seed, sheetType, isTest) {
-                    return [
-                        taskGenerator.probability.generate(0, 'mixed', 1, seed * 11 + 1, 'mixed_topic', true)[0],
-                        taskGenerator.functions.generate(0, 'mixed', 1, seed * 13 + 2, 'mixed_topic', true)[0],
-                        taskGenerator.systems_linear.generate(0, 'mixed', 1, seed * 17 + 3, 'mixed_topic', true)[0],
-                        taskGenerator.systems_quadratic.generate(0, 'mixed', 1, seed * 19 + 4, 'mixed_topic', true)[0],
-                        taskGenerator.rational_inequalities.generate(0, 'mixed', 1, seed * 23 + 5, 'mixed_topic', true)[0],
-                        taskGenerator.similar_triangles.generate(0, 'mixed', 1, seed * 29 + 6, 'mixed_topic', true)[0],
-                        taskGenerator.metric_relations.generate(0, 'mixed', 1, seed * 31 + 7, 'mixed_topic', true)[0],
-                        taskGenerator.trig_acute.generate(0, 'mixed', 1, seed * 37 + 8, 'mixed_topic', true)[0]
-                    ];
-                }
-            },
-
             probability: {
                 generate: function(lessonIdx, difficulty, count, seed, sheetType, isTest) {
                     setSeed(seed * 41);
@@ -761,6 +682,7 @@
                     setSeed(seed * 22);
                     
                     let templates = [
+                        // T0: ДМ
                         (i) => {
                             const val = getRandomIntSeeded(2, 6);
                             return { 
@@ -770,6 +692,51 @@
                                 solution: `Подкоренната величина в знаменател трябва да бъде строго положителна: $x^2 - ${val*val} > 0$. Решаваме неравенството $(x-${val})(x+${val}) > 0$, откъдето $x \\in (-\\infty; -${val}) \\cup (${val}; +\\infty)$.` 
                             };
                         },
+                        // T1: Познаване на линейна функция от чертеж
+                        (i) => {
+                            const task5Variations = [
+                                { a: 2, b: 2, opts: [{ text: "$y = 2x + 2$", correct: true }, { text: "$y = -2x - 2$", correct: false }, { text: "$y = 2x - 2$", correct: false }, { text: "$y = -2x + 2$", correct: false }], s: `Правата пресича ординатната ос $Oy$ в точка $(0; 2) \\Rightarrow b = 2$. Пресича абсцисната ос $Ox$ в точка $(-1; 0) \\Rightarrow 0 = a(-1) + 2 \\Rightarrow a = 2$.` },
+                                { a: -2, b: 2, opts: [{ text: "$y = -2x + 2$", correct: true }, { text: "$y = 2x - 2$", correct: false }, { text: "$y = -2x - 2$", correct: false }, { text: "$y = 2x + 2$", correct: false }], s: `Правата пресича оста $Oy$ в точка $(0; 2) \\Rightarrow b = 2$. Пресича оста $Ox$ в точка $(1; 0) \\Rightarrow 0 = a(1) + 2 \\Rightarrow a = -2$.` }
+                            ];
+                            const activeT5 = task5Variations[getRandomIntSeeded(0, task5Variations.length - 1)];
+                            const letters5 = ['а', 'б', 'в', 'г'];
+                            const shuffledOpts5 = seededShuffle(activeT5.opts);
+                            let t5Answer = '';
+                            let opts5Html = `<div class="grid grid-cols-2 gap-2 mt-2 font-medium">`;
+                            shuffledOpts5.forEach((o, oi) => {
+                                const lbl = `${letters5[oi]}) ${o.text}`;
+                                if (o.correct) t5Answer = lbl;
+                                opts5Html += `<span>${lbl}</span>`;
+                            });
+                            opts5Html += `</div>`;
+                            return {
+                                question: `Графиката на коя линейна функция е изобразена на предоставения по-долу чертеж?`,
+                                htmlElement: svgHelpers.linearFunctionGraph(activeT5.a, activeT5.b) + opts5Html,
+                                space: "h-32", answer: t5Answer, solution: activeT5.s
+                            };
+                        },
+                        // T2: Чертане на Линейна функция (НОВО)
+                        (i) => {
+                            const variants = [
+                                { a: 2, b: -4 }, { a: -2, b: 4 }, { a: 3, b: -3 }, { a: -3, b: 3 }, { a: 1, b: 2 }, { a: -1, b: -2 }
+                            ];
+                            const v = variants[getRandomIntSeeded(0, variants.length - 1)];
+                            const funcStr = `y = ${v.a === 1 ? '' : (v.a === -1 ? '-' : v.a)}x ${getSignStr(v.b)}`;
+                            const alg = `<div class="bg-blue-50/50 p-3 rounded-lg text-sm text-slate-700 mt-2 mb-3 border border-blue-100">
+                                <strong>Алгоритъм за построяване на графика на линейна функция:</strong><br>
+                                1. Намираме пресечната точка с оста $Oy$: избираме $x = 0$ и пресмятаме $y$.<br>
+                                2. Намираме пресечната точка с оста $Ox$: избираме $y = 0$ и решаваме уравнението за $x$.<br>
+                                3. Нанасяме намерените две точки в координатната система и прекарваме права линия през тях.
+                            </div>`;
+                            return {
+                                question: `Постройте графиката на линейната функция <b>$${funcStr}$</b>. За целта предварително намерете координатите на две точки от нея. ${alg}`,
+                                htmlElement: svgHelpers.drawingGrid(),
+                                space: "h-20",
+                                answer: `Пресечни точки: $(0; ${v.b})$ и $(${v.b === 0 ? 1 : -v.b / v.a}; ${v.b === 0 ? v.a : 0})$.`,
+                                solution: `При $x = 0 \\Rightarrow y = ${v.b}$. Точката е $(0; ${v.b})$.<br>При $y = 0 \\Rightarrow ${v.a}x ${getSignStr(v.b)} = 0 \\Rightarrow x = ${-v.b / v.a}$. Точката е $(${v.b === 0 ? 1 : -v.b / v.a}; ${v.b === 0 ? v.a : 0})$.<br>Нанасяме ги и чертаем правата.`
+                            };
+                        },
+                        // T3: Свойства по върха
                         (i) => {
                             const x0 = getRandomIntSeeded(1, 3);
                             const y0 = getRandomIntSeeded(4, 9);
@@ -783,6 +750,7 @@
                                 solution: `Понеже параболата е отворена надолу ($a < 0$), тя расте до абсцисата на върха $x_0 = ${x0}$ и намалява след нея. Върхът съответства на максимума (НГС), който е ординатата $y_0 = ${y0}$.` 
                             };
                         },
+                        // T4: НМС/НГС в интервал
                         (i) => {
                             return { 
                                 question: `Намерете най-малката (НМС) и най-голямата (НГС) стойност на квадратната функция <b>$f(x) = x^2 - 4x + 3$</b> в затворения интервал <b>$[3; 5]$</b>.`, 
@@ -791,6 +759,7 @@
                                 solution: `Абсцисата на върха е $x_0 = -\\frac{-4}{2} = 2$. Тъй като $2 \\notin [3; 5]$ и $a = 1 > 0$, функцията е строго растяща в този интервал.<br>Изчисляваме стойностите в краищата на интервала:<br>$f(3) = 3^2 - 4 \\cdot 3 + 3 = 0$ (НМС).<br>$f(5) = 5^2 - 4 \\cdot 5 + 3 = 8$ (НГС).` 
                             };
                         },
+                        // T5: Знаци от графика
                         (i) => {
                             return { 
                                 question: `Графиката на квадратната функция $f(x) = ax^2 + bx + c$ пресича абсцисната ос в две точки с положителни абсциси, а нейният връх лежи в четвърти квадрант. Определете знаците на коефициентите $a$, $b$ и $c$.`, 
@@ -799,6 +768,7 @@
                                 solution: `Върхът лежи в IV квадрант $\\Rightarrow y_0 < 0$ и параболата пресича оста $Ox$ в две точки $\\Rightarrow a > 0$.<br>Тъй като върхът има положителна абсциса $x_0 = -\\frac{b}{2a} > 0$ и $a > 0 \\Rightarrow b < 0$.<br>Корените са положителни $\\Rightarrow x_1 \\cdot x_2 = \\frac{c}{a} > 0 \\Rightarrow c > 0$.` 
                             };
                         },
+                        // T6: Намиране по корени
                         (i) => {
                             const pairs = [ { x1: 1, x2: 3 }, { x1: 2, x2: 4 }, { x1: 1, x2: 5 }, { x1: -1, x2: 3 } ];
                             const p = pairs[getRandomIntSeeded(0, pairs.length - 1)];
@@ -810,8 +780,51 @@
                                 answer: `$b = ${b}$, $c = ${c}$, връх $V(${vx}; ${vy})$`,
                                 solution: `Абсцисите на пресечните точки са корени на $f(x) = 0$. По формулите на Виет: $x_1 + x_2 = -b \\Rightarrow b = ${b}$ и $x_1 \\cdot x_2 = c = ${c}$.<br>Върхът лежи на оста на симетрия, по средата между корените: $x_0 = \\frac{${p.x1} + ${p.x2}}{2} = ${vx}$, а $y_0 = f(${vx}) = ${vy}$.`
                             };
+                        },
+                        // T7: Чертане на Квадратна функция (НОВО)
+                        (i) => {
+                            const variants = [
+                                { f: "x^2 - 4x + 3", x0: 2, y0: -1, c: 3, r1: 1, r2: 3 },
+                                { f: "-x^2 + 2x + 3", x0: 1, y0: 4, c: 3, r1: -1, r2: 3 },
+                                { f: "x^2 - 4", x0: 0, y0: -4, c: -4, r1: -2, r2: 2 },
+                                { f: "-x^2 + 4", x0: 0, y0: 4, c: 4, r1: -2, r2: 2 }
+                            ];
+                            const v = variants[getRandomIntSeeded(0, variants.length - 1)];
+                            const alg = `<div class="bg-blue-50/50 p-3 rounded-lg text-sm text-slate-700 mt-2 mb-3 border border-blue-100">
+                                <strong>Алгоритъм за построяване на графика на квадратна функция $y = ax^2 + bx + c$:</strong><br>
+                                1. Намираме координатите на върха $V(x_0; y_0)$, където $x_0 = -\\frac{b}{2a}$ и $y_0 = f(x_0)$. Начертаваме оста на симетрия.<br>
+                                2. Намираме пресечната точка с оста $Oy$: при $x = 0 \\Rightarrow y = c$. Нанасяме и симетричната ѝ точка.<br>
+                                3. Намираме пресечните точки с оста $Ox$ (ако съществуват), като решим уравнението $ax^2 + bx + c = 0$.<br>
+                                4. Съединяваме точките с плавна крива (парабола).
+                            </div>`;
+                            return {
+                                question: `Постройте графиката на квадратната функция <b>$y = ${v.f}$</b>, като следвате алгоритъма: ${alg}`,
+                                htmlElement: svgHelpers.drawingGrid(),
+                                space: "h-32",
+                                answer: `Връх $V(${v.x0}; ${v.y0})$, пресича $Oy$ в $(0; ${v.c})$, пресича $Ox$ в $(${v.r1}; 0)$ и $(${v.r2}; 0)$.`,
+                                solution: `Абсциса на върха: $x_0 = ${v.x0}$. Ордината: $y_0 = f(${v.x0}) = ${v.y0}$. Върхът е $V(${v.x0}; ${v.y0})$.<br>Пресечна точка с $Oy$: при $x = 0 \\Rightarrow y = ${v.c}$. Точката е $(0; ${v.c})$.<br>Пресечни точки с $Ox$: решаваме $${v.f} = 0$ $\\Rightarrow$ $x_1 = ${v.r1}, x_2 = ${v.r2}$. Точките са $(${v.r1}; 0)$ и $(${v.r2}; 0)$. Параболата минава през тях.`
+                            };
                         }
                     ];
+                    
+                    if (!isTest && sheetType !== 'mixed_topic') {
+                        if (lessonIdx === 0) {
+                            templates = [templates[0]];
+                        } else if (lessonIdx === 1) {
+                            // Линейна функция
+                            templates = [templates[1], templates[2]];
+                        } else if (lessonIdx === 2) {
+                            // Квадратна y = ax^2
+                            templates = [templates[3]];
+                        } else {
+                            // Квадратна пълна
+                            templates = [templates[4], templates[5], templates[6], templates[7]];
+                        }
+                    } else if (isTest || sheetType === 'mixed_topic') {
+                        // За тест/смесен махаме чертането, за да пестим място, или го оставяме
+                        templates = [templates[0], templates[1], templates[3], templates[4], templates[5], templates[6]];
+                    }
+                    
                     const chosen = getShuffledTemplates(templates, count);
                     return chosen.map((t, idx) => t(idx));
                 }
@@ -852,6 +865,40 @@
                     ];
                     const chosen = getShuffledTemplates(templates, count);
                     return chosen.map((t, idx) => t(idx));
+                }
+            },
+            linear_work: {
+                generate: function(lessonIdx, difficulty, count, seed, sheetType, isTest) {
+                    setSeed(seed * 77);
+                    const tasks = [];
+                    
+                    // Task 1: Класическа вероятност
+                    tasks.push(taskGenerator.probability.generate(0, 'mixed', 1, seed, 'mixed_topic', true)[0]);
+                    
+                    // Task 2: Усложнена вероятност (комбинаторика)
+                    tasks.push(taskGenerator.probability.generate(0, 'mixed', 1, seed+1, 'mixed_topic', true)[0]);
+                    
+                    // Task 3: Функции (познаване графика)
+                    tasks.push(taskGenerator.functions.generate(0, 'mixed', 1, seed+2, 'mixed_topic', true)[0]);
+                    
+                    // Task 4: Функции (НМС/НГС)
+                    tasks.push(taskGenerator.functions.generate(0, 'mixed', 1, seed+3, 'mixed_topic', true)[1]);
+                    
+                    // Task 5: Функции (чертане)
+                    tasks.push(taskGenerator.functions.generate(1, 'mixed', 1, seed+4, 'classwork', false)[1]);
+                    
+                    // Task 6: Системи линейни (обикновена)
+                    tasks.push(taskGenerator.systems_linear.generate(0, 'mixed', 1, seed+5, 'mixed_topic', true)[0]);
+                    
+                    // Task 7: Системи линейни (текстова)
+                    tasks.push(taskGenerator.systems_linear.generate(0, 'mixed', 1, seed+6, 'mixed_topic', true)[1]);
+                    
+                    // Ако иска 8 задачи, добавяме още една:
+                    if (count >= 8) {
+                        tasks.push(taskGenerator.systems_linear.generate(0, 'mixed', 1, seed+7, 'mixed_topic', true)[3]);
+                    }
+
+                    return tasks.slice(0, count);
                 }
             },
             systems_quadratic: {
@@ -1106,8 +1153,23 @@
                     const chosen = getShuffledTemplates(templates, count);
                     return chosen.map((t, idx) => t(idx));
                 }
+            },
+            linear_work2: {
+                generate: function(lessonIdx, difficulty, count, seed, sheetType, isTest) {
+                    return [
+                        taskGenerator.probability.generate(0, 'mixed', 1, seed * 11 + 1, 'mixed_topic', true)[0],
+                        taskGenerator.functions.generate(0, 'mixed', 1, seed * 13 + 2, 'mixed_topic', true)[0],
+                        taskGenerator.systems_linear.generate(0, 'mixed', 1, seed * 17 + 3, 'mixed_topic', true)[0],
+                        taskGenerator.systems_quadratic.generate(0, 'mixed', 1, seed * 19 + 4, 'mixed_topic', true)[0],
+                        taskGenerator.rational_inequalities.generate(0, 'mixed', 1, seed * 23 + 5, 'mixed_topic', true)[0],
+                        taskGenerator.similar_triangles.generate(0, 'mixed', 1, seed * 29 + 6, 'mixed_topic', true)[0],
+                        taskGenerator.metric_relations.generate(0, 'mixed', 1, seed * 31 + 7, 'mixed_topic', true)[0],
+                        taskGenerator.trig_acute.generate(0, 'mixed', 1, seed * 37 + 8, 'mixed_topic', true)[0]
+                    ];
+                }
             }
         };
+
         function generateWorksheet() {
             const themeId = themeSelect.value;
             const themeObj = curriculumData.find(t => t.id === themeId);
