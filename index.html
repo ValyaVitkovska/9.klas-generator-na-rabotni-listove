@@ -381,7 +381,7 @@
             linear_work: "Класна работа №1 обхваща темите: 1. Класическа вероятност, 2. Функции и 3. Системи линейни уравнения. Време за работа: 2 учебни часа. Максимален брой точки: 40 т. Оценка = 2 + точки/10.",
             linear_work2: "Класна работа №2 обхваща всичко изучено до момента: преговор от I срок (вероятности, функции) и целия II срок (системи уравнения, неравенства, подобни триъгълници, метрични зависимости, тригонометрия). Време за работа: 2 учебни часа. Максимален брой точки: 40 т.",
             systems_linear: "Системи линейни уравнения се решават чрез: 1) Метод на заместването; 2) Метод на събирането; 3) Графичен метод (правите се пресичат в единствена точка - решение).",
-            systems_quadratic: "При системи с едно линейно уравнение изразяваме едната променлива и заместваме във второто. При хомогенно уравнение от вида $Ax^2+Bxy+Cy^2=0$ разлагаме на множители.",
+            systems_quadratic: "При системи с едно уравнение от първа степен: изразяваме едната променлива и заместваме във второто. При хомогенно уравнение от вида $Ax^2+Bxy+Cy^2=0$ разлагаме на множители.",
             similar_triangles: "При подобни триъгълници съответните ъгли са равни, а страните са пропорционални: $\\frac{a}{a_1} = \\frac{b}{b_1} = \\frac{c}{c_1} = k$. Лицата се отнасят като квадрата на коефициента: $\\frac{S}{S_1} = k^2$.",
             rational_inequalities: "За решаване по метода на интервалите: намираме нулите на числителя и знаменателя, нанасяме ги на числова ос. Внимаваме за четните степени на множителите (знакът не се променя при преминаване през тях).",
             metric_relations: "Метрични зависимости в правоъгълен триъгълник с височина $h_c$: $h_c^2 = a_1 \\cdot b_1$; $a^2 = a_1 \\cdot c$; $b^2 = b_1 \\cdot c$; $h_c = \\frac{a \\cdot b}{c}$. Питагорова теорема: $a^2 + b^2 = c^2$.",
@@ -490,22 +490,22 @@
             drawingGrid: () => `<div class="flex justify-center mt-5 mb-3 svg-print-fix">
                 <svg width="240" height="240" viewBox="-60 -60 120 120" class="border border-slate-300 bg-white shadow-sm rounded">
                     <defs>
-                        <pattern id="drawingGridPattern" width="10" height="10" patternUnits="userSpaceOnUse">
-                            <path d="M 10 0 L 0 0 0 10" fill="none" stroke="#e2e8f0" stroke-width="1"/>
+                        <pattern id="drawingGridPattern" width="10" height="10" patternUnits="userSpaceOnUse" x="0" y="0">
+                            <rect width="10" height="10" fill="none" stroke="#cbd5e1" stroke-width="1"/>
                         </pattern>
                     </defs>
                     <rect x="-60" y="-60" width="120" height="120" fill="url(#drawingGridPattern)" />
-                    <line x1="-60" y1="0" x2="55" y2="0" stroke="#475569" stroke-width="1.5"/>
-                    <line x1="0" y1="-55" x2="0" y2="60" stroke="#475569" stroke-width="1.5"/>
-                    <polygon points="58,0 52,-3 52,3" fill="#475569"/>
-                    <polygon points="0,-58 -3,-52 3,-52" fill="#475569"/>
-                    <text x="52" y="-8" font-family="serif" font-style="italic" font-size="10" fill="#475569">x</text>
-                    <text x="6" y="-52" font-family="serif" font-style="italic" font-size="10" fill="#475569">y</text>
-                    <text x="-8" y="12" font-family="serif" font-style="italic" font-size="10" fill="#475569">O</text>
-                    <line x1="10" y1="-2" x2="10" y2="2" stroke="#475569" stroke-width="1.5"/>
-                    <text x="8" y="12" font-family="sans-serif" font-size="8" fill="#475569">1</text>
-                    <line x1="-2" y1="-10" x2="2" y2="-10" stroke="#475569" stroke-width="1.5"/>
-                    <text x="-10" y="-7" font-family="sans-serif" font-size="8" fill="#475569">1</text>
+                    <line x1="-60" y1="0" x2="55" y2="0" stroke="#334155" stroke-width="1.5"/>
+                    <line x1="0" y1="-55" x2="0" y2="60" stroke="#334155" stroke-width="1.5"/>
+                    <polygon points="58,0 52,-3 52,3" fill="#334155"/>
+                    <polygon points="0,-58 -3,-52 3,-52" fill="#334155"/>
+                    <text x="52" y="-8" font-family="serif" font-style="italic" font-size="10" fill="#334155">x</text>
+                    <text x="6" y="-52" font-family="serif" font-style="italic" font-size="10" fill="#334155">y</text>
+                    <text x="-8" y="12" font-family="serif" font-style="italic" font-size="10" fill="#334155">O</text>
+                    <line x1="10" y1="-2" x2="10" y2="2" stroke="#334155" stroke-width="1.5"/>
+                    <text x="8" y="12" font-family="sans-serif" font-size="8" font-weight="bold" fill="#334155">1</text>
+                    <line x1="-2" y1="-10" x2="2" y2="-10" stroke="#334155" stroke-width="1.5"/>
+                    <text x="-10" y="-7" font-family="sans-serif" font-size="8" font-weight="bold" fill="#334155">1</text>
                 </svg></div>`,
             
             rightTriangle: (lblA, lblB, lblC, extra='') => `<div class="flex justify-center mt-4 mb-2 svg-print-fix">
@@ -566,31 +566,61 @@
                     <text x="195" y="166" font-family="serif" font-size="15" font-style="italic" fill="#475569">a<tspan font-size="10" dy="3">1</tspan></text>
                 </svg></div>`,
             linearFunctionGraph: (a, b) => {
-                const x1 = -3, y1 = a * x1 + b;
-                const x2 = 3, y2 = a * x2 + b;
                 const mapX = (x) => 100 + x * 16;
                 const mapY = (y) => 100 - y * 16;
+                const x1 = -5, y1 = a * x1 + b;
+                const x2 = 5, y2 = a * x2 + b;
                 
                 return `<div class="flex justify-center mt-3 mb-2 svg-print-fix">
-                    <svg width="200" height="200" viewBox="0 0 200 200" class="border border-slate-200 bg-slate-50 shadow-sm rounded">
+                    <svg width="200" height="200" viewBox="0 0 200 200" class="border border-slate-300 bg-white shadow-sm rounded">
                         <defs>
-                            <pattern id="gridPatternClass" width="16" height="16" patternUnits="userSpaceOnUse">
-                                <path d="M 16 0 L 0 0 0 16" fill="none" stroke="#e2e8f0" stroke-width="0.5"/>
+                            <pattern id="gridPatternClass" width="16" height="16" patternUnits="userSpaceOnUse" x="4" y="4">
+                                <rect width="16" height="16" fill="none" stroke="#cbd5e1" stroke-width="1"/>
                             </pattern>
                         </defs>
                         <rect width="200" height="200" fill="url(#gridPatternClass)" />
-                        <line x1="10" y1="100" x2="190" y2="100" stroke="#64748b" stroke-width="1.5"/>
-                        <line x1="100" y1="10" x2="100" y2="190" stroke="#64748b" stroke-width="1.5"/>
-                        <polygon points="190,100 184,97 184,103" fill="#64748b"/>
-                        <polygon points="100,10 97,16 103,16" fill="#64748b"/>
-                        <text x="185" y="115" font-family="serif" font-style="italic" font-size="12" fill="#475569">x</text>
-                        <text x="112" y="18" font-family="serif" font-style="italic" font-size="12" fill="#475569">y</text>
-                        <text x="90" y="113" font-family="serif" font-style="italic" font-size="10" fill="#475569">O</text>
-                        <line x1="${mapX(1)}" y1="97" x2="${mapX(1)}" y2="103" stroke="#475569" stroke-width="1.2"/>
-                        <text x="${mapX(1)}" y="115" font-family="sans-serif" font-size="9" fill="#475569" text-anchor="middle">1</text>
-                        <line x1="97" y1="${mapY(1)}" x2="103" y2="${mapY(1)}" stroke="#475569" stroke-width="1.2"/>
-                        <text x="88" y="${mapY(1) + 3}" font-family="sans-serif" font-size="9" fill="#475569" text-anchor="middle">1</text>
-                        <line x1="${mapX(x1)}" y1="${mapY(y1)}" x2="${mapX(x2)}" y2="${mapY(y2)}" stroke="#1e40af" stroke-width="2.5"/>
+                        <line x1="0" y1="100" x2="200" y2="100" stroke="#1e293b" stroke-width="1.5"/>
+                        <line x1="100" y1="0" x2="100" y2="200" stroke="#1e293b" stroke-width="1.5"/>
+                        <polygon points="200,100 194,97 194,103" fill="#1e293b"/>
+                        <polygon points="100,0 97,6 103,6" fill="#1e293b"/>
+                        <text x="188" y="114" font-family="serif" font-style="italic" font-size="12" fill="#1e293b">x</text>
+                        <text x="108" y="12" font-family="serif" font-style="italic" font-size="12" fill="#1e293b">y</text>
+                        <text x="88" y="114" font-family="serif" font-style="italic" font-size="12" fill="#1e293b">O</text>
+                        <line x1="${mapX(1)}" y1="97" x2="${mapX(1)}" y2="103" stroke="#1e293b" stroke-width="1.5"/>
+                        <text x="${mapX(1)}" y="116" font-family="sans-serif" font-size="10" font-weight="bold" fill="#1e293b" text-anchor="middle">1</text>
+                        <line x1="97" y1="${mapY(1)}" x2="103" y2="${mapY(1)}" stroke="#1e293b" stroke-width="1.5"/>
+                        <text x="86" y="${mapY(1) + 4}" font-family="sans-serif" font-size="10" font-weight="bold" fill="#1e293b" text-anchor="middle">1</text>
+                        <line x1="${mapX(x1)}" y1="${mapY(y1)}" x2="${mapX(x2)}" y2="${mapY(y2)}" stroke="#b91c1c" stroke-width="2.5"/>
+                    </svg></div>`;
+            },
+            quadraticFunctionGraph: (a, b, c) => {
+                const mapX = (x) => 100 + x * 16;
+                const mapY = (y) => 100 - y * 16;
+                let pathD = `M ${mapX(-6)} ${mapY(a*(-6)*(-6) + b*(-6) + c)}`;
+                for (let x = -5.5; x <= 6; x += 0.5) {
+                    pathD += ` L ${mapX(x)} ${mapY(a*x*x + b*x + c)}`;
+                }
+                return `<div class="flex justify-center mt-3 mb-2 svg-print-fix">
+                    <svg width="200" height="200" viewBox="0 0 200 200" class="border border-slate-300 bg-white shadow-sm rounded">
+                        <defs>
+                            <pattern id="gridPatternQuad" width="16" height="16" patternUnits="userSpaceOnUse" x="4" y="4">
+                                <rect width="16" height="16" fill="none" stroke="#cbd5e1" stroke-width="1"/>
+                            </pattern>
+                        </defs>
+                        <rect width="200" height="200" fill="url(#gridPatternQuad)" />
+                        <line x1="0" y1="100" x2="200" y2="100" stroke="#1e293b" stroke-width="1.5"/>
+                        <line x1="100" y1="0" x2="100" y2="200" stroke="#1e293b" stroke-width="1.5"/>
+                        <polygon points="200,100 194,97 194,103" fill="#1e293b"/>
+                        <polygon points="100,0 97,6 103,6" fill="#1e293b"/>
+                        <text x="188" y="114" font-family="serif" font-style="italic" font-size="12" fill="#1e293b">x</text>
+                        <text x="108" y="12" font-family="serif" font-style="italic" font-size="12" fill="#1e293b">y</text>
+                        <text x="88" y="114" font-family="serif" font-style="italic" font-size="12" fill="#1e293b">O</text>
+                        <line x1="${mapX(1)}" y1="97" x2="${mapX(1)}" y2="103" stroke="#1e293b" stroke-width="1.5"/>
+                        <text x="${mapX(1)}" y="116" font-family="sans-serif" font-size="10" font-weight="bold" fill="#1e293b" text-anchor="middle">1</text>
+                        <line x1="97" y1="${mapY(1)}" x2="103" y2="${mapY(1)}" stroke="#1e293b" stroke-width="1.5"/>
+                        <text x="86" y="${mapY(1) + 4}" font-family="sans-serif" font-size="10" font-weight="bold" fill="#1e293b" text-anchor="middle">1</text>
+                        
+                        <path d="${pathD}" fill="none" stroke="#b91c1c" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
                     </svg></div>`;
             }
         };
@@ -682,17 +712,18 @@
                     setSeed(seed * 22);
                     
                     let templates = [
-                        // T0: ДМ
+                        // T0: ДМ (Линейно неравенство)
                         (i) => {
-                            const val = getRandomIntSeeded(2, 6);
+                            const a = getRandomIntSeeded(2, 5);
+                            const b = a * getRandomIntSeeded(1, 4);
                             return { 
-                                question: `Определете дефиниционното множество на функцията:<br><b>$$f(x) = \\frac{x^2 - 4}{\\sqrt{x^2 - ${val*val}}}$$</b>`, 
-                                space: "h-32", 
-                                answer: `$x \\in (-\\infty; -${val}) \\cup (${val}; +\\infty)$`, 
-                                solution: `Подкоренната величина в знаменател трябва да бъде строго положителна: $x^2 - ${val*val} > 0$. Решаваме неравенството $(x-${val})(x+${val}) > 0$, откъдето $x \\in (-\\infty; -${val}) \\cup (${val}; +\\infty)$.` 
+                                question: `Определете дефиниционното множество на функцията:<br><b>$$f(x) = \\frac{x - 5}{\\sqrt{${a}x - ${b}}}$$</b>`, 
+                                space: "h-24", 
+                                answer: `$x \\in (${b/a}; +\\infty)$`, 
+                                solution: `Подкоренната величина в знаменател трябва да бъде строго положителна: $${a}x - ${b} > 0 \\Rightarrow ${a}x > ${b} \\Rightarrow x > ${b/a}$. Дефиниционното множество е $x \\in (${b/a}; +\\infty)$.` 
                             };
                         },
-                        // T1: Познаване на линейна функция от чертеж
+                        // T1: Познаване на линейна функция от опции
                         (i) => {
                             const task5Variations = [
                                 { a: 2, b: 2, opts: [{ text: "$y = 2x + 2$", correct: true }, { text: "$y = -2x - 2$", correct: false }, { text: "$y = 2x - 2$", correct: false }, { text: "$y = -2x + 2$", correct: false }], s: `Правата пресича ординатната ос $Oy$ в точка $(0; 2) \\Rightarrow b = 2$. Пресича абсцисната ос $Ox$ в точка $(-1; 0) \\Rightarrow 0 = a(-1) + 2 \\Rightarrow a = 2$.` },
@@ -715,14 +746,34 @@
                                 space: "h-32", answer: t5Answer, solution: activeT5.s
                             };
                         },
-                        // T2: Чертане на Линейна функция (НОВО)
+                        // T2: Разчитане на линейна функция от графика
+                        (i) => {
+                            const variants = [
+                                { a: 2, b: -2, f0: -2, fx0: 1, sign: "положителен" },
+                                { a: -2, b: 4, f0: 4, fx0: 2, sign: "отрицателен" }
+                            ];
+                            const v = variants[getRandomIntSeeded(0, variants.length - 1)];
+                            return {
+                                question: `На чертежа е дадена графиката на линейната функция $y = f(x)$. Като използвате чертежа, намерете:<br>
+                                           а) стойността на функцията при $x = 0$;<br>
+                                           б) стойността на аргумента $x$, за която $f(x) = 0$;<br>
+                                           в) знака на ъгловия коефициент на функцията (положителен или отрицателен).`,
+                                htmlElement: svgHelpers.linearFunctionGraph(v.a, v.b),
+                                space: "h-32",
+                                answer: `а) $f(0) = ${v.f0}$; б) $x = ${v.fx0}$; в) ${v.sign}`,
+                                solution: `а) Графиката пресича оста $Oy$ в точката $(0; ${v.f0})$, следователно $f(0) = ${v.f0}$.<br>
+                                           б) Графиката пресича оста $Ox$ в точката $(${v.fx0}; 0)$, следователно $f(${v.fx0}) = 0$.<br>
+                                           в) Тъй като функцията е ${v.a > 0 ? "растяща (графиката 'се изкачва' отляво надясно)" : "намаляваща (графиката 'слиза' отляво надясно)"}, ъгловият ѝ коефициент е ${v.sign}.`
+                            };
+                        },
+                        // T3: Построяване на Линейна функция
                         (i) => {
                             const variants = [
                                 { a: 2, b: -4 }, { a: -2, b: 4 }, { a: 3, b: -3 }, { a: -3, b: 3 }, { a: 1, b: 2 }, { a: -1, b: -2 }
                             ];
                             const v = variants[getRandomIntSeeded(0, variants.length - 1)];
                             const funcStr = `y = ${v.a === 1 ? '' : (v.a === -1 ? '-' : v.a)}x ${getSignStr(v.b)}`;
-                            const alg = `<div class="bg-blue-50/50 p-3 rounded-lg text-sm text-slate-700 mt-2 mb-3 border border-blue-100">
+                            const alg = `<div class="bg-blue-50/50 p-3 rounded-lg text-sm text-slate-700 mt-2 mb-3 border border-blue-100 shadow-sm">
                                 <strong>Алгоритъм за построяване на графика на линейна функция:</strong><br>
                                 1. Намираме пресечната точка с оста $Oy$: избираме $x = 0$ и пресмятаме $y$.<br>
                                 2. Намираме пресечната точка с оста $Ox$: избираме $y = 0$ и решаваме уравнението за $x$.<br>
@@ -736,7 +787,7 @@
                                 solution: `При $x = 0 \\Rightarrow y = ${v.b}$. Точката е $(0; ${v.b})$.<br>При $y = 0 \\Rightarrow ${v.a}x ${getSignStr(v.b)} = 0 \\Rightarrow x = ${-v.b / v.a}$. Точката е $(${v.b === 0 ? 1 : -v.b / v.a}; ${v.b === 0 ? v.a : 0})$.<br>Нанасяме ги и чертаем правата.`
                             };
                         },
-                        // T3: Свойства по върха
+                        // T4: Свойства на квадратна функция по върха
                         (i) => {
                             const x0 = getRandomIntSeeded(1, 3);
                             const y0 = getRandomIntSeeded(4, 9);
@@ -750,7 +801,7 @@
                                 solution: `Понеже параболата е отворена надолу ($a < 0$), тя расте до абсцисата на върха $x_0 = ${x0}$ и намалява след нея. Върхът съответства на максимума (НГС), който е ординатата $y_0 = ${y0}$.` 
                             };
                         },
-                        // T4: НМС/НГС в интервал
+                        // T5: НМС/НГС в интервал
                         (i) => {
                             return { 
                                 question: `Намерете най-малката (НМС) и най-голямата (НГС) стойност на квадратната функция <b>$f(x) = x^2 - 4x + 3$</b> в затворения интервал <b>$[3; 5]$</b>.`, 
@@ -759,7 +810,7 @@
                                 solution: `Абсцисата на върха е $x_0 = -\\frac{-4}{2} = 2$. Тъй като $2 \\notin [3; 5]$ и $a = 1 > 0$, функцията е строго растяща в този интервал.<br>Изчисляваме стойностите в краищата на интервала:<br>$f(3) = 3^2 - 4 \\cdot 3 + 3 = 0$ (НМС).<br>$f(5) = 5^2 - 4 \\cdot 5 + 3 = 8$ (НГС).` 
                             };
                         },
-                        // T5: Знаци от графика
+                        // T6: Знаци a, b, c от чертеж
                         (i) => {
                             return { 
                                 question: `Графиката на квадратната функция $f(x) = ax^2 + bx + c$ пресича абсцисната ос в две точки с положителни абсциси, а нейният връх лежи в четвърти квадрант. Определете знаците на коефициентите $a$, $b$ и $c$.`, 
@@ -768,7 +819,7 @@
                                 solution: `Върхът лежи в IV квадрант $\\Rightarrow y_0 < 0$ и параболата пресича оста $Ox$ в две точки $\\Rightarrow a > 0$.<br>Тъй като върхът има положителна абсциса $x_0 = -\\frac{b}{2a} > 0$ и $a > 0 \\Rightarrow b < 0$.<br>Корените са положителни $\\Rightarrow x_1 \\cdot x_2 = \\frac{c}{a} > 0 \\Rightarrow c > 0$.` 
                             };
                         },
-                        // T6: Намиране по корени
+                        // T7: Намиране коефициенти по корени
                         (i) => {
                             const pairs = [ { x1: 1, x2: 3 }, { x1: 2, x2: 4 }, { x1: 1, x2: 5 }, { x1: -1, x2: 3 } ];
                             const p = pairs[getRandomIntSeeded(0, pairs.length - 1)];
@@ -781,7 +832,7 @@
                                 solution: `Абсцисите на пресечните точки са корени на $f(x) = 0$. По формулите на Виет: $x_1 + x_2 = -b \\Rightarrow b = ${b}$ и $x_1 \\cdot x_2 = c = ${c}$.<br>Върхът лежи на оста на симетрия, по средата между корените: $x_0 = \\frac{${p.x1} + ${p.x2}}{2} = ${vx}$, а $y_0 = f(${vx}) = ${vy}$.`
                             };
                         },
-                        // T7: Чертане на Квадратна функция (НОВО)
+                        // T8: Чертане на Квадратна функция
                         (i) => {
                             const variants = [
                                 { f: "x^2 - 4x + 3", x0: 2, y0: -1, c: 3, r1: 1, r2: 3 },
@@ -790,7 +841,7 @@
                                 { f: "-x^2 + 4", x0: 0, y0: 4, c: 4, r1: -2, r2: 2 }
                             ];
                             const v = variants[getRandomIntSeeded(0, variants.length - 1)];
-                            const alg = `<div class="bg-blue-50/50 p-3 rounded-lg text-sm text-slate-700 mt-2 mb-3 border border-blue-100">
+                            const alg = `<div class="bg-blue-50/50 p-3 rounded-lg text-sm text-slate-700 mt-2 mb-3 border border-blue-100 shadow-sm">
                                 <strong>Алгоритъм за построяване на графика на квадратна функция $y = ax^2 + bx + c$:</strong><br>
                                 1. Намираме координатите на върха $V(x_0; y_0)$, където $x_0 = -\\frac{b}{2a}$ и $y_0 = f(x_0)$. Начертаваме оста на симетрия.<br>
                                 2. Намираме пресечната точка с оста $Oy$: при $x = 0 \\Rightarrow y = c$. Нанасяме и симетричната ѝ точка.<br>
@@ -804,6 +855,28 @@
                                 answer: `Връх $V(${v.x0}; ${v.y0})$, пресича $Oy$ в $(0; ${v.c})$, пресича $Ox$ в $(${v.r1}; 0)$ и $(${v.r2}; 0)$.`,
                                 solution: `Абсциса на върха: $x_0 = ${v.x0}$. Ордината: $y_0 = f(${v.x0}) = ${v.y0}$. Върхът е $V(${v.x0}; ${v.y0})$.<br>Пресечна точка с $Oy$: при $x = 0 \\Rightarrow y = ${v.c}$. Точката е $(0; ${v.c})$.<br>Пресечни точки с $Ox$: решаваме $${v.f} = 0$ $\\Rightarrow$ $x_1 = ${v.r1}, x_2 = ${v.r2}$. Точките са $(${v.r1}; 0)$ и $(${v.r2}; 0)$. Параболата минава през тях.`
                             };
+                        },
+                        // T9: Разчитане на Квадратна функция от графика
+                        (i) => {
+                            const variants = [
+                                { a: -1, b: 4, c: -3, r1: 1, r2: 3, vx: 2, vy: 1, ext: "най-голяма стойност $= 1$", signQ: "$f(x) > 0$", signA: "$x \\in (1; 3)$", signSol: "над оста $Ox$, т.е. $x \\in (1; 3)$" },
+                                { a: 1, b: -2, c: -3, r1: -1, r2: 3, vx: 1, vy: -4, ext: "най-малка стойност $= -4$", signQ: "$f(x) < 0$", signA: "$x \\in (-1; 3)$", signSol: "под оста $Ox$, т.е. $x \\in (-1; 3)$" }
+                            ];
+                            const v = variants[getRandomIntSeeded(0, variants.length - 1)];
+                            return {
+                                question: `На чертежа е дадена графиката на квадратната функция $y = f(x)$. Като използвате чертежа, определете:<br>
+                                           а) корените на уравнението $f(x) = 0$;<br>
+                                           б) координатите на върха на параболата;<br>
+                                           в) екстремума (най-голяма или най-малка стойност) на функцията;<br>
+                                           г) интервала, в който ${v.signQ}.`,
+                                htmlElement: svgHelpers.quadraticFunctionGraph(v.a, v.b, v.c),
+                                space: "h-32",
+                                answer: `а) $x_1 = ${v.r1}, x_2 = ${v.r2}$; б) $V(${v.vx}; ${v.vy})$; в) ${v.ext}; г) ${v.signA}`,
+                                solution: `а) Графиката пресича оста $Ox$ в точките $(${v.r1}; 0)$ и $(${v.r2}; 0)$, следователно корените са ${v.r1} и ${v.r2}.<br>
+                                           б) Върхът на параболата е точката $V(${v.vx}; ${v.vy})$.<br>
+                                           в) Тъй като параболата е отворена ${v.a > 0 ? "нагоре" : "надолу"}, функцията има ${v.ext} във върха си.<br>
+                                           г) Търсим къде функцията е ${v.a > 0 ? "отрицателна" : "положителна"}, което съответства на частта от графиката, която е ${v.signSol}.`
+                            };
                         }
                     ];
                     
@@ -811,18 +884,15 @@
                         if (lessonIdx === 0) {
                             templates = [templates[0]];
                         } else if (lessonIdx === 1) {
-                            // Линейна функция
-                            templates = [templates[1], templates[2]];
+                            templates = [templates[1], templates[2], templates[3]];
                         } else if (lessonIdx === 2) {
-                            // Квадратна y = ax^2
-                            templates = [templates[3]];
+                            templates = [templates[4]];
                         } else {
-                            // Квадратна пълна
-                            templates = [templates[4], templates[5], templates[6], templates[7]];
+                            templates = [templates[4], templates[5], templates[6], templates[7], templates[8], templates[9]];
                         }
-                    } else if (isTest || sheetType === 'mixed_topic') {
-                        // За тест/смесен махаме чертането, за да пестим място, или го оставяме
-                        templates = [templates[0], templates[1], templates[3], templates[4], templates[5], templates[6]];
+                    } else {
+                        // За тест/смесено избираме най-добрите и ключови задачи
+                        templates = [templates[0], templates[2], templates[3], templates[8], templates[9], templates[4]];
                     }
                     
                     const chosen = getShuffledTemplates(templates, count);
@@ -869,36 +939,11 @@
             },
             linear_work: {
                 generate: function(lessonIdx, difficulty, count, seed, sheetType, isTest) {
-                    setSeed(seed * 77);
-                    const tasks = [];
-                    
-                    // Task 1: Класическа вероятност
-                    tasks.push(taskGenerator.probability.generate(0, 'mixed', 1, seed, 'mixed_topic', true)[0]);
-                    
-                    // Task 2: Усложнена вероятност (комбинаторика)
-                    tasks.push(taskGenerator.probability.generate(0, 'mixed', 1, seed+1, 'mixed_topic', true)[0]);
-                    
-                    // Task 3: Функции (познаване графика)
-                    tasks.push(taskGenerator.functions.generate(0, 'mixed', 1, seed+2, 'mixed_topic', true)[0]);
-                    
-                    // Task 4: Функции (НМС/НГС)
-                    tasks.push(taskGenerator.functions.generate(0, 'mixed', 1, seed+3, 'mixed_topic', true)[1]);
-                    
-                    // Task 5: Функции (чертане)
-                    tasks.push(taskGenerator.functions.generate(1, 'mixed', 1, seed+4, 'classwork', false)[1]);
-                    
-                    // Task 6: Системи линейни (обикновена)
-                    tasks.push(taskGenerator.systems_linear.generate(0, 'mixed', 1, seed+5, 'mixed_topic', true)[0]);
-                    
-                    // Task 7: Системи линейни (текстова)
-                    tasks.push(taskGenerator.systems_linear.generate(0, 'mixed', 1, seed+6, 'mixed_topic', true)[1]);
-                    
-                    // Ако иска 8 задачи, добавяме още една:
-                    if (count >= 8) {
-                        tasks.push(taskGenerator.systems_linear.generate(0, 'mixed', 1, seed+7, 'mixed_topic', true)[3]);
-                    }
-
-                    return tasks.slice(0, count);
+                    // Генерираме балансиран брой задачи от предходните теми
+                    const probTasks = taskGenerator.probability.generate(0, 'mixed', 4, seed * 7, 'mixed_topic', true);
+                    const funcTasks = taskGenerator.functions.generate(0, 'mixed', 4, seed * 11, 'mixed_topic', true);
+                    const allTasks = [...probTasks, ...funcTasks];
+                    return allTasks.slice(0, count); // Връщаме колкото са поискани (обикновено 8)
                 }
             },
             systems_quadratic: {
